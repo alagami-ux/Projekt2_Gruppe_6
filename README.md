@@ -70,3 +70,7 @@ og vælg Run.
 
 Testen contextLoads kontrollerer, at Spring-konteksten kan indlæses.
 Den bekræfter ikke i sig selv, at SQL-forespørgsler virker.
+
+## Diagrammer og design
+
+Se [diagrammer og forklaring til holdet](docs/diagrammer.md) for klasse-, sekvens- og deployment-diagrammer samt links til wireframes og ER-diagram med Chen-notation.
