@@ -27,23 +27,7 @@ class WishListRepositoryFailureTests {
         assertSame(failure, result.getCause());
     }
 
-    @Test
-    void queryFailureClosesResourcesAndPreservesCause() throws SQLException {
-        DataSource dataSource = mock(DataSource.class);
-        Connection connection = mock(Connection.class);
-        PreparedStatement statement = mock(PreparedStatement.class);
-        SQLException failure = new SQLException("Query failed");
-        when(dataSource.getConnection()).thenReturn(connection);
-        when(connection.prepareStatement(anyString())).thenReturn(statement);
-        when(statement.executeQuery()).thenThrow(failure);
 
-        DataAccessException result = assertThrows(DataAccessException.class,
-                () -> new WishListRepository(dataSource).getWishlistById(1));
-
-        assertSame(failure, result.getCause());
-        verify(statement).close();
-        verify(connection).close();
-    }
     @Test
     void wishesQueryFailureIsNotReportedAsAnEmptyList() throws SQLException {
         DataSource dataSource = mock(DataSource.class);

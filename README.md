@@ -90,13 +90,10 @@ Opstart alene bekræfter ikke, at databaseforespørgsler virker; se testene nede
 
 ## Test
 
-Højreklik på Projekt2Gruppe6ApplicationTests under src/test/java,
-og vælg Run.
+Højreklik på `src/test/java` i IntelliJ, og vælg **Run 'All Tests'**.
+Testene med `@SpringBootTest` kontrollerer også, at Spring-konteksten kan indlæses.
 
-Testen contextLoads kontrollerer, at Spring-konteksten kan indlæses.
-Den bekræfter ikke i sig selv, at SQL-forespørgsler virker.
-
-Kør også `WishListRepositoryTests` under `src/test/java`. Testene kræver,
+`WishListRepositoryTests` kontrollerer hentning af ønskesedler. Testene kræver,
 at MySQL og projektdatabasen er klar, og at F26A må læse, indsætte og slette.
 Testen henter det nye ID med `getGeneratedKeys()` og sletter kun sin egen
 testrække i en finally-blok, også hvis en assertion fejler. Der bruges ikke
@@ -104,6 +101,26 @@ testrække i en finally-blok, også hvis en assertion fejler. Der bruges ikke
 
 `WishListRepositoryFailureTests` tester databasefejl og lukning af ressourcer
 uden MySQL.
+
+## Automatiske tests på GitHub
+
+Workflowen [Maven tests](.github/workflows/tests.yml) bygger projektet og kører
+alle Maven-tests ved pull requests til `main` og ved push til `main`.
+Den kan også startes manuelt fra fanen **Actions → Maven tests → Run workflow**,
+når workflowen er merged til standardbranchen.
+
+GitHub bruger Java 21 og en separat MySQL 8.4-testdatabase. Workflowen indlæser
+`src/main/resources/templates/sql/schema.sql`. Testene opretter selv deres data,
+så `data.sql` indlæses ikke. Testdatabasen fjernes efter kørslen og har ingen
+forbindelse til databasen på gruppens computere. Loginoplysningerne i workflowen
+gælder kun den midlertidige testdatabase.
+
+Resultatet vises på pull requesten og under **Actions**. Testrapporterne kan
+hentes som `test-reports` på den enkelte kørsel og gemmes i syv dage.
+Layout og brugeroplevelse kontrolleres stadig manuelt i browseren.
+
+Workflowen ændrer ikke reglerne for merge. Når første kørsel består, kan holdet
+vælge **Java 21 and MySQL tests** som krævet status check i reglerne for `main`.
 
 ## Diagrammer og design
 

@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 @Repository
@@ -82,5 +83,28 @@ public class WishListRepository {
         return wishesByWishListId;
     }
 
+    public void createWishList(WishList wishList) {
+        String sql = "INSERT INTO wishlist (title) VALUES(?)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, wishList.getTitle());
+            statement.executeUpdate();
+
+            // Gem MySQL's nye ID i det samme WishList-objekt.
+            try (ResultSet keys = statement.getGeneratedKeys()) {
+                if (keys.next()) {
+                    wishList.setId(keys.getInt(1));
+                } else {
+                    throw new SQLException("Databasen returnerede ikke et ID.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke oprette ønskesedlen i databasen.", e);
+        }
+    }
 
 }
