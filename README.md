@@ -32,11 +32,9 @@ Vent på, at Maven indlæser projektets afhængigheder.
 
 Kør scriptet for at oprette databasen projekt2_gruppe_6_db og dens tabeller.
 
-Kør eventuelt scriptet med testdata, hvis det ønskes.
-
 Brug en MySQL-konto med de nødvendige rettigheder til at oprette databasen og tabellerne.
 
-Rettigheder til brugeren F26A
+## Rettigheder til brugeren F26A
 
 Applikationen bruger MySQL-brugeren F26A med adgangskoden 1234.
 
