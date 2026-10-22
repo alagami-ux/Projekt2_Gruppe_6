@@ -28,7 +28,6 @@ class WishListRepositoryTests {
     void findsWishlistById() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             int id;
-            String sql = "INSERT INTO wishlist (title) VALUES (?)";
 
             String sql =  "INSERT INTO wishlist (title) VALUES (?)";
 
@@ -51,8 +50,9 @@ class WishListRepositoryTests {
                 assertEquals(id, result.getId());
                 assertEquals("Testliste", result.getTitle());
             } finally {
+                String sql2 = "DELETE FROM wishlist WHERE id = ?";
                 try (PreparedStatement statement = connection.prepareStatement(
-                        "DELETE FROM wishlist WHERE id = ?")) {
+                        sql2)) {
 
                     statement.setInt(1, id);
                     statement.executeUpdate();
