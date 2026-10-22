@@ -8,7 +8,7 @@ public class Wish {
     private int wishlistId;
     private String name;
     private String description;
-    private Integer quantity = 1;
+    private int quantity = 1;
     private BigDecimal price;
     private String productUrl;
     private String imageUrl;
@@ -17,7 +17,7 @@ public class Wish {
     }
 
     public Wish(int id, int wishlistId, String name,
-                String description, Integer quantity,
+                String description, int quantity,
                 BigDecimal price, String productUrl,
                 String imageUrl) {
         this.id = id;

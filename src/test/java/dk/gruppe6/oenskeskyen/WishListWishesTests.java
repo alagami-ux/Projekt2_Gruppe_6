@@ -78,9 +78,11 @@ class WishListWishesTests {
         }
     }
 
+
     private int createList(Connection connection) throws SQLException {
+        String sql = "INSERT INTO wishlist (title) VALUES (?)";
         try (PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO wishlist (title) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+                sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, "Repositorytest");
             statement.executeUpdate();
             try (ResultSet keys = statement.getGeneratedKeys()) {
@@ -111,8 +113,8 @@ class WishListWishesTests {
 
     private void deleteList(Connection connection, int id) throws SQLException {
         // ON DELETE CASCADE fjerner også testlistens ønsker.
-        try (PreparedStatement statement = connection.prepareStatement(
-                "DELETE FROM wishlist WHERE id = ?")) {
+        String sql = "DELETE FROM wishlist WHERE id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             statement.executeUpdate();
         }
