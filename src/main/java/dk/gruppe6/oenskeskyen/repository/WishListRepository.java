@@ -50,14 +50,14 @@ public class WishListRepository {
     public ArrayList<Wish> getWishesByWishListID(int wishListID) {
         ArrayList<Wish> wishesByWishListId = new ArrayList<>();
 
-        String sql = "SELECT * FROM wish WHERE wishlist_id = ?";
+        String sql = "SELECT * FROM wish WHERE wishlist_id = ? ORDER BY id";
 
         try(Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, wishListID);
 
-            try (ResultSet resultSet = statement.executeQuery(sql)) {
+            try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Wish wish = new Wish(
                             resultSet.getInt("id"),
@@ -65,7 +65,7 @@ public class WishListRepository {
                             resultSet.getString("name"),
                             resultSet.getString("description"),
                             resultSet.getInt("quantity"),
-                            resultSet.getInt("price"),
+                            resultSet.getBigDecimal("price"),
                             resultSet.getString("product_url"),
                             resultSet.getString("image_url")
                     );
@@ -75,7 +75,8 @@ public class WishListRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke hente ønskerne fra databasen.", e);
         }
 
         return wishesByWishListId;
