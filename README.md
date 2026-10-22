@@ -24,15 +24,31 @@ Hent projektet fra GitHub.
 
 Vent på, at Maven indlæser projektets afhængigheder.
 
-## Gendan databasen
+## Gendan databasen og indlæs startdata
 
-Åbn MySQL Workbench, og forbind til den lokale MySQL Server.
+SQL-filerne ligger i `src/main/resources/templates/sql/`.
 
-Åbn SQL-scriptet til databaseoprettelse i projektets sql-mappe.
+1. Start MySQL Server, og åbn forbindelsen i MySQL Workbench som root eller en anden konto med rettighed til at oprette databasen og tabellerne.
+2. Vælg **File → Open SQL Script**, og åbn [`schema.sql`](src/main/resources/templates/sql/schema.sql).
+3. Kør hele scriptet med lyn-knappen. Det opretter `projekt2_gruppe_6_db` samt tabellerne `wishlist` og `wish`. Scriptet opretter ikke brugeren F26A.
+4. Ved en frisk installation: Åbn derefter [`data.sql`](src/main/resources/templates/sql/data.sql), og kør hele scriptet én gang på samme forbindelse.
+5. Kontrollér, at Action Output ikke viser fejl. På en frisk database indsættes to ønskesedler og fem ønsker.
 
-Kør scriptet for at oprette databasen projekt2_gruppe_6_db og dens tabeller.
+**Startdata forudsætter en frisk database**, hvor de to nye ønskesedler får ID 1 og 2. `data.sql` bruger disse ID'er direkte. Kør ikke scriptet igen på en eksisterende database: Det kan tilføje dubletter, knytte ønsker til forkerte lister eller give en fremmednøglefejl. `schema.sql` tømmer ikke eksisterende tabeller og ændrer ikke deres struktur, hvis de allerede findes.
 
-Brug en MySQL-konto med de nødvendige rettigheder til at oprette databasen og tabellerne.
+Kontrollér data i en ny query-fane:
+
+```sql
+SELECT id, title
+FROM projekt2_gruppe_6_db.wishlist
+ORDER BY id;
+
+SELECT id, wishlist_id, name
+FROM projekt2_gruppe_6_db.wish
+ORDER BY id;
+```
+
+I `src/main/resources/application.properties` skal `spring.sql.init.mode=never` være sat. SQL-filerne køres manuelt i Workbench, ikke automatisk ved opstart.
 
 ## Rettigheder til brugeren F26A
 
