@@ -2,6 +2,7 @@ package dk.gruppe6.oenskeskyen;
 
 import dk.gruppe6.oenskeskyen.model.Wish;
 import dk.gruppe6.oenskeskyen.repository.WishListRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,80 +28,80 @@ class WishListWishesTests {
     @Autowired
     private DataSource dataSource;
 
+    // Gem kun ID'erne på de lister, den aktuelle test selv opretter.
+    private final ArrayList<Integer> testListIds = new ArrayList<>();
+
     @Test
-    void retrievesOnlySelectedListsWishesWithAllFieldsAndNullablePrices()
-            throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            int selectedId = createList(connection);
-            try {
-                int otherId = createList(connection);
-                try {
-                    insertWish(connection, selectedId, "Bog", new BigDecimal("199.95"));
-                    insertWish(connection, otherId, "Anden listes ønske", new BigDecimal("12.50"));
-                    insertWish(connection, selectedId, "Uden pris", null);
-                    insertWish(connection, selectedId, "Gratis", BigDecimal.ZERO);
+    void findsWishesForSelectedWishlist() throws SQLException {
+        // Forbered to lister og ønsker med forskellige priser.
+        int selectedId = createList();
+        int otherId = createList();
+        insertWish(selectedId, "Bog", new BigDecimal("199.95"));
+        insertWish(otherId, "Anden listes ønske", new BigDecimal("12.50"));
+        insertWish(selectedId, "Uden pris", null);
+        insertWish(selectedId, "Gratis", BigDecimal.ZERO);
 
-                    List<Wish> wishes = repository.getWishesByWishListID(selectedId);
+        // Hent ønskerne fra den valgte liste.
+        List<Wish> wishes = repository.getWishesByWishListID(selectedId);
 
-                    assertEquals(3, wishes.size());
-                    assertTrue(wishes.stream().allMatch(w -> w.getWishlistId() == selectedId));
-                    assertTrue(wishes.get(0).getId() < wishes.get(1).getId());
-                    assertTrue(wishes.get(1).getId() < wishes.get(2).getId());
-                    Wish first = wishes.get(0);
-                    assertEquals("Bog", first.getName());
-                    assertEquals("Testbeskrivelse", first.getDescription());
-                    assertEquals(Integer.valueOf(2), first.getQuantity());
-                    assertEquals(new BigDecimal("199.95"), first.getPrice());
-                    assertEquals("https://example.com/product", first.getProductUrl());
-                    assertEquals("https://example.com/image.png", first.getImageUrl());
-                    assertEquals("Uden pris", wishes.get(1).getName());
-                    assertNull(wishes.get(1).getPrice());
-                    assertEquals("Gratis", wishes.get(2).getName());
-                    assertEquals(new BigDecimal("0.00"), wishes.get(2).getPrice());
-                } finally {
-                    deleteList(connection, otherId);
-                }
-            } finally {
-                deleteList(connection, selectedId);
-            }
+        // Kontrollér antal, tilhørsforhold og rækkefølge.
+        assertEquals(3, wishes.size());
+        for (Wish wish : wishes) {
+            assertEquals(selectedId, wish.getWishlistId());
         }
+        assertTrue(wishes.get(0).getId() < wishes.get(1).getId());
+        assertTrue(wishes.get(1).getId() < wishes.get(2).getId());
+
+        // Kontrollér, at oplysningerne er læst korrekt fra databasen.
+        Wish book = wishes.get(0);
+        assertEquals("Bog", book.getName());
+        assertEquals("Testbeskrivelse", book.getDescription());
+        assertEquals(Integer.valueOf(2), book.getQuantity());
+        assertEquals(new BigDecimal("199.95"), book.getPrice());
+        assertEquals("https://example.com/product", book.getProductUrl());
+        assertEquals("https://example.com/image.png", book.getImageUrl());
+
+        assertEquals("Uden pris", wishes.get(1).getName());
+        assertNull(wishes.get(1).getPrice());
+        assertEquals("Gratis", wishes.get(2).getName());
+        assertEquals(new BigDecimal("0.00"), wishes.get(2).getPrice());
     }
 
     @Test
     void returnsEmptyListWhenNoWishesAreAttached() throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            int id = createList(connection);
-            try {
-                assertNotNull(repository.getWishesByWishListID(id));
-                assertTrue(repository.getWishesByWishListID(id).isEmpty());
-            } finally {
-                deleteList(connection, id);
-            }
-        }
+        int id = createList();
+
+        List<Wish> wishes = repository.getWishesByWishListID(id);
+
+        assertNotNull(wishes);
+        assertTrue(wishes.isEmpty());
     }
 
-
-    private int createList(Connection connection) throws SQLException {
+    private int createList() throws SQLException {
         String sql = "INSERT INTO wishlist (title) VALUES (?)";
-        try (PreparedStatement statement = connection.prepareStatement(
-                sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, "Repositorytest");
             statement.executeUpdate();
+
             try (ResultSet keys = statement.getGeneratedKeys()) {
                 assertTrue(keys.next());
-                return keys.getInt(1);
+                int id = keys.getInt(1);
+                testListIds.add(id);
+                return id;
             }
         }
     }
 
-    private void insertWish(Connection connection, int listId, String name,
-                            BigDecimal price) throws SQLException {
-        String sql = """
-                INSERT INTO wish
-                (wishlist_id, name, description, quantity, price, product_url, image_url)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-                """;
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+    private void insertWish(int listId, String name, BigDecimal price)
+            throws SQLException {
+        String sql = "INSERT INTO wish "
+                + "(wishlist_id, name, description, quantity, price, product_url, image_url) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, listId);
             statement.setString(2, name);
             statement.setString(3, "Testbeskrivelse");
@@ -111,12 +113,21 @@ class WishListWishesTests {
         }
     }
 
-    private void deleteList(Connection connection, int id) throws SQLException {
-        // ON DELETE CASCADE fjerner også testlistens ønsker.
+    @AfterEach
+    void deleteTestLists() throws SQLException {
+        if (testListIds.isEmpty()) {
+            return;
+        }
+
+        // JUnit kører denne metode efter hver test, også hvis en assertion fejler.
+        // ON DELETE CASCADE sletter også ønskerne på testlisterne.
         String sql = "DELETE FROM wishlist WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
-            statement.executeUpdate();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int id : testListIds) {
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            }
         }
     }
 }
