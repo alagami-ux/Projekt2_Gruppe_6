@@ -18,7 +18,7 @@ classDiagram
         -int wishlistId
         -String name
         -String description
-        -int quantity
+        -Integer quantity
         -BigDecimal price
         -String productUrl
         -String imageUrl
@@ -54,18 +54,18 @@ sequenceDiagram
         B-->>U: Vis fejlbeskeder
     else Gyldigt input
         WC->>WR: createWish(wish)
-        WR->>DB: Parameteriseret INSERT via JdbcTemplate
+        WR->>DB: Parameteriseret INSERT via PreparedStatement
         DB->>DB: Kontrollér constraints og generér ID
         DB-->>WR: Én række indsat
         WR-->>WC: Gemt
         WC-->>B: HTTP 302 til /showWishList?id=...
         B->>LC: GET /showWishList?id=...
         LC->>LR: getWishlistById(id)
-        LR->>DB: SELECT ønskeseddel via JdbcTemplate
+        LR->>DB: SELECT ønskeseddel via PreparedStatement
         DB-->>LR: Ønskesedlens id og title
         LR-->>LC: WishList
         LC->>WR: getWishesByWishlistId(id)
-        WR->>DB: SELECT ønsker via JdbcTemplate
+        WR->>DB: SELECT ønsker via PreparedStatement
         DB-->>WR: Ønskernes oplysninger
         WR-->>LC: Liste af Wish
         LC->>LC: Tilføj ønskeseddel og ønsker til Model
@@ -74,11 +74,11 @@ sequenceDiagram
     end
 ```
 
-`JdbcTemplate` er samlet i repositoryernes databasekald for at holde hoveddiagrammet læsbart. Databasefejl vises separat nedenfor.
+Repositoryerne bruger direkte JDBC med `DataSource`, `Connection`, `PreparedStatement` og `ResultSet`. Forbindelser og statements lukkes med try-with-resources. Databasefejl vises separat nedenfor.
 
 ## Sekvensdiagram – Databasefejl under Gem
 
-Foreslået håndtering: Controlleren håndterer `DataAccessException`, bevarer formularens værdier og viser en generel fejlbesked.
+Foreslået håndtering ved oprettelse: Repositoryet pakker `SQLException` ind i en `DataAccessException`. Controlleren håndterer `DataAccessException`, bevarer formularens værdier og viser en generel fejlbesked.
 
 ```mermaid
 sequenceDiagram
@@ -86,17 +86,15 @@ sequenceDiagram
     participant B as Browser
     participant C as WishController
     participant R as WishRepository
-    participant J as JdbcTemplate
     participant DB as MySQL
 
     U->>B: Trykker Gem
     B->>C: POST /saveCreateWish
     C->>C: Input er gyldigt
     C->>R: createWish(wish)
-    R->>J: update(SQL, parametre)
-    J->>DB: Forsøg INSERT
-    DB-->>J: Databasefejl
-    J-->>R: DataAccessException
+    R->>DB: Forsøg INSERT via PreparedStatement
+    DB-->>R: SQLException
+    R->>R: Luk ressourcer og pak fejlen i DataAccessException
     R-->>C: DataAccessException
     C->>C: Log teknisk fejl og tilføj formularfejl
     C-->>B: Formular med bevarede værdier og fejlbesked
@@ -134,7 +132,7 @@ Når brugeren trykker **Gem**:
 
 1. Formularen sender oplysningerne til controlleren.
 2. Controlleren kontrollerer input. Ved fejl vises formularen igen med fejlbeskeder.
-3. Repositoryet gemmer gyldige oplysninger i MySQL gennem `JdbcTemplate`.
+3. Repositoryet gemmer gyldige oplysninger i MySQL gennem direkte JDBC.
 4. Browseren sendes videre til ønskesedlen.
 5. Applikationen henter titel og ønsker fra databasen og viser den opdaterede side.
 
@@ -150,3 +148,4 @@ Begge findes på det samme tldraw-board:
 - [ER-diagram med Chen-notation](https://www.tldraw.com/f/SC8uJKYfJs_BzxX0tho5A): Find diagrammet med entiteter som rektangler, attributter som ovaler og relationen som en rombe.
 
 Mermaid-filerne i GitHub er fremover reference for klasse-, sekvens- og deployment-diagrammer. Ældre versioner af klasse- og sekvensdiagrammer på tldraw-boardet kan være forældede.
+
