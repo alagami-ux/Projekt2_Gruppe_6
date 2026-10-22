@@ -28,9 +28,9 @@ class WishListRepositoryTests {
     void findsWishlistById() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             int id;
+            String sql = "INSERT INTO wishlist (title) VALUES (?)";
 
-            try (PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO wishlist (title) VALUES (?)",
+            try (PreparedStatement statement = connection.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS)) {
 
                 statement.setString(1, "Testliste");
