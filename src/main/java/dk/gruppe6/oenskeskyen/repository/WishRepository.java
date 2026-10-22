@@ -2,6 +2,7 @@ package dk.gruppe6.oenskeskyen.repository;
 
 import dk.gruppe6.oenskeskyen.model.Wish;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -33,7 +34,8 @@ public class WishRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke oprette ønsket i databasen.", e);
         }
 
     }
