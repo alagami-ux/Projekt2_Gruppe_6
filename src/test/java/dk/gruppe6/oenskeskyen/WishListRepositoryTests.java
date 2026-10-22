@@ -30,6 +30,8 @@ class WishListRepositoryTests {
             int id;
             String sql = "INSERT INTO wishlist (title) VALUES (?)";
 
+            String sql =  "INSERT INTO wishlist (title) VALUES (?)";
+
             try (PreparedStatement statement = connection.prepareStatement(sql,
                     Statement.RETURN_GENERATED_KEYS)) {
 
