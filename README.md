@@ -90,13 +90,10 @@ Opstart alene bekræfter ikke, at databaseforespørgsler virker; se testene nede
 
 ## Test
 
-Højreklik på Projekt2Gruppe6ApplicationTests under src/test/java,
-og vælg Run.
+Højreklik på `src/test/java` i IntelliJ, og vælg **Run 'All Tests'**.
+Testene med `@SpringBootTest` kontrollerer også, at Spring-konteksten kan indlæses.
 
-Testen contextLoads kontrollerer, at Spring-konteksten kan indlæses.
-Den bekræfter ikke i sig selv, at SQL-forespørgsler virker.
-
-Kør også `WishListRepositoryTests` under `src/test/java`. Testene kræver,
+`WishListRepositoryTests` kontrollerer hentning af ønskesedler. Testene kræver,
 at MySQL og projektdatabasen er klar, og at F26A må læse, indsætte og slette.
 Testen henter det nye ID med `getGeneratedKeys()` og sletter kun sin egen
 testrække i en finally-blok, også hvis en assertion fejler. Der bruges ikke
