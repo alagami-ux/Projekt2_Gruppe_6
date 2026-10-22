@@ -34,7 +34,9 @@ SQL-filerne ligger i `src/main/resources/templates/sql/`.
 4. Ved en frisk installation: Åbn derefter [`data.sql`](src/main/resources/templates/sql/data.sql), og kør hele scriptet én gang på samme forbindelse.
 5. Kontrollér, at Action Output ikke viser fejl. På en frisk database indsættes to ønskesedler og fem ønsker.
 
-**Startdata forudsætter en frisk database**, hvor de to nye ønskesedler får ID 1 og 2. `data.sql` bruger disse ID'er direkte. Kør ikke scriptet igen på en eksisterende database: Det kan tilføje dubletter, knytte ønsker til forkerte lister eller give en fremmednøglefejl. `schema.sql` tømmer ikke eksisterende tabeller og ændrer ikke deres struktur, hvis de allerede findes.
+`data.sql` gemmer hver ny ønskeseddels ID med `LAST_INSERT_ID()` og bruger det til de tilhørende ønsker. Kør hele scriptet på samme forbindelse. Det kræver ikke, at listerne får ID 1 og 2, og eksisterende rækker ændres ikke.
+
+**Kør startdata-scriptet én gang pr. installation.** Gentagen kørsel opretter yderligere to lister og fem ønsker. `schema.sql` tømmer ikke eksisterende tabeller og ændrer ikke deres struktur, hvis de allerede findes. Hvis `data.sql` stopper med en fejl, kør `ROLLBACK;` på samme forbindelse, ret fejlen, og prøv igen. En almindelig statement-fejl ruller ikke nødvendigvis hele transaktionen tilbage automatisk.
 
 Kontrollér data i en ny query-fane:
 
