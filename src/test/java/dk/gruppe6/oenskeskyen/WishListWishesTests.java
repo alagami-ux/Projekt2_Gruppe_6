@@ -56,7 +56,7 @@ class WishListWishesTests {
         Wish book = wishes.get(0);
         assertEquals("Bog", book.getName());
         assertEquals("Testbeskrivelse", book.getDescription());
-        assertEquals(Integer.valueOf(2), book.getQuantity());
+        assertEquals(2, book.getQuantity());
         assertEquals(new BigDecimal("199.95"), book.getPrice());
         assertEquals("https://example.com/product", book.getProductUrl());
         assertEquals("https://example.com/image.png", book.getImageUrl());
