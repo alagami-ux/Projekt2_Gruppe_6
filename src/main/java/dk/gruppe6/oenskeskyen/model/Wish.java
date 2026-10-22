@@ -9,7 +9,7 @@ public class Wish {
     private String name;
     private String description;
     private Integer quantity = 1;
-    private BigDecimal price;
+    private double price;
     private String productUrl;
     private String imageUrl;
 
@@ -18,7 +18,7 @@ public class Wish {
 
     public Wish(int id, int wishlistId, String name,
                 String description, Integer quantity,
-                BigDecimal price, String productUrl,
+                double price, String productUrl,
                 String imageUrl) {
         this.id = id;
         this.wishlistId = wishlistId;
@@ -70,11 +70,11 @@ public class Wish {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
