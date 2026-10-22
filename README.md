@@ -63,6 +63,17 @@ Started Projekt2Gruppe6Application
 Forsiden er endnu ikke implementeret. Derfor returnerer
 adressen / indtil videre HTTP 404.
 
+## Direkte JDBC
+
+Repositoryet bruger `DataSource`, `Connection`, `PreparedStatement` og `ResultSet`.
+SQL-parametre sættes på statementet, og try-with-resources lukker ressourcerne.
+Et manglende ID giver `Optional.empty()`. En SQL-fejl kastes videre som
+`DataAccessException` med den oprindelige fejl som årsag.
+
+Kald til `dataSource.getConnection()` deltager ikke automatisk i Springs
+`@Transactional`. Fremtidige operationer med flere SQL-ændringer skal bruge
+samme forbindelse og en eksplicit commit/rollback, hvis de skal være atomiske.
+
 ## Test
 
 Højreklik på Projekt2Gruppe6ApplicationTests under src/test/java,
@@ -71,6 +82,16 @@ og vælg Run.
 Testen contextLoads kontrollerer, at Spring-konteksten kan indlæses.
 Den bekræfter ikke i sig selv, at SQL-forespørgsler virker.
 
+Kør også `WishListRepositoryTests` under `src/test/java`. Testene kræver,
+at MySQL og projektdatabasen er klar, og at F26A må læse, indsætte og slette.
+Testen henter det nye ID med `getGeneratedKeys()` og sletter kun sin egen
+testrække i en finally-blok, også hvis en assertion fejler. Der bruges ikke
+`@Transactional` til oprydningen.
+
+`WishListRepositoryFailureTests` tester databasefejl og lukning af ressourcer
+uden MySQL.
+
 ## Diagrammer og design
 
 Se [diagrammer og forklaring til holdet](docs/diagrammer.md) for klasse-, sekvens- og deployment-diagrammer samt links til wireframes og ER-diagram med Chen-notation.
+

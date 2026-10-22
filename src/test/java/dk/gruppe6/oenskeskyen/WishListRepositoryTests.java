@@ -5,38 +5,54 @@ import dk.gruppe6.oenskeskyen.repository.WishListRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.transaction.annotation.Transactional;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
 class WishListRepositoryTests {
 
     @Autowired
     private WishListRepository repository;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private DataSource dataSource;
 
     @Test
-    void findsWishlistById() {
-        jdbcTemplate.update(
-                "INSERT INTO wishlist (title) VALUES (?)",
-                "Testliste"
-        );
+    void findsWishlistById() throws SQLException {
+        // Direkte JDBC bruger egne forbindelser, så testen rydder selv op.
+        try (Connection connection = dataSource.getConnection()) {
+            int id;
+            try (PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO wishlist (title) VALUES (?)",
+                    Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, "Testliste");
+                assertEquals(1, statement.executeUpdate());
+                try (ResultSet keys = statement.getGeneratedKeys()) {
+                    assertTrue(keys.next());
+                    id = keys.getInt(1);
+                }
+            }
 
-        Integer id = jdbcTemplate.queryForObject(
-                "SELECT LAST_INSERT_ID()",
-                Integer.class
-        );
-
-        WishList result = repository.getWishlistById(id)
-                .orElseThrow();
-
-        assertEquals(id.intValue(), result.getId());
-        assertEquals("Testliste", result.getTitle());
+            try {
+                WishList result = repository.getWishlistById(id).orElseThrow();
+                assertEquals(id, result.getId());
+                assertEquals("Testliste", result.getTitle());
+            } finally {
+                // Slet kun den række, testen selv oprettede.
+                try (PreparedStatement statement = connection.prepareStatement(
+                        "DELETE FROM wishlist WHERE id = ?")) {
+                    statement.setInt(1, id);
+                    statement.executeUpdate();
+                }
+            }
+        }
     }
 
     @Test
