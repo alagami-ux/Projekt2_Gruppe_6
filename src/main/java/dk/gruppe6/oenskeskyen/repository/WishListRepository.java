@@ -16,11 +16,8 @@ import java.util.ArrayList;
 @Repository
 public class WishListRepository {
 
-    private final DataSource dataSource;
-
-    public WishListRepository(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    @Autowired
+    private DataSource dataSource;
 
     public WishList getWishlistById(int id) {
 
