@@ -84,43 +84,33 @@ Tomcat er startet på port 8080. Det viser, at Spring Boot er startet.
 Forsiden på `http://localhost:8080/` er endnu ikke implementeret. Adressen
 returnerer derfor HTTP 404. Det betyder ikke i sig selv, at opstarten fejlede.
 
-Brugerfladen er under udvikling og er endnu ikke klar til brug. Visning af en
-ønskeseddel kræver controlleren fra #27 og den tilhørende Thymeleaf-side.
-Opstart alene bekræfter ikke, at databaseforespørgsler virker; se testene nedenfor.
+En eksisterende ønskeseddel kan vises på
+`http://localhost:8080/showWishList?id=DIT_ID`. Erstat `DIT_ID` med et
+eksisterende ID fra SQL-opslaget ovenfor. De øvrige brugerforløb er under udvikling.
+Opstart alene bekræfter ikke, at databaseforespørgsler virker.
 
-## Test
+## Manuel test
 
-Højreklik på `src/test/java` i IntelliJ, og vælg **Run 'All Tests'**.
-Testene med `@SpringBootTest` kontrollerer også, at Spring-konteksten kan indlæses.
+Projektet bruger manuel funktionstest. Der er ingen JUnit-tests eller
+test-dependencies i denne version.
 
-`WishListRepositoryTests` kontrollerer hentning af ønskesedler. Testene kræver,
-at MySQL og projektdatabasen er klar, og at F26A må læse, indsætte og slette.
-Testen henter det nye ID med `getGeneratedKeys()` og sletter kun sin egen
-testrække i en finally-blok, også hvis en assertion fejler. Der bruges ikke
-`@Transactional` til oprydningen.
+Brug [den manuelle testtabel](docs/manuel-test.md). Udfyld resultatet, når
+hver funktion er afprøvet. En funktion er ikke testet alene ved, at projektet
+kan bygges eller Spring Boot starter.
 
-`WishListRepositoryFailureTests` tester databasefejl og lukning af ressourcer
-uden MySQL.
+## Automatisk bygning på GitHub
 
-## Automatiske tests på GitHub
+Workflowen [Maven build](.github/workflows/tests.yml) bygger projektet med
+Java 21 ved pull requests til `main` og push til `main`.
+Den kan også startes fra **Actions → Maven build → Run workflow**,
+når ændringen er merged til standardbranchen.
 
-Workflowen [Maven tests](.github/workflows/tests.yml) bygger projektet og kører
-alle Maven-tests ved pull requests til `main` og ved push til `main`.
-Den kan også startes manuelt fra fanen **Actions → Maven tests → Run workflow**,
-når workflowen er merged til standardbranchen.
+Workflowen kører `bash mvnw --batch-mode --no-transfer-progress package`.
+Den kompilerer og pakker applikationen uden at starte MySQL eller applikationen.
+Den udfører ingen automatiske funktionstests.
 
-GitHub bruger Java 21 og en separat MySQL 8.4-testdatabase. Workflowen indlæser
-`src/main/resources/templates/sql/schema.sql`. Testene opretter selv deres data,
-så `data.sql` indlæses ikke. Testdatabasen fjernes efter kørslen og har ingen
-forbindelse til databasen på gruppens computere. Loginoplysningerne i workflowen
-gælder kun den midlertidige testdatabase.
-
-Resultatet vises på pull requesten og under **Actions**. Testrapporterne kan
-hentes som `test-reports` på den enkelte kørsel og gemmes i syv dage.
-Layout og brugeroplevelse kontrolleres stadig manuelt i browseren.
-
-Workflowen ændrer ikke reglerne for merge. Når første kørsel består, kan holdet
-vælge **Java 21 and MySQL tests** som krævet status check i reglerne for `main`.
+En grøn kørsel betyder, at projektet kunne bygges. Formularer, SQL, navigation
+og layout skal stadig afprøves manuelt. Workflowen ændrer ikke merge-reglerne.
 
 ## Diagrammer og design
 
