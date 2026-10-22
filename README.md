@@ -1,78 +1,72 @@
 # Projekt2_Gruppe_6
 Digital ønskeseddel – miniprojekt på 2. semester, gruppe 6.
 
+#" Projektbeskrivelse
+
+Ønskeskyen er en Spring Boot-applikation, hvor brugeren kan oprette og administrere ønskelister og ønsker.
+
+Denne README beskriver, hvordan databasen gendannes, og hvordan applikationen startes på en ny computer (target-maskinen).
+
 ## Krav
 
 - Java 21
 - IntelliJ IDEA
-- MySQL Server og MySQL Workbench
+- MySQL Server og MySQL Workbench.
+- Projektets kildekode fra GitHub.
 
 Projektet bruger Spring Boot og Maven. Maven Wrapper følger med.
 
 ## Hent projektet
 
-Klon repositoryet:
-https://github.com/alagami-ux/Projekt2_Gruppe_6
+Hent projektet fra GitHub.
 
-Åbn projektets pom.xml i IntelliJ som et Maven-projekt.
-Vælg Java 21 som Project SDK, og lad Maven indlæse dependencies.
+Åbn projektmappen i IntelliJ IDEA.
 
-## Opret lokal database
+Vent på, at Maven indlæser projektets afhængigheder.
 
-1. Start MySQL Server.
-2. Åbn MySQL Workbench, og forbind som root.
-3. Åbn og kør hele src/main/resources/schema.sql.
-4. Åbn og kør hele src/main/resources/data.sql én gang.
+## Gendan databasen
 
-schema.sql opretter databasen projekt2_gruppe_6_db,
-tabellerne wishlist og wish samt databasebrugeren F26A.
+Åbn MySQL Workbench, og forbind til den lokale MySQL Server.
 
-data.sql indsætter en ønskeseddel med tre ønsker.
-Gentagen kørsel tilføjer flere testdata.
+Åbn SQL-scriptet til databaseoprettelse i projektets sql-mappe.
 
-Root-adgangskoden er den lokale adgangskode fra installationen
-af MySQL. Den skal ikke indsættes i projektets filer.
+Kør scriptet for at oprette databasen projekt2_gruppe_6_db og dens tabeller.
 
-## Databaseforbindelse
+Kør eventuelt scriptet med testdata, hvis det ønskes.
 
-src/main/resources/application.properties skal indeholde:
+Brug en MySQL-konto med de nødvendige rettigheder til at oprette databasen og tabellerne.
 
-```properties
-spring.application.name=Projekt2_Gruppe_6
+Rettigheder til brugeren F26A
+
+Applikationen bruger MySQL-brugeren F26A med adgangskoden 1234.
+
+Hvis F26A mangler de nødvendige rettigheder, skal en MySQL-administrator logge ind med root eller en anden konto med de nødvendige administratorrettigheder og køre:
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON projekt2_gruppe_6_db.*
+TO 'F26A'@'localhost';
+
+Hvis brugeren F26A ikke allerede findes, skal den først oprettes med den aftalte adgangskode.
+
+## Kontrollér databaseindstillingerne
+
+Kontrollér filen src/main/resources/application.properties:
 
 spring.datasource.url=jdbc:mysql://localhost:3306/projekt2_gruppe_6_db
 spring.datasource.username=F26A
 spring.datasource.password=1234
 
-spring.sql.init.mode=never
-```
-
-SQL-scripts køres manuelt i Workbench.
-Spring Boot kører dem ikke automatisk ved opstart.
-
 ## Start applikationen
 
-1. Sørg for, at MySQL Server kører.
-2. Åbn Projekt2Gruppe6Application under src/main/java.
-3. Klik på den grønne trekant ved main-metoden, og vælg Run.
-4. Åbn http://localhost:8080 i browseren.
+Find projektets hovedklasse med @SpringBootApplication i IntelliJ.
 
-Opstarten er gennemført, når Run-vinduet viser:
-Started Projekt2Gruppe6Application
+Start applikationen med Run.
 
-Forsiden er endnu ikke implementeret. Derfor returnerer
-adressen / indtil videre HTTP 404.
+Åbn browseren på:
 
-## Direkte JDBC
+http://localhost:8080
 
-Repositoryet bruger `DataSource`, `Connection`, `PreparedStatement` og `ResultSet`.
-SQL-parametre sættes på statementet, og try-with-resources lukker ressourcerne.
-Et manglende ID giver `Optional.empty()`. En SQL-fejl kastes videre som
-`DataAccessException` med den oprindelige fejl som årsag.
-
-Kald til `dataSource.getConnection()` deltager ikke automatisk i Springs
-`@Transactional`. Fremtidige operationer med flere SQL-ændringer skal bruge
-samme forbindelse og en eksplicit commit/rollback, hvis de skal være atomiske.
+Applikationen er nu klar til brug.
 
 ## Test
 
