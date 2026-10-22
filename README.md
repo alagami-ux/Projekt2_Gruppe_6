@@ -1,7 +1,7 @@
 # Projekt2_Gruppe_6
 Digital ønskeseddel – miniprojekt på 2. semester, gruppe 6.
 
-# Projektbeskrivelse
+## Projektbeskrivelse
 
 Ønskeskyen er en Spring Boot-applikation, hvor brugeren kan oprette og administrere ønskelister og ønsker.
 
