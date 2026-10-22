@@ -2,7 +2,6 @@ package dk.gruppe6.oenskeskyen.repository;
 
 import dk.gruppe6.oenskeskyen.model.Wish;
 import dk.gruppe6.oenskeskyen.model.WishList;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 @Repository
@@ -86,15 +86,24 @@ public class WishListRepository {
     public void createWishList(WishList wishList) {
         String sql = "INSERT INTO wishlist (title) VALUES(?)";
 
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     sql, Statement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, wishList.getTitle());
-
             statement.executeUpdate();
 
+            // Gem MySQL's nye ID i det samme WishList-objekt.
+            try (ResultSet keys = statement.getGeneratedKeys()) {
+                if (keys.next()) {
+                    wishList.setId(keys.getInt(1));
+                } else {
+                    throw new SQLException("Databasen returnerede ikke et ID.");
+                }
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke oprette ønskesedlen i databasen.", e);
         }
     }
 
