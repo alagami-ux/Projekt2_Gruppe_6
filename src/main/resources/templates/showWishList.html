@@ -89,7 +89,15 @@
 
     <article th:each="wish : ${wishes}">
 
-        <!-- Billedvisningen fra #36 indsættes her med class="wish-image" -->
+        <img class="wish-image"
+             th:src="${#strings.isEmpty(wish.imageUrl)}
+                     ? @{/images/standard.svg}
+                     : ${wish.imageUrl}"
+             th:alt="${#strings.isEmpty(wish.imageUrl)}
+                     ? 'Intet produktbillede'
+                     : ${wish.name}"
+             th:attr="data-fallback=@{/images/standard.svg}"
+             onerror="this.onerror=null; this.src=this.dataset.fallback; this.alt='Intet produktbillede';">
 
         <div class="wish-details">
             <h2 th:text="${wish.name}">Ønskets navn</h2>
