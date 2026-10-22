@@ -22,6 +22,6 @@ VALUES
      1, 399.95, NULL, NULL),
 
     (1, 'GTA6', 'Den nyeste GTA6, som kan spilles på PS5',
-     1, 700, 'https://www.elgiganten.dk/brand/rockstar/gta-6-release', NULL),
+     1, 700, 'https://www.elgiganten.dk/brand/rockstar/gta-6-release', NULL);
 
     COMMIT;

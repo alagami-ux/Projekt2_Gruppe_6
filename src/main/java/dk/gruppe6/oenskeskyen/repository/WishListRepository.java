@@ -1,6 +1,8 @@
 package dk.gruppe6.oenskeskyen.repository;
 
+import dk.gruppe6.oenskeskyen.model.Wish;
 import dk.gruppe6.oenskeskyen.model.WishList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
 
@@ -9,18 +11,17 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @Repository
 public class WishListRepository {
 
-    private final DataSource dataSource;
-
-    public WishListRepository(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    @Autowired
+    private DataSource dataSource;
 
     public WishList getWishlistById(int id) {
-        String sql = "SELECT id, title FROM wishlist WHERE id = ?";
+
+        String sql = "SELECT * FROM wishlist WHERE id = ?";
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -43,4 +44,6 @@ public class WishListRepository {
                     "Kunne ikke hente ønskesedlen fra databasen.", e);
         }
     }
+
+
 }
