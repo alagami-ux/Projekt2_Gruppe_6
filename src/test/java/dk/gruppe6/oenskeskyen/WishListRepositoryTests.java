@@ -26,14 +26,16 @@ class WishListRepositoryTests {
 
     @Test
     void findsWishlistById() throws SQLException {
-        // Direkte JDBC bruger egne forbindelser, så testen rydder selv op.
         try (Connection connection = dataSource.getConnection()) {
             int id;
+
             try (PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO wishlist (title) VALUES (?)",
                     Statement.RETURN_GENERATED_KEYS)) {
+
                 statement.setString(1, "Testliste");
                 assertEquals(1, statement.executeUpdate());
+
                 try (ResultSet keys = statement.getGeneratedKeys()) {
                     assertTrue(keys.next());
                     id = keys.getInt(1);
@@ -41,13 +43,15 @@ class WishListRepositoryTests {
             }
 
             try {
-                WishList result = repository.getWishlistById(id).orElseThrow();
+                WishList result = repository.getWishlistById(id);
+
+                assertNotNull(result);
                 assertEquals(id, result.getId());
                 assertEquals("Testliste", result.getTitle());
             } finally {
-                // Slet kun den række, testen selv oprettede.
                 try (PreparedStatement statement = connection.prepareStatement(
                         "DELETE FROM wishlist WHERE id = ?")) {
+
                     statement.setInt(1, id);
                     statement.executeUpdate();
                 }
@@ -56,7 +60,7 @@ class WishListRepositoryTests {
     }
 
     @Test
-    void returnsEmptyWhenWishlistDoesNotExist() {
-        assertTrue(repository.getWishlistById(-1).isEmpty());
+    void returnsNullWhenWishlistDoesNotExist() {
+        assertNull(repository.getWishlistById(-1));
     }
 }
