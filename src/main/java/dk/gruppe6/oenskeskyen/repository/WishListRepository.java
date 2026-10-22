@@ -2,6 +2,7 @@ package dk.gruppe6.oenskeskyen.repository;
 
 import dk.gruppe6.oenskeskyen.model.Wish;
 import dk.gruppe6.oenskeskyen.model.WishList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
 
@@ -82,5 +83,19 @@ public class WishListRepository {
         return wishesByWishListId;
     }
 
+    public void createWishList(WishList wishList) {
+        String sql = "INSERT INTO wishlist (title) VALUES(?)";
+
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, wishList.getTitle());
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
