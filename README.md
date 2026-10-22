@@ -102,6 +102,26 @@ testrække i en finally-blok, også hvis en assertion fejler. Der bruges ikke
 `WishListRepositoryFailureTests` tester databasefejl og lukning af ressourcer
 uden MySQL.
 
+## Automatiske tests på GitHub
+
+Workflowen [Maven tests](.github/workflows/tests.yml) bygger projektet og kører
+alle Maven-tests ved pull requests til `main` og ved push til `main`.
+Den kan også startes manuelt fra fanen **Actions → Maven tests → Run workflow**,
+når workflowen er merged til standardbranchen.
+
+GitHub bruger Java 21 og en separat MySQL 8.4-testdatabase. Workflowen indlæser
+`src/main/resources/templates/sql/schema.sql`. Testene opretter selv deres data,
+så `data.sql` indlæses ikke. Testdatabasen fjernes efter kørslen og har ingen
+forbindelse til databasen på gruppens computere. Loginoplysningerne i workflowen
+gælder kun den midlertidige testdatabase.
+
+Resultatet vises på pull requesten og under **Actions**. Testrapporterne kan
+hentes som `test-reports` på den enkelte kørsel og gemmes i syv dage.
+Layout og brugeroplevelse kontrolleres stadig manuelt i browseren.
+
+Workflowen ændrer ikke reglerne for merge. Når første kørsel består, kan holdet
+vælge **Java 21 and MySQL tests** som krævet status check i reglerne for `main`.
+
 ## Diagrammer og design
 
 Se [diagrammer og forklaring til holdet](docs/diagrammer.md) for klasse-, sekvens- og deployment-diagrammer samt links til wireframes og ER-diagram med Chen-notation.
