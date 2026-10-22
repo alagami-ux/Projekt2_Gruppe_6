@@ -60,11 +60,15 @@ Find projektets hovedklasse med @SpringBootApplication i IntelliJ.
 
 Start applikationen med Run.
 
-Åbn browseren på:
+Kontrollér, at Run-vinduet viser `Started Projekt2Gruppe6Application`, og at
+Tomcat er startet på port 8080. Det viser, at Spring Boot er startet.
 
-http://localhost:8080
+Forsiden på `http://localhost:8080/` er endnu ikke implementeret. Adressen
+returnerer derfor HTTP 404. Det betyder ikke i sig selv, at opstarten fejlede.
 
-Applikationen er nu klar til brug.
+Brugerfladen er under udvikling og er endnu ikke klar til brug. Visning af en
+ønskeseddel kræver controlleren fra #27 og den tilhørende Thymeleaf-side.
+Opstart alene bekræfter ikke, at databaseforespørgsler virker; se testene nedenfor.
 
 ## Test
 
