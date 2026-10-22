@@ -18,7 +18,7 @@ classDiagram
         -int wishlistId
         -String name
         -String description
-        -Integer quantity
+        -int quantity
         -BigDecimal price
         -String productUrl
         -String imageUrl
