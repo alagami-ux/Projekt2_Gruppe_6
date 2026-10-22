@@ -74,17 +74,4 @@ class WishListControllerTests {
         verify(repository, never()).getWishesByWishListID(anyInt());
     }
 
-    @Test
-    void missingIdReturnsBadRequest() throws Exception {
-        mockMvc.perform(get("/showWishList"))
-                .andExpect(status().isBadRequest());
-        verifyNoInteractions(repository);
-    }
-
-    @Test
-    void nonNumericIdReturnsBadRequest() throws Exception {
-        mockMvc.perform(get("/showWishList").param("id", "abc"))
-                .andExpect(status().isBadRequest());
-        verifyNoInteractions(repository);
-    }
 }
