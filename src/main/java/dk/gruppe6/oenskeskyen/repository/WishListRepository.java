@@ -11,8 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class WishListRepository {
@@ -20,32 +20,31 @@ public class WishListRepository {
     @Autowired
     private DataSource dataSource;
 
-    public ArrayList<WishList> getAllWishLists() {
-        ArrayList<WishList> wishlists = new ArrayList<>();
-
+    public List<WishList> getAllWishLists() {
+        List<WishList> wishlists = new ArrayList<>();
         String sql = "SELECT * FROM wishlist";
 
-        try(Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql);
-        ResultSet resultSet = statement.executeQuery()) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
 
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 WishList wishlist = new WishList(
                         resultSet.getInt("id"),
-                        resultSet.getString("title"));
-
-
+                        resultSet.getString("title")
+                );
                 wishlists.add(wishlist);
             }
+
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke hente ønskesedler fra databasen.", e);
         }
 
         return wishlists;
     }
 
     public WishList getWishlistById(int id) {
-
         String sql = "SELECT * FROM wishlist WHERE id = ?";
 
         try (Connection connection = dataSource.getConnection();
@@ -58,25 +57,23 @@ public class WishListRepository {
                     WishList wishlist = new WishList();
                     wishlist.setId(resultSet.getInt("id"));
                     wishlist.setTitle(resultSet.getString("title"));
-
                     return wishlist;
                 }
-
                 return null;
             }
+
         } catch (SQLException e) {
             throw new DataAccessResourceFailureException(
                     "Kunne ikke hente ønskesedlen fra databasen.", e);
         }
     }
 
-    public ArrayList<Wish> getWishesByWishListID(int wishListID) {
-        ArrayList<Wish> wishesByWishListId = new ArrayList<>();
-
+    public List<Wish> getWishesByWishListID(int wishListID) {
+        List<Wish> wishesByWishListId = new ArrayList<>();
         String sql = "SELECT * FROM wish WHERE wishlist_id = ? ORDER BY id";
 
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, wishListID);
 
@@ -92,7 +89,6 @@ public class WishListRepository {
                             resultSet.getString("product_url"),
                             resultSet.getString("image_url")
                     );
-
                     wishesByWishListId.add(wish);
                 }
             }
@@ -105,19 +101,31 @@ public class WishListRepository {
         return wishesByWishListId;
     }
 
-    public void createWishList(WishList wishList) {
+    public int createWishList(WishList wishList) {
         String sql = "INSERT INTO wishlist (title) VALUES(?)";
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, wishList.getTitle());
-            statement.executeUpdate();
+            int rows = statement.executeUpdate();
+
+            if (rows == 0) {
+                throw new DataAccessResourceFailureException(
+                        "Kunne ikke oprette ønskesedlen i databasen.");
+            }
+
+            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+            }
+
+            return -1;
 
         } catch (SQLException e) {
             throw new DataAccessResourceFailureException(
                     "Kunne ikke oprette ønskesedlen i databasen.", e);
         }
     }
-
 }

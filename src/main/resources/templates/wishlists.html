@@ -1,12 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Mine ønskesedler</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
+<header>
+    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+    <nav>
+        <a th:href="@{/getCreateWishList}">Opret ønskeseddel</a>
+    </nav>
+</header>
 
+<main>
+    <h1>Mine ønskesedler</h1>
+
+    <div th:if="${#lists.isEmpty(wishlists)}">
+        <p>Du har endnu ingen ønskesedler.</p>
+    </div>
+
+    <ul th:unless="${#lists.isEmpty(wishlists)}">
+        <li th:each="wishlist : ${wishlists}">
+            <a th:href="@{/showWishList(id=${wishlist.id})}" th:text="${wishlist.title}">Titel</a>
+        </li>
+    </ul>
+
+    <p>
+        <a th:href="@{/getCreateWishList}">+ Opret en ny ønskeseddel</a>
+    </p>
+</main>
 
 </body>
 </html>
