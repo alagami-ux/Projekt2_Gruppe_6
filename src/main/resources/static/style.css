@@ -1,3 +1,4 @@
+
 /*
    1. Grundlæggende styling
 */
@@ -35,7 +36,7 @@ p {
 
 /*
    2. Header og navigation
- */
+*/
 
 header {
     background-color: #FFFFFF;
@@ -74,7 +75,7 @@ nav a:hover {
 
 /*
    3. Forsiden og sektioner
- */
+*/
 
 section {
     text-align: center;
@@ -94,25 +95,29 @@ section {
 hr {
     border: none;
     border-top: 1px solid #DCE8D5;
-    width: 100%;
+    width: 90%;
     margin: 20px auto;
 }
 
 
 /*
    4. Knapper
- */
+*/
 
 /* Knappernes placering */
 .button,
 .button2,
-.button3 {
+.button3,
+.button4 {
     display: inline-block;
     margin: 10px;
 }
 
 /* Knappernes udseende */
+
+
 .btn {
+    display: inline-block;
     background-color: #45634A;
     color: #FFFFFF;
     border: none;
@@ -120,6 +125,7 @@ hr {
     border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
+    text-decoration: none;
 }
 
 /* Når musen holdes over knapperne */
@@ -183,13 +189,11 @@ hr {
     display: flex;
     flex-direction: column;
     gap: 12px;
-
     width: 100%;
     max-width: 500px;
     box-sizing: border-box;
     margin: 0 auto;
     padding: 20px;
-
     background-color: #FFFFFF;
     border: 1px solid #DCE8D5;
     border-radius: 12px;
@@ -234,20 +238,81 @@ hr {
     margin: 0;
 }
 
+/* Placering af ønskeseddel-kort */
+.overskriftWishlist {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.wishlist-container {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* Udseende af hvert ønskeseddel-kort */
+.wishlist-box {
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #DCE8D5;
+    box-shadow: 0 1px 5px #ccc;
+    background-color: #FFFFFF;
+}
+
+/* Overskriften på kortet */
+.wishlist-box h2 {
+    margin-top: 0;
+}
+
+/* Link til ønskesedlen */
+.wishlist-box a {
+    color: #45634A;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.wishlist-box a:hover {
+    text-decoration: underline;
+}
+
+.button4 {
+    display: flex;
+    justify-content: center;
+    width: 99%;
+    margin-top: 50px;
+}
+
+.textWishLists{
+    color: #45634A;
+    line-height: 1.6;
+    font-size: 20px;
+    text-align: center;
+}
+
 
 /*
    7. Ønsker og billeder
 */
 
 /* Et enkelt ønske */
+main {
+    padding: 0 20px;
+}
+
 article {
     display: flex;
     gap: 20px;
     background-color: #FFFFFF;
     padding: 20px;
     margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    border: 1px solid #DCE8D5;
+    border-radius: 12px;
+    box-shadow: 0 1px 5px #ccc;
+    max-width: 1000px;
 }
 
 /* Teksten til ønsket */
@@ -259,6 +324,10 @@ article {
 /* Overskriften til ønsket */
 .wish-details h2 {
     margin-top: 0;
+}
+
+.wish-details p {
+    font-size: 16px;
 }
 
 /* Billede til ønsket */
@@ -311,7 +380,8 @@ footer {
     /* Knapper */
     .button,
     .button2,
-    .button3 {
+    .button3,
+    .button4 {
         display: block;
     }
 
@@ -329,5 +399,11 @@ footer {
     /* Gem-knap */
     .wishlist-form button {
         width: 100%;
+    }
+
+    /* Ønskesedler på mobil */
+    .wishlist-container {
+        grid-template-columns: 1fr;
+        margin: 20px auto;
     }
 }
