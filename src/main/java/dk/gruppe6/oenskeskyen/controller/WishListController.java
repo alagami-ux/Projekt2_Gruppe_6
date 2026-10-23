@@ -34,7 +34,8 @@ public class WishListController {
     }
 
     @GetMapping("/getCreateWishlist")
-    public String createWishlist() {
+    public String createWishlist(Model model) {
+        model.addAttribute("wishlist", new WishList());
         return "createWishList";
     }
 
