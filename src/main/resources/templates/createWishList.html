@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Opret ønskeseddel</title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<header>
+    <strong>ØNSKESKYEN</strong>
+</header>
+
+<main>
+    <h1>Opret ønskeseddel</h1>
+
+    <form th:action="@{/saveWishList}"
+          th:object="${wishlist}"
+          method="post"
+          class="wishlist-form"
+          novalidate>
+
+        <label for="title">Titel på ønskeseddel</label>
+
+        <input type="text"
+               id="title"
+               th:field="*{title}"
+               maxlength="150"
+               placeholder="F.eks. Mine fødselsdagsønsker">
+
+        <p th:if="${#fields.hasErrors('title')}"
+           th:errors="*{title}"
+           class="error-message"
+           role="alert">
+        </p>
+
+        <button type="submit">Gem ønskeseddel</button>
+
+    </form>
+</main>
+
+</body>
+</html>
