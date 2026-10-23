@@ -19,13 +19,13 @@
 <main>
     <h1>Opret ønskeseddel</h1>
 
-    <form th:action="@{/saveCreateWishList}"
+    <form th:action="@{/saveCreateWishlist}"
           th:object="${wishlist}"
           method="post"
           class="wishlist-form"
           novalidate>
 
-        <label for="title">Titel på ønskeseddel</label>
+    <label for="title">Titel på ønskeseddel</label>
 
         <input type="text"
                id="title"
