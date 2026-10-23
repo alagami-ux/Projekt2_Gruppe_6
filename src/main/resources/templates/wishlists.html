@@ -15,21 +15,36 @@
 </header>
 
 <main>
-    <h1>Mine ønskesedler</h1>
+
+    <h1 class="overskriftWishlist">Mine ønskesedler</h1>
+    <p class="textWishLists">Her kan du se dine ønskesedler og åbne dem.</p>
 
     <div th:if="${#lists.isEmpty(wishlists)}">
         <p>Du har endnu ingen ønskesedler.</p>
     </div>
 
-    <ul th:unless="${#lists.isEmpty(wishlists)}">
-        <li th:each="wishlist : ${wishlists}">
-            <a th:href="@{/showWishList(id=${wishlist.id})}" th:text="${wishlist.title}">Titel</a>
-        </li>
-    </ul>
 
-    <p>
-        <a th:href="@{/getCreateWishList}">+ Opret en ny ønskeseddel</a>
-    </p>
+    <div class="wishlist-container"
+         th:unless="${#lists.isEmpty(wishlists)}">
+
+        <div class="wishlist-box"
+             th:each="wishlist : ${wishlists}">
+
+            <h2 th:text="${wishlist.title}">Titel</h2>
+
+            <a th:href="@{/showWishList(id=${wishlist.id})}">
+                Se ønskeseddel
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="button4">
+        <form th:action="@{/getCreateWishList}" method="get" class="modify-form">
+            <button class="btn">+ Opret en ny ønskeseddel</button>
+        </form>
+    </div>
 </main>
 
 </body>

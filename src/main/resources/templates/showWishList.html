@@ -11,11 +11,12 @@
 <body>
 
 <header>
-    <strong>ØNSKESKYEN</strong>
+    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
 
-    <nav aria-label="Hovednavigation">
+    <nav>
         <a th:href="@{/wishlists}">Mine ønskesedler</a>
     </nav>
+
 </header>
 
 <main>
@@ -24,7 +25,7 @@
     <p th:if="${#lists.isEmpty(wishes)}">
         Du har endnu ikke tilføjet nogen ønsker.
     </p>
-
+<div>
     <article th:each="wish : ${wishes}">
         <img class="wish-image"
              th:src="${#strings.isEmpty(wish.imageUrl)}
@@ -62,12 +63,16 @@
                 </p>
             </div>
 
-            <a th:if="${!#strings.isEmpty(wish.productUrl)}"
+            <a class="btn"
+               th:if="${!#strings.isEmpty(wish.productUrl)}"
                th:href="${wish.productUrl}">
                 Se produkt
             </a>
+
         </div>
     </article>
+</div>
+
 </main>
 
 </body>
