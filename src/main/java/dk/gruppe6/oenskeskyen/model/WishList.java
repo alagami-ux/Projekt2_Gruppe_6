@@ -13,6 +13,10 @@ public class WishList {
         this.title = title;
     }
 
+    public WishList(String title) {
+        this.title = title;
+    }
+
     public int getId() {
         return id;
     }
