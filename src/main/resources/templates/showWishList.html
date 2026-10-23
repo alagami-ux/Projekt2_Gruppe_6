@@ -44,6 +44,10 @@
             min-width: 0;
         }
 
+        .wish-details h2 {
+            margin-top: 0;
+        }
+
         .wish-image {
             width: 170px;
             height: 180px;
@@ -88,7 +92,6 @@
     </p>
 
     <article th:each="wish : ${wishes}">
-
         <img class="wish-image"
              th:src="${#strings.isEmpty(wish.imageUrl)}
                      ? @{/images/standard.svg}
@@ -111,16 +114,25 @@
                 Antal: <span th:text="${wish.quantity}">1</span>
             </p>
 
-            <p th:if="${wish.price != null}">
-                Pris: <span th:text="${wish.price}">0.00</span> kr.
-            </p>
+            <div th:if="${wish.price != null}">
+                <p>
+                    Pris pr. stk.:
+                    <span th:text="${wish.price}">79.50</span> kr.
+                </p>
+
+                <p>
+                    <strong>
+                        Totalpris:
+                        <span th:text="${wish.price * wish.quantity}">159.00</span> kr.
+                    </strong>
+                </p>
+            </div>
 
             <a th:if="${!#strings.isEmpty(wish.productUrl)}"
                th:href="${wish.productUrl}">
                 Se produkt
             </a>
         </div>
-
     </article>
 </main>
 
