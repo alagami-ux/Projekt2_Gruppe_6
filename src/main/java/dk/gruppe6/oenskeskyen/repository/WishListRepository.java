@@ -2,6 +2,7 @@ package dk.gruppe6.oenskeskyen.repository;
 
 import dk.gruppe6.oenskeskyen.model.Wish;
 import dk.gruppe6.oenskeskyen.model.WishList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
 
@@ -16,10 +17,29 @@ import java.util.ArrayList;
 @Repository
 public class WishListRepository {
 
-    private final DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
 
-    public WishListRepository(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public ArrayList<WishList> getAllWishLists() {
+        ArrayList<WishList> wishlists = new ArrayList<>();
+
+        String sql = "SELECT * FROM wishlist";
+
+        try(Connection connection = dataSource.getConnection();
+        PreparedStatement statement = connection.prepareStatement(sql);
+        ResultSet resultSet = statement.executeQuery()) {
+
+            while(resultSet.next()) {
+                WishList wishlist = new WishList(
+                        resultSet.getInt("id"),
+                        resultSet.getString("title"));
+
+
+                wishlists.add(wishlist);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public WishList getWishlistById(int id) {

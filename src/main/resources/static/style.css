@@ -17,6 +17,16 @@ header {
     margin-bottom: 20px;
 }
 
+nav {
+    text-decoration: none;
+}
+
+
+nav a:hover {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 h1, h2, p, a {
     overflow-wrap: anywhere;
 }
