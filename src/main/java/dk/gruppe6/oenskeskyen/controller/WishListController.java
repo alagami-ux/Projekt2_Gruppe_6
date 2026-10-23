@@ -33,18 +33,18 @@ public class WishListController {
         return "showWishList";
     }
 
-    @GetMapping("/getCreateWishlist")
+    @GetMapping("/getCreateWishList")
     public String createWishlist() {
         return "createWishList";
     }
 
-    @PostMapping("/saveCreateWishlist")
+    @PostMapping("/saveCreateWishList")
     public String postCreateWishlist(@RequestParam("title") String title) {
         WishList wishList = new WishList(title);
 
         wishListRepository.createWishList(wishList);
 
-        return"redirect: wishlists";
+        return"redirect:/wishlists";
 
     }
 
