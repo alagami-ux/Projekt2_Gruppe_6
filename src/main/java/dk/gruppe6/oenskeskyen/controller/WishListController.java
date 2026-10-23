@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Controller
 public class WishListController {
@@ -42,10 +45,13 @@ public class WishListController {
     public String postCreateWishlist(@RequestParam("title") String title) {
         WishList wishList = new WishList(title);
 
-        wishListRepository.createWishList(wishList);
+        if (bindingResult.hasErrors()) {
+            return "createWishList";
+        }
 
         return"redirect:/wishlists";
 
+        return "redirect: wishlists";
     }
 
 

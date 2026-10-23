@@ -1,8 +1,13 @@
 package dk.gruppe6.oenskeskyen.model;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class WishList {
 
     private int id;
+    @NotBlank(message = "Indtast en titel til ønskesedlen.")
+    @Size(max = 150, message = "Titlen må højst være 150 tegn.")
     private String title;
 
     public WishList() {
