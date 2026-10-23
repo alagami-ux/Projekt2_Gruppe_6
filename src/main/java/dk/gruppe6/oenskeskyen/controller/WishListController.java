@@ -44,14 +44,10 @@ public class WishListController {
     @PostMapping("/saveCreateWishList")
     public String postCreateWishlist(@RequestParam("title") String title) {
         WishList wishList = new WishList(title);
-
-        if (bindingResult.hasErrors()) {
-            return "createWishList";
-        }
+        wishListRepository.createWishList(wishList);
 
         return"redirect:/wishlists";
 
-        return "redirect: wishlists";
     }
 
 

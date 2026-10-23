@@ -1,6 +1,6 @@
-/* =========================
+/*
    1. Grundlæggende styling
-   ========================= */
+*/
 
 body {
     background-color: #F8F6F0;
@@ -33,9 +33,9 @@ p {
 }
 
 
-/* =========================
+/*
    2. Header og navigation
-   ========================= */
+ */
 
 header {
     background-color: #FFFFFF;
@@ -72,9 +72,9 @@ nav a:hover {
 }
 
 
-/* =========================
+/*
    3. Forsiden og sektioner
-   ========================= */
+ */
 
 section {
     text-align: center;
@@ -99,9 +99,9 @@ hr {
 }
 
 
-/* =========================
+/*
    4. Knapper
-   ========================= */
+ */
 
 /* Knappernes placering */
 .button,
@@ -128,9 +128,9 @@ hr {
 }
 
 
-/* =========================
+/*
    5. Informationsbokse
-   ========================= */
+*/
 
 /* Placering af de to bokse */
 .grid {
@@ -168,9 +168,9 @@ hr {
 }
 
 
-/* =========================
+/*
    6. Ønskesedler
-   ========================= */
+*/
 
 /* Overskrift på ønskeseddel-sider */
 .overskriftWishlist {
@@ -235,9 +235,9 @@ hr {
 }
 
 
-/* =========================
+/*
    7. Ønsker og billeder
-   ========================= */
+*/
 
 /* Et enkelt ønske */
 article {
@@ -271,9 +271,9 @@ article {
 }
 
 
-/* =========================
+/*
    8. Footer
-   ========================= */
+*/
 
 footer {
     background-color: #E8EDE2;
@@ -284,9 +284,9 @@ footer {
 }
 
 
-/* =========================
+/*
    9. Tilpasning til mobil
-   ========================= */
+*/
 
 @media (max-width: 600px) {
 
