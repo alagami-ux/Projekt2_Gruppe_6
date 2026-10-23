@@ -40,6 +40,8 @@ public class WishListRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return wishlists;
     }
 
     public WishList getWishlistById(int id) {
@@ -113,14 +115,6 @@ public class WishListRepository {
             statement.setString(1, wishList.getTitle());
             statement.executeUpdate();
 
-            // Gem MySQL's nye ID i det samme WishList-objekt.
-            try (ResultSet keys = statement.getGeneratedKeys()) {
-                if (keys.next()) {
-                    wishList.setId(keys.getInt(1));
-                } else {
-                    throw new SQLException("Databasen returnerede ikke et ID.");
-                }
-            }
         } catch (SQLException e) {
             throw new DataAccessResourceFailureException(
                     "Kunne ikke oprette ønskesedlen i databasen.", e);
