@@ -109,8 +109,7 @@ public class WishListRepository {
         String sql = "INSERT INTO wishlist (title) VALUES(?)";
 
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, wishList.getTitle());
             statement.executeUpdate();
