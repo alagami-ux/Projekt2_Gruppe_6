@@ -1,12 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ønskeskyen</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 
+
+<header>
+    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+
+    <nav>
+        <a th:href="@{/wishlists}">Mine ønskesedler</a>
+    </nav>
+
+</header>
+
+<section>
+    <img class="img-forside" src="https://images.openai.com/static-rsc-4/1qsrmg_dGiC3cGyQrryXdWUUfaIC81fmza5AENM8WoUlWjosgc9i2j7oCaOefTdYaOXZz1aWZZyE_dambmA7UYeumOBTdLmZd7NURAiHVxLFzCtFdGRXHKPMjg7WjuoT0avXcNqktZdcZXdnyVA2FEwilyWjm6aSLB4eUbROKSBerHCCr1ezKHLn006W49Mh?purpose=fullsize" alt="Billede af gaver">
+
+    <h1>Alle dine ønsker samlet ét sted</h1>
+
+    <p> Saml dine ønsker, lav personlige ønskesedler, og hold styr på de ting, du drømmer om.</p>
+
+    <div class="button">
+        <form th:action="@{/wishlists}" method="get" class="modify-form">
+            <button class="btn">Se mine ønskesedler</button>
+        </form>
+    </div>
+
+    <div class="button2">
+        <form th:action="@{/getCreateWishList}" method="get" class="modify-form">
+            <button class="btn">+ Opret en ny ønskeseddel</button>
+        </form>
+    </div>
+
+</section>
+
+<hr>
+
+<section>
+    <h2>Gør dine ønsker personlige</h2>
+
+    <div class="grid">
+
+        <div class="box1">
+            <p>Saml dine ønsker</p>
+            <p>Alle dine idéer på ét sted</p>
+        </div>
+
+        <div class="box2">
+            <p>Hold overblik</p>
+            <p>Organisér dine ønskesedler</p>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <p>ØNSKESKYEN · 2026 </p>
+</footer>
 
 </body>
 </html>

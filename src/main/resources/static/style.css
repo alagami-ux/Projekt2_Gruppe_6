@@ -1,81 +1,184 @@
+/* =========================
+   1. Grundlæggende styling
+   ========================= */
+
 body {
+    background-color: #F8F6F0;
+    color: #30372F;
     font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f5f5f5;
-    color: #222;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 20px;
-}
-
-nav {
-    text-decoration: none;
-}
-
-
-nav a:hover {
-    text-decoration: underline;
-    font-weight: bold;
+    margin: 0;
 }
 
 h1, h2, p, a {
     overflow-wrap: anywhere;
 }
 
-article {
+/* Hovedoverskrift */
+h1 {
+    font-size: 36px;
+    color: #30372F;
+    margin-bottom: 15px;
+}
+
+/* Andre overskrifter */
+h2 {
+    color: #45634A;
+}
+
+/* Almindelig tekst */
+p {
+    color: #45634A;
+    line-height: 1.6;
+    font-size: 20px;
+}
+
+
+/* =========================
+   2. Header og navigation
+   ========================= */
+
+header {
+    background-color: #FFFFFF;
+    padding: 20px 50px;
     display: flex;
-    gap: 20px;
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.wish-details {
-    flex: 1;
-    min-width: 0;
+/* Navnet Ønskeskyen */
+header h2 {
+    color: #45634A;
+    margin: 0;
 }
 
-.wish-details h2 {
-    margin-top: 0;
+/* Logo-link */
+.logo,
+a.logo {
+    color: #45634A;
+    text-decoration: none;
+    padding: 0;
 }
 
-.wish-image {
-    width: 170px;
-    height: 180px;
-    max-width: 100%;
-    object-fit: contain;
-    flex-shrink: 0;
+/* Links i navigationen */
+nav a {
+    color: #45634A;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-a {
-    display: inline-block;
-    padding: 10px 0;
-    color: #005a9c;
+nav a:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-@media (max-width: 600px) {
 
-article {
-    flex-direction: column;
+/* =========================
+   3. Forsiden og sektioner
+   ========================= */
+
+section {
+    text-align: center;
+    padding: 40px 20px;
 }
 
-.wish-image {
+/* Billedet på forsiden */
+.img-forside {
     width: 100%;
-    height: 220px;
-    }
+    height: 300px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin: 0 auto 30px;
 }
 
+/* Vandret linje */
+hr {
+    border: none;
+    border-top: 1px solid #DCE8D5;
+    width: 100%;
+    margin: 20px auto;
+}
+
+
+/* =========================
+   4. Knapper
+   ========================= */
+
+/* Knappernes placering */
+.button,
+.button2,
+.button3 {
+    display: inline-block;
+    margin: 10px;
+}
+
+/* Knappernes udseende */
+.btn {
+    background-color: #45634A;
+    color: #FFFFFF;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Når musen holdes over knapperne */
+.btn:hover {
+    background-color: #344B38;
+}
+
+
+/* =========================
+   5. Informationsbokse
+   ========================= */
+
+/* Placering af de to bokse */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    max-width: 900px;
+    margin: 50px auto;
+}
+
+/* Fælles styling til boksene */
+.box1,
+.box2 {
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #DCE8D5;
+    box-shadow: 0 1px 5px #ccc;
+}
+
+/* Farver på boksene */
+.box1 {
+    background-color: #DCE8D5;
+}
+
+.box2 {
+    background-color: #F2D6D8;
+}
+
+/* Første afsnit i hver boks */
+.box1 p:first-child,
+.box2 p:first-child {
+    color: #45634A;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+
+/* =========================
+   6. Ønskesedler
+   ========================= */
+
+/* Overskrift på ønskeseddel-sider */
+.overskriftWishlist {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+/* Formular til oprettelse af ønskeseddel */
 .wishlist-form {
     display: flex;
     flex-direction: column;
@@ -84,45 +187,146 @@ article {
     width: 100%;
     max-width: 500px;
     box-sizing: border-box;
-
-    background-color: white;
+    margin: 0 auto;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+
+    background-color: #FFFFFF;
+    border: 1px solid #DCE8D5;
+    border-radius: 12px;
+    box-shadow: 0 1px 5px #ccc;
 }
 
+/* Tekst over inputfelt */
 .wishlist-form label {
     font-weight: bold;
 }
 
+/* Inputfelt */
 .wishlist-form input {
     width: 100%;
     box-sizing: border-box;
     padding: 12px;
     font: inherit;
-
     border: 1px solid #888;
     border-radius: 4px;
 }
 
+/* Gem-knap */
 .wishlist-form button {
     align-self: flex-start;
-    padding: 12px 20px;
-
-    background-color: #005a9c;
-    color: white;
+    padding: 14px 24px;
+    background-color: #45634A;
+    color: #FFFFFF;
     border: none;
-    border-radius: 4px;
-
+    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
 }
 
+/* Når musen holdes over gem-knappen */
+.wishlist-form button:hover {
+    background-color: #344B38;
+}
+
+/* Fejlbesked */
 .error-message {
     color: #b42318;
     margin: 0;
 }
 
+
+/* =========================
+   7. Ønsker og billeder
+   ========================= */
+
+/* Et enkelt ønske */
+article {
+    display: flex;
+    gap: 20px;
+    background-color: #FFFFFF;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Teksten til ønsket */
+.wish-details {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Overskriften til ønsket */
+.wish-details h2 {
+    margin-top: 0;
+}
+
+/* Billede til ønsket */
+.wish-image {
+    width: 170px;
+    height: 180px;
+    max-width: 100%;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+
+/* =========================
+   8. Footer
+   ========================= */
+
+footer {
+    background-color: #E8EDE2;
+    color: #45634A;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+
+/* =========================
+   9. Tilpasning til mobil
+   ========================= */
+
 @media (max-width: 600px) {
+
+    /* Header */
+    header {
+        padding: 20px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Overskrift */
+    h1 {
+        font-size: 28px;
+    }
+
+    /* Informationsbokse */
+    .grid {
+        grid-template-columns: 1fr;
+        margin: 20px;
+    }
+
+    /* Knapper */
+    .button,
+    .button2,
+    .button3 {
+        display: block;
+    }
+
+    /* Ønsker */
+    article {
+        flex-direction: column;
+    }
+
+    /* Billeder */
+    .wish-image {
+        width: 100%;
+        height: 220px;
+    }
+
+    /* Gem-knap */
     .wishlist-form button {
         width: 100%;
     }

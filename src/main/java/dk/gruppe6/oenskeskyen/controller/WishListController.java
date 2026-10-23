@@ -36,22 +36,20 @@ public class WishListController {
         return "showWishList";
     }
 
-    @GetMapping("/getCreateWishlist")
-    public String createWishlist(Model model) {
-        model.addAttribute("wishlist", new WishList());
+    @GetMapping("/getCreateWishList")
+    public String createWishlist() {
         return "createWishList";
     }
 
-    @PostMapping("/saveCreateWishlist")
-    public String postCreateWishlist(
-            @Valid @ModelAttribute("wishlist") WishList wishList,
-            BindingResult bindingResult) {
+    @PostMapping("/saveCreateWishList")
+    public String postCreateWishlist(@RequestParam("title") String title) {
+        WishList wishList = new WishList(title);
 
         if (bindingResult.hasErrors()) {
             return "createWishList";
         }
 
-        wishListRepository.createWishList(wishList);
+        return"redirect:/wishlists";
 
         return "redirect: wishlists";
     }
