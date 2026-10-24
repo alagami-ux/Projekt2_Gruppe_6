@@ -330,6 +330,26 @@ article {
     font-size: 16px;
 }
 
+
+.addWish {
+    display: inline-block;
+    background-color: #45634A;
+    color: #FFFFFF;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    margin: 10px;
+}
+
+/* Når musen holdes over knapperne */
+.addWish:hover {
+    background-color: #344B38;
+}
+
+
 /* Billede til ønsket */
 .wish-image {
     width: 170px;
@@ -348,10 +368,77 @@ footer {
     background-color: #E8EDE2;
     color: #45634A;
     text-align: center;
-    padding: 10px;
-    margin-top: 20px;
+    padding: 5px;
+    margin-top: 30px;
 }
 
+/* Formular til oprettelse af ønske */
+
+
+.addWishHeading {
+    text-align: center;
+    margin: 50px;
+}
+
+.createwish-formular {
+    max-width: 550px;
+    width: 100%;
+    margin: 0 auto 40px;
+    padding: 30px;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
+    border: 1px solid #DCE8D5;
+    border-radius: 12px;
+    box-shadow: 0 1px 5px #ccc;
+}
+
+.createwish-formular form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.createwish-formular label {
+    color: #45634A;
+    font-weight: bold;
+}
+
+.createwish-formular input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    font: inherit;
+    border: 1px solid #DCE8D5;
+    border-radius: 6px;
+    background-color: #FAFCF8;
+}
+
+.createwish-formular input:focus {
+    outline: 2px solid #8DA780;
+    border-color: #45634A;
+}
+
+
+.createwish-formular .error-message {
+    color: #b42318;
+    font-size: 14px;
+    margin: 0 0 5px;
+}
+
+.createButton{
+    display: inline-block;
+    background-color: #45634A;
+    color: #FFFFFF;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn:hover {
+    background-color: #344B38;
+}
 
 /*
    9. Tilpasning til mobil
@@ -406,4 +493,12 @@ footer {
         grid-template-columns: 1fr;
         margin: 20px auto;
     }
+
+      .createwish-formular {
+            padding: 20px;
+        }
+
+        .createwish-formular button.btn {
+            width: 100%;
+        }
 }
