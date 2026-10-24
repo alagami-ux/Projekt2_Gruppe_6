@@ -51,8 +51,8 @@ public class WishListController {
         }
 
         WishList wishList = new WishList(title.trim());
-        wishListRepository.createWishList(wishList);
+        int id = wishListRepository.createWishList(wishList);
 
-        return "redirect:/wishlists";
+        return "redirect:/showWishList?id=" + id;
     }
 }
