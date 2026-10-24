@@ -1,48 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Tilføj ønske til din ønskeseddel</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+
 </head>
 <body>
-<h1>Tilføj ønske til #reference to given wishlist#</h1>
 
-<form action="/saveCreateWish" method="post" th:object="${wish}">
-    <input type="hidden" name="wishlistId" th:value="${wishlistId}">
+<header>
+    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
 
-    <label for="name">Navn på ønske</label>
-    <input type="text" id="name" th:field="*{name}">
-    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-    <br>
+    <nav>
+        <a th:href="@{/wishlists}">Mine ønskesedler</a>
+    </nav>
 
-    <label for="description">Beskrivelse</label>
-    <input type="text" id="description" th:field="*{description}">
-    <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
-    <br>
+</header>
 
-    <label for="quantity">Antal</label>
-    <input type="number" id="quantity" th:field="*{quantity}">
-    <div th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
-    <br>
+<main>
+    <h1 class="addWishHeading">
+        Tilføj et ønske til
+        <span th:text="${wishlist.title}">ønskesedlen</span> 🎁
+    </h1>
 
-    <label for="price">Pris</label>
-    <input type="text" id="price" th:field="*{price}">
-    <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
-    <br>
+    <div class="createwish-formular">
+        <form action="/saveCreateWish" method="post" th:object="${wish}">
+            <input type="hidden" name="wishlistId" th:value="${wishlistId}">
 
-    <label for="productUrl">Link til ønske</label>
-    <input type="url" id="productUrl" th:field="*{productUrl}">
-    <div th:if="${#fields.hasErrors('productUrl')}" th:errors="*{productUrl}"></div>
-    <br>
+            <label for="name">Navn på ønske</label>
+            <input type="text" id="name" th:field="*{name}" required>
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            <br>
 
-    <label for="imageUrl">Link til billede af ønske</label>
-    <input type="url" id="imageUrl" th:field="*{imageUrl}">
-    <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
-    <br>
+            <label for="description">Beskrivelse</label>
+            <input type="text" id="description" th:field="*{description}">
+            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            <br>
 
-    <button type="submit">Gem ønske</button>
+            <label for="quantity">Antal</label>
+            <input type="number" id="quantity" th:field="*{quantity}">
+            <div th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
+            <br>
 
-</form>
+            <label for="price">Pris</label>
+            <input type="text" id="price" th:field="*{price}">
+            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
+            <br>
+
+            <label for="productUrl">Link til ønske</label>
+            <input type="url" id="productUrl" th:field="*{productUrl}">
+            <div th:if="${#fields.hasErrors('productUrl')}" th:errors="*{productUrl}"></div>
+            <br>
+
+            <label for="imageUrl">Link til billede af ønske</label>
+            <input type="url" id="imageUrl" th:field="*{imageUrl}">
+            <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
+            <br>
+
+            <button type="submit" class="createButton">Gem ønske</button>
+
+        </form>
+    </div>
+</main>
+
+<footer>
+    <p>ØNSKESKYEN · 2026 </p>
+</footer>
 
 </body>
 </html>

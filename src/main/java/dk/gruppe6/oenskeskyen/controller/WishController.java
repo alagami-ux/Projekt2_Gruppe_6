@@ -37,6 +37,9 @@ public class WishController {
             );
         }
 
+        model.addAttribute("wishlist", wishList);
+
+
         Wish wish = new Wish();
         wish.setWishlistId(id);
         wish.setQuantity(1);
