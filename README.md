@@ -26,17 +26,17 @@ Vent på, at Maven indlæser projektets afhængigheder.
 
 ## Gendan databasen og indlæs startdata
 
-SQL-filerne ligger i `src/main/resources/templates/sql/`.
+SQL-filerne ligger i `src/main/resources/db/`.
 
 1. Start MySQL Server, og åbn forbindelsen i MySQL Workbench som root eller en anden konto med rettighed til at oprette databasen og tabellerne.
-2. Vælg **File → Open SQL Script**, og åbn [`schema.sql`](src/main/resources/templates/sql/schema.sql).
+2. Vælg **File → Open SQL Script**, og åbn [`schema.sql`](src/main/resources/db/schema.sql).
 3. Kør hele scriptet med lyn-knappen. Det opretter `projekt2_gruppe_6_db` samt tabellerne `wishlist` og `wish`. Scriptet opretter ikke brugeren F26A.
-4. Ved en frisk installation: Åbn derefter [`data.sql`](src/main/resources/templates/sql/data.sql), og kør hele scriptet én gang på samme forbindelse.
+4. Ved en frisk installation: Åbn derefter [`data.sql`](src/main/resources/db/data.sql), og kør hele scriptet én gang på samme forbindelse.
 5. Kontrollér, at Action Output ikke viser fejl. På en frisk database indsættes to ønskesedler og fem ønsker.
 
-`data.sql` gemmer hver ny ønskeseddels ID med `LAST_INSERT_ID()` og bruger det til de tilhørende ønsker. Kør hele scriptet på samme forbindelse. Det kræver ikke, at listerne får ID 1 og 2, og eksisterende rækker ændres ikke.
+`data.sql` gemmer hver ny ønskeseddels ID med `LAST_INSERT_ID()` og bruger det til de tilhørende ønsker. Kør hele scriptet på samme forbindelse. Det kræver ikke, at listerne får ID 1 og 2, men det er vigtigt, at hele scriptet køres i samme forbindelse.
 
-**Kør startdata-scriptet én gang pr. installation.** Gentagen kørsel opretter yderligere to lister og fem ønsker. `schema.sql` tømmer ikke eksisterende tabeller og ændrer ikke deres struktur, hvis de allerede findes. Hvis `data.sql` stopper med en fejl, kør `ROLLBACK;` på samme forbindelse, ret fejlen, og prøv igen. En almindelig statement-fejl ruller ikke nødvendigvis hele transaktionen tilbage automatisk.
+**Kør startdata-scriptet én gang pr. installation.** Gentagen kørsel opretter yderligere to lister og fem ønsker. `schema.sql` tømmer ikke eksisterende tabeller og ændrer ikke deres struktur.
 
 Kontrollér data i en ny query-fane:
 
@@ -81,9 +81,7 @@ Start applikationen med Run.
 Kontrollér, at Run-vinduet viser `Started Projekt2Gruppe6Application`, og at
 Tomcat er startet på port 8080. Det viser, at Spring Boot er startet.
 
-Forsiden på `http://localhost:8080/` er endnu ikke implementeret. Adressen
-returnerer derfor HTTP 404. Det betyder ikke i sig selv, at opstarten fejlede.
-
+Forsiden på `http://localhost:8080/` returnerer nu en redirect til `/wishlists`.
 En eksisterende ønskeseddel kan vises på
 `http://localhost:8080/showWishList?id=DIT_ID`. Erstat `DIT_ID` med et
 eksisterende ID fra SQL-opslaget ovenfor. De øvrige brugerforløb er under udvikling.
@@ -115,4 +113,3 @@ og layout skal stadig afprøves manuelt. Workflowen ændrer ikke merge-reglerne.
 ## Diagrammer og design
 
 Se [diagrammer og forklaring til holdet](docs/diagrammer.md) for klasse-, sekvens- og deployment-diagrammer samt links til wireframes og ER-diagram med Chen-notation.
-
