@@ -1,0 +1,73 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #222;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: Arial, sans-serif;
+    color: #111;
+    margin-top: 0;
+}
+
+label,
+input,
+button,
+select,
+textarea,
+a,
+p {
+    font-family: Arial, sans-serif;
+}
+
+form {
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+input,
+button,
+select,
+textarea {
+    box-sizing: border-box;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+}
+
+button {
+    background: #005a9c;
+    color: white;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.error {
+    color: #b00020;
+    margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    form {
+        padding: 16px;
+    }
+}

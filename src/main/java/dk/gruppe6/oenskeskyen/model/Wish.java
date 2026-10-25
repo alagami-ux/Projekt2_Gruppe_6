@@ -8,12 +8,17 @@ public class Wish {
 
     private int id;
     private int wishlistId;
+
     @NotBlank(message = "Indtast et ønske til ønskesedlen.")
-    @Size(max = 150, message = "Ønsket må højst være 100 tegn.")
+    @Size(max = 150, message = "Ønsket må højst være 150 tegn.")
     private String name;
+
+    @Size(max = 150, message = "Beskrivelsen må højst være 150 tegn.")
     private String description;
+
     @jakarta.validation.constraints.Min(value = 1, message = "Antallet skal mindst være 1.")
     private int quantity = 1;
+
     @jakarta.validation.constraints.DecimalMin(value ="0.00", message = "Prisen må ikke være negativ.")
     @jakarta.validation.constraints.Digits(
             integer = 8,
@@ -21,8 +26,10 @@ public class Wish {
             message = "Prisen må højst have 8 cifre før kommaet og 2 decimaler."
     )
     private BigDecimal price;
+
     @jakarta.validation.constraints.Size(max = 2048, message = "Linket må højst være 2048 tegn.")
     private String productUrl;
+
     @jakarta.validation.constraints.Size(max = 2048, message = "Linket må højst være 2048 tegn.")
     private String imageUrl;
 
@@ -107,4 +114,3 @@ public class Wish {
         this.imageUrl = imageUrl;
     }
 }
-

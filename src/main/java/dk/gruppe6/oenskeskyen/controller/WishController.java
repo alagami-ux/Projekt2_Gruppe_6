@@ -6,7 +6,7 @@ import dk.gruppe6.oenskeskyen.repository.WishListRepository;
 import dk.gruppe6.oenskeskyen.repository.WishRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -39,7 +39,6 @@ public class WishController {
 
         model.addAttribute("wishlist", wishList);
 
-
         Wish wish = new Wish();
         wish.setWishlistId(id);
         wish.setQuantity(1);
@@ -57,14 +56,19 @@ public class WishController {
             @RequestParam("wishlistId") int wishlistId,
             Model model) {
 
-        if (wishListRepository.getWishlistById(wishlistId) == null) {
+        WishList wishList = wishListRepository.getWishlistById(wishlistId);
+
+        if (wishList == null) {
             model.addAttribute("wishlistId", wishlistId);
             model.addAttribute("errorMessage", "Ønskesedlen findes ikke.");
             return "createWish";
         }
 
+        model.addAttribute("wishlist", wishList);
+        model.addAttribute("wishlistId", wishlistId);
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("wishlistId", wishlistId);
+            model.addAttribute("errorMessage", "Der er fejl i formularen. Ret venligst markerede felter.");
             return "createWish";
         }
 
@@ -72,10 +76,9 @@ public class WishController {
 
         try {
             wishRepository.createWish(wish);
-        } catch (DataAccessResourceFailureException e) {
-            model.addAttribute("wishlistId", wishlistId);
+        } catch (DataAccessException e) {
             model.addAttribute("errorMessage",
-                    "Der opstod en fejl ved oprettelsen af ønsket. Prøv igen, smukke!");
+                    "Der opstod en fejl ved oprettelsen af ønsket. Prøv igen.");
             return "createWish";
         }
 
