@@ -54,7 +54,6 @@ public class WishListController {
             Model model) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("errorMessage", "Du skal skrive en titel til ønskesedlen.");
             return "createWishList";
         }
 
