@@ -3,6 +3,7 @@ package dk.gruppe6.oenskeskyen.controller;
 import dk.gruppe6.oenskeskyen.model.WishList;
 import dk.gruppe6.oenskeskyen.repository.WishListRepository;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataAccessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -65,8 +66,12 @@ public class WishListController {
         }
 
         WishList savedWishList = new WishList(title);
-        int id = wishListRepository.createWishList(savedWishList);
-
-        return "redirect:/showWishList?id=" + id;
+        try {
+            int id = wishListRepository.createWishList(savedWishList);
+            return "redirect:/showWishList?id=" + id;
+        } catch (DataAccessException e) {
+            model.addAttribute("errorMessage", "Ønskesedlen kunne ikke gemmes. Prøv igen senere.");
+            return "createWishList";
+        }
     }
 }

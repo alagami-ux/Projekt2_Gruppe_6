@@ -56,29 +56,25 @@ public class WishController {
             @RequestParam("wishlistId") int wishlistId,
             Model model) {
 
-        WishList wishList = wishListRepository.getWishlistById(wishlistId);
-
-        if (wishList == null) {
-            model.addAttribute("wishlistId", wishlistId);
-            model.addAttribute("errorMessage", "Ønskesedlen findes ikke.");
-            return "createWish";
-        }
-
-        model.addAttribute("wishlist", wishList);
         model.addAttribute("wishlistId", wishlistId);
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("errorMessage", "Der er fejl i formularen. Ret venligst markerede felter.");
-            return "createWish";
-        }
-
         wish.setWishlistId(wishlistId);
 
         try {
+            WishList wishList = wishListRepository.getWishlistById(wishlistId);
+            if (wishList == null) {
+                model.addAttribute("errorMessage", "Ønskesedlen findes ikke. Gå tilbage til Mine ønskesedler.");
+                return "createWish";
+            }
+            model.addAttribute("wishlist", wishList);
+
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("errorMessage", "Der er fejl i formularen. Ret venligst markerede felter.");
+                return "createWish";
+            }
+
             wishRepository.createWish(wish);
         } catch (DataAccessException e) {
-            model.addAttribute("errorMessage",
-                    "Der opstod en fejl ved oprettelsen af ønsket. Prøv igen.");
+            model.addAttribute("errorMessage", "Ønsket kunne ikke gemmes. Prøv igen senere.");
             return "createWish";
         }
 

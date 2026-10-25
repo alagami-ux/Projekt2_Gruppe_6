@@ -19,7 +19,7 @@
 <main>
     <h1 class="addWishHeading">
         Tilføj et ønske til
-        <span th:text="${wishlist.title}">ønskesedlen</span> 🎁
+        <span th:if="${wishlist != null}" th:text="${wishlist.title}">ønskesedlen</span> 🎁
     </h1>
 
     <div th:if="${errorMessage != null}" class="error-message" th:text="${errorMessage}">
