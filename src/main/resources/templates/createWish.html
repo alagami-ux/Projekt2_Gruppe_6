@@ -2,9 +2,9 @@
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tilføj ønske til din ønskeseddel</title>
     <link rel="stylesheet" th:href="@{/style.css}">
-
 </head>
 <body>
 
@@ -14,7 +14,6 @@
     <nav>
         <a th:href="@{/wishlists}">Mine ønskesedler</a>
     </nav>
-
 </header>
 
 <main>
@@ -23,8 +22,12 @@
         <span th:text="${wishlist.title}">ønskesedlen</span> 🎁
     </h1>
 
+    <div th:if="${errorMessage != null}" class="error-message" th:text="${errorMessage}">
+        Fejl
+    </div>
+
     <div class="createwish-formular">
-        <form action="/saveCreateWish" method="post" th:object="${wish}">
+        <form th:action="@{/saveCreateWish}" method="post" th:object="${wish}">
             <input type="hidden" name="wishlistId" th:value="${wishlistId}">
 
             <label for="name">Navn på ønske</label>
