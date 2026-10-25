@@ -21,6 +21,11 @@ public class WishListController {
     @Autowired
     WishListRepository wishListRepository;
 
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/wishlists";
+    }
+
     @GetMapping("/wishlists")
     public String wishlists(Model model) {
         model.addAttribute("wishlists", wishListRepository.getAllWishLists());
