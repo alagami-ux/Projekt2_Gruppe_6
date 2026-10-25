@@ -4,65 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ønskeskyen</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
-
-
 <header>
-    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+    <h2>
+        <a th:href="@{/}" class="logo">Ønskeskyen ☁️</a>
+    </h2>
 
-    <nav>
+    <nav aria-label="Hovednavigation">
         <a th:href="@{/wishlists}">Mine ønskesedler</a>
     </nav>
-
 </header>
 
-<section>
-    <img class="img-forside"
-         src="https://images.openai.com/static-rsc-4/1qsrmg_dGiC3cGyQrryXdWUUfaIC81fmza5AENM8WoUlWjosgc9i2j7oCaOefTdYaOXZz1aWZZyE_dambmA7UYeumOBTdLmZd7NURAiHVxLFzCtFdGRXHKPMjg7WjuoT0avXcNqktZdcZXdnyVA2FEwilyWjm6aSLB4eUbROKSBerHCCr1ezKHLn006W49Mh?purpose=fullsize"
-         alt="Gaver pakket ind i pink og turkis gave papir.">
-    <h1>Alle dine ønsker samlet ét sted</h1>
+<main>
+    <section>
+        <img class="img-forside"
+             th:src="@{/images/forside-gaver.jpg}"
+             alt="Gaver med gavebånd og blomster">
 
-    <p> Saml dine ønsker, lav personlige ønskesedler, og hold styr på de ting, du drømmer om.</p>
+        <h1>Alle dine ønsker samlet ét sted</h1>
 
-    <div class="button">
-        <form th:action="@{/wishlists}" method="get" class="modify-form">
-            <button class="btn">Se mine ønskesedler</button>
-        </form>
-    </div>
+        <p>
+            Saml dine ønsker, lav personlige ønskesedler,
+            og hold styr på de ting, du drømmer om.
+        </p>
 
-    <div class="button2">
-        <form th:action="@{/getCreateWishList}" method="get" class="modify-form">
-            <button class="btn">+ Opret en ny ønskeseddel</button>
-        </form>
-    </div>
-
-</section>
-
-<hr>
-
-<section>
-    <h2>Gør dine ønsker personlige</h2>
-
-    <div class="grid">
-
-        <div class="box1">
-            <p>Saml dine ønsker</p>
-            <p>Alle dine idéer på ét sted</p>
+        <div class="button">
+            <form th:action="@{/wishlists}"
+                  method="get"
+                  class="modify-form">
+                <button class="btn" type="submit">
+                    Se mine ønskesedler
+                </button>
+            </form>
         </div>
 
-        <div class="box2">
-            <p>Hold overblik</p>
-            <p>Organisér dine ønskesedler</p>
+        <div class="button2">
+            <form th:action="@{/getCreateWishList}"
+                  method="get"
+                  class="modify-form">
+                <button class="btn" type="submit">
+                    + Opret en ny ønskeseddel
+                </button>
+            </form>
         </div>
+    </section>
 
-    </div>
-</section>
+    <hr>
+
+    <section>
+        <h2>Gør dine ønsker personlige</h2>
+
+        <div class="grid">
+            <div class="box1">
+                <p>Saml dine ønsker</p>
+                <p>Alle dine idéer på ét sted</p>
+            </div>
+
+            <div class="box2">
+                <p>Hold overblik</p>
+                <p>Organisér dine ønskesedler</p>
+            </div>
+        </div>
+    </section>
+</main>
 
 <footer>
-    <p>ØNSKESKYEN · 2026 </p>
+    <p>ØNSKESKYEN · 2026</p>
 </footer>
 
 </body>
