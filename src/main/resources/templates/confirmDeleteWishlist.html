@@ -1,20 +1,53 @@
+
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bekræft sletning</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
-<h1>Bekræft sletning</h1>
 
-<p>
-    Er du sikker på, at du vil slette ønskesedlen
-    <strong th:text="${wishlist.title}">Ønskeseddel</strong>?
-</p>
-<p><a th:href="@{/wishlists}">Nej, gå tilbage</a></p>
-<form th:action="@{/deleteWishList}" method="post">
-    <input type="hidden" name="id" th:value="${wishlist.id}">
-    <button type="submit">Ja, slet ønskesedlen</button>
-</form>
+<header>
+    <h2>
+        <a th:href="@{/}" class="logo">Ønskeskyen ☁️</a>
+    </h2>
+
+    <nav>
+        <a th:href="@{/wishlists}">Mine ønskesedler</a>
+    </nav>
+</header>
+
+<main>
+    <div class="delete-confirmation">
+
+        <h1>Bekræft sletning</h1>
+
+        <p>
+            Er du sikker på, at du vil slette ønskesedlen
+            <strong th:text="${wishlist.title}">Ønskeseddel</strong>?
+        </p>
+
+        <div class="delete-actions">
+
+            <form th:action="@{/deleteWishList}" method="post">
+                <input type="hidden"
+                       name="id"
+                       th:value="${wishlist.id}">
+
+                <button type="submit" class="btn btn-danger">
+                    Ja, slet ønskesedlen
+                </button>
+            </form>
+
+            <a th:href="@{/wishlists}" class="btn">
+                Annuller
+            </a>
+
+        </div>
+    </div>
+</main>
+
 </body>
 </html>
