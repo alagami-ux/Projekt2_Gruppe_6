@@ -40,3 +40,18 @@ Tester: aL
 
 Resultaterne er baseret på aLs manuelle kontroller og skærmbilleder.
 Oprettelse gennem formularer, redigering, sletning og øvrige funktioner er ikke testet her.
+
+### #30 – Databasetest af sletning af ønskeseddel
+
+Dato: 26-10-2026
+Tester: aL
+Resultat: Bestået
+
+- Sletning af testlisten ramte 1 række.
+- Testlistens tilknyttede ønske blev slettet automatisk.
+- Den anden liste og dens ønske blev bevaret.
+- Gentagen sletning ramte 0 rækker.
+- Testændringer blev rullet tilbage med ROLLBACK.
+
+Testen blev udført direkte i MySQL Workbench.
+Java-metoden og controllerforløbet er endnu ikke funktionstestet.
