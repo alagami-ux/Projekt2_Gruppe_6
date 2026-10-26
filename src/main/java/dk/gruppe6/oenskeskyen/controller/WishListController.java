@@ -51,6 +51,40 @@ public class WishListController {
         return "showWishList";
     }
 
+    @GetMapping("/confirmDeleteWishList")
+    public String confirmDeleteWishList(@RequestParam("id") int id, Model model) {
+        WishList wishlist = wishListRepository.getWishlistById(id);
+
+        if (wishlist == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Ønskesedlen findes ikke.");
+        }
+
+        model.addAttribute("wishlist", wishlist);
+        return "confirmDeleteWishlist";
+    }
+
+    @PostMapping("/deleteWishList")
+    public String deleteWishList(@RequestParam("id") int id) {
+        WishList wishlist = wishListRepository.getWishlistById(id);
+
+        if (wishlist == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "Ønskesedlen findes ikke.");
+        }
+
+        try {
+            wishListRepository.deleteWishlist(id);
+        } catch (DataAccessException e) {
+            log.error("Kunne ikke slette ønskeseddel med id={}", id, e);
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Ønskesedlen kunne ikke slettes. Prøv igen senere.");
+        }
+
+        return "redirect:/wishlists";
+    }
+
     @GetMapping("/getCreateWishList")
     public String createWishlist(Model model) {
         model.addAttribute("wishList", new WishList());

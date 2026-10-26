@@ -135,7 +135,12 @@ public class WishListRepository {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, id);
-            statement.executeUpdate();
+            int rowsDeleted = statement.executeUpdate();
+
+            if (rowsDeleted == 0) {
+                throw new DataAccessResourceFailureException(
+                        "OBS: Ønskesedlen findes ikke.");
+            }
 
         } catch (SQLException e) {
             throw new DataAccessResourceFailureException(

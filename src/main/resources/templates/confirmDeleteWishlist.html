@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bekræft sletning</title>
+</head>
+<body>
+<h1>Bekræft sletning</h1>
+
+<p>
+    Er du sikker på, at du vil slette ønskesedlen
+    <strong th:text="${wishlist.title}">Ønskeseddel</strong>?
+</p>
+<p><a th:href="@{/wishlists}">Nej, gå tilbage</a></p>
+<form th:action="@{/deleteWishList}" method="post">
+    <input type="hidden" name="id" th:value="${wishlist.id}">
+    <button type="submit">Ja, slet ønskesedlen</button>
+</form>
+</body>
+</html>
