@@ -58,39 +58,43 @@ public class WishRepository {
     }
 
     public Wish getWishById(int id) {
-        Wish wish = new Wish();
         String sql = "SELECT * FROM wish WHERE id = ?";
 
-        try(Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
             statement.setInt(1, id);
 
-            try(ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    wish.setId(resultSet.getInt("id"));
-                    wish.setWishlistId(resultSet.getInt("wishlist_id"));
-                    wish.setName(resultSet.getString("name"));
-                    wish.setDescription(resultSet.getString("description"));
-                    wish.setQuantity(resultSet.getInt("quantity"));
-                    wish.setPrice(resultSet.getBigDecimal("price"));
-                    wish.setProductUrl(resultSet.getString("product_url"));
-                    wish.setImageUrl(resultSet.getString("image_url"));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return null;
                 }
 
-            }
-        }catch (SQLException e) {
-            throw new DataAccessResourceFailureException("Kunne ikke finde det pågældende ønske", e);
-        }
+                Wish wish = new Wish();
+                wish.setId(resultSet.getInt("id"));
+                wish.setWishlistId(resultSet.getInt("wishlist_id"));
+                wish.setName(resultSet.getString("name"));
+                wish.setDescription(resultSet.getString("description"));
+                wish.setQuantity(resultSet.getInt("quantity"));
+                wish.setPrice(resultSet.getBigDecimal("price"));
+                wish.setProductUrl(resultSet.getString("product_url"));
+                wish.setImageUrl(resultSet.getString("image_url"));
 
-        return wish;
+                return wish;
+            }
+
+        } catch (SQLException e) {
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke finde det pågældende ønske.", e);
+        }
     }
 
     public void updateWish(Wish updatedWish) {
         String sql = "UPDATE wish SET name = ?, description = ?, quantity = ?, price = ?," +
                 "product_url = ?, image_url = ? WHERE id = ?";
 
-        try(Connection connection = dataSource.getConnection();
-        PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, updatedWish.getName());
             statement.setString(2, updatedWish.getDescription());
@@ -103,7 +107,8 @@ public class WishRepository {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new DataAccessResourceFailureException("Kunne ikke redigere i ønsket.", e);
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke redigere i ønsket.", e);
         }
     }
 }
