@@ -18,7 +18,14 @@
 
 <main>
     <div>
-        <h1 th:text="${wishlist.title}">Ønskeseddel</h1>
+        <div class="wishlist-title-row">
+            <h1 th:text="${wishlist.title}">Ønskesedlens titel</h1>
+
+            <a th:href="@{/getUpdateWishList(id=${wishlist.id})}"
+               class="btn">
+                Rediger ønskeseddel
+            </a>
+        </div>
 
         <div>
             <a th:href="@{/getCreateWish(id=${wishlist.id})}" class="addWish">

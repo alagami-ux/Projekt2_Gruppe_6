@@ -154,7 +154,7 @@ public class WishListRepository {
 
             statement.executeUpdate();
         }catch (SQLException e) {
-            e.printStackTrace();
+            throw new DataAccessResourceFailureException("Kunne ikke redigere i ønskesedlen", e);
         }
     }
 }
