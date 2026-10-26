@@ -171,4 +171,26 @@ public class WishController {
             return "showWishList";
         }
     }
+
+    @GetMapping("/getUpdateWish")
+    public String getUpdateWish(@RequestParam("id") int id, Model model) {
+        Wish wish = wishRepository.getWishById(id);
+
+        if (wish == null) {
+            model.addAttribute("errorMessage", "Ønsket findes ikke.");
+            return "showWishList";
+        }
+
+        model.addAttribute("wish", wish);
+        model.addAttribute("wishlistId", wish.getWishlistId());
+
+        return "updateWish";
+    }
+
+    @PostMapping("/saveUpdateWish")
+    public String postUpdateWish(@ModelAttribute Wish wish, @RequestParam("wishlistId") int wishListId) {
+        wishRepository.updateWish(wish);
+
+        return "redirect:showWishList?id=" + wishListId;
+    }
 }

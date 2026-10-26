@@ -40,7 +40,7 @@ public class WishRepository {
         }
     }
 
-    public void deleteWish(int id, int wishlistId) {
+    public int deleteWish(int id, int wishlistId) {
         String sql = "DELETE FROM wish WHERE id = ? AND wishlist_id = ?";
 
         try (Connection connection = dataSource.getConnection();
@@ -49,7 +49,7 @@ public class WishRepository {
             statement.setInt(1, id);
             statement.setInt(2, wishlistId);
 
-            statement.executeUpdate();
+            return statement.executeUpdate();
 
         } catch (SQLException e) {
             throw new DataAccessResourceFailureException(
@@ -59,22 +59,23 @@ public class WishRepository {
 
     public Wish getWishById(int id) {
         Wish wish = new Wish();
-        String sql = "SELECT * FROM WHERE id = ?";
+        String sql = "SELECT * FROM wish WHERE id = ?";
 
         try(Connection connection = dataSource.getConnection();
         PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, id);
 
             try(ResultSet resultSet = statement.executeQuery()) {
-                wish.setId(resultSet.getInt("id"));
-                wish.setId(resultSet.getInt("wishlist_id"));
-                wish.setWishlistId(resultSet.getInt("wishlist_id"));
-                wish.setName(resultSet.getString("name"));
-                wish.setDescription(resultSet.getString("desciption"));
-                wish.setQuantity(resultSet.getInt("quantity"));
-                wish.setPrice(resultSet.getBigDecimal("price"));
-                wish.setProductUrl(resultSet.getString("product_url"));
-                wish.setImageUrl(resultSet.getString("image_url"));
+                if (resultSet.next()) {
+                    wish.setId(resultSet.getInt("id"));
+                    wish.setWishlistId(resultSet.getInt("wishlist_id"));
+                    wish.setName(resultSet.getString("name"));
+                    wish.setDescription(resultSet.getString("description"));
+                    wish.setQuantity(resultSet.getInt("quantity"));
+                    wish.setPrice(resultSet.getBigDecimal("price"));
+                    wish.setProductUrl(resultSet.getString("product_url"));
+                    wish.setImageUrl(resultSet.getString("image_url"));
+                }
 
             }
         }catch (SQLException e) {
@@ -84,8 +85,8 @@ public class WishRepository {
         return wish;
     }
 
-    public void editWish(Wish updatedWish) {
-        String sql = "UPDATE wish SET name = ?, description = ?, quantity = ?, price = ?" +
+    public void updateWish(Wish updatedWish) {
+        String sql = "UPDATE wish SET name = ?, description = ?, quantity = ?, price = ?," +
                 "product_url = ?, image_url = ? WHERE id = ?";
 
         try(Connection connection = dataSource.getConnection();

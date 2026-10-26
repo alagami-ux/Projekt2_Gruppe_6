@@ -311,6 +311,95 @@ article {
 .wish-details h2 {
     margin-top: 0;
 }
+/* Show wishlist / wishes */
+main {
+    padding: 0 20px;
+}
+
+article {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    background-color: var(--white);
+    padding: 20px;
+    margin: 0 auto 20px;
+    border: 1px solid var(--sage-light);
+    border-radius: 12px;
+    box-shadow: 0 1px 5px var(--shadow);
+    max-width: 1000px;
+}
+
+.wish-image {
+    width: 170px;
+    height: 180px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.wish-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.wish-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.wish-title-row h2 {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.wish-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.wish-actions form {
+    margin: 0;
+}
+
+.wish-actions .btn {
+    margin: 0;
+    white-space: nowrap;
+    padding: 10px 14px;
+}
+
+.wish-actions a.btn {
+    background-color: var(--forest-main);
+    color: var(--white);
+}
+
+.wish-actions a.btn:hover {
+    background-color: var(--forest-deep);
+}
+
+.wish-actions .btn-danger {
+    background-color: var(--danger);
+    border: 1px solid var(--danger);
+    color: var(--white);
+}
+
+.wish-actions .btn-danger:hover {
+    background-color: var(--danger-dark);
+}
+
+.wish-details p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+.addWish {
+    margin: 10px;
+}
 
 .wish-details p {
     font-size: 16px;
@@ -409,6 +498,9 @@ footer {
     text-decoration: none;
     cursor: pointer;
 }
+
+
+
 
 /* Responsive */
 @media (max-width: 600px) {
