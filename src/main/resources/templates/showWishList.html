@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Ønskeseddel</title>
-
     <link rel="stylesheet" th:href="@{/style.css}">
-
 </head>
 <body>
 
@@ -16,12 +14,11 @@
     <nav>
         <a th:href="@{/wishlists}">Mine ønskesedler</a>
     </nav>
-
 </header>
 
 <main>
     <div>
-        <h1 th:text="${wishlist.title}">Ønskesedlens titel</h1>
+        <h1 th:text="${wishlist.title}">Ønskeseddel</h1>
 
         <div>
             <a th:href="@{/getCreateWish(id=${wishlist.id})}" class="addWish">
@@ -33,53 +30,59 @@
     <p th:if="${#lists.isEmpty(wishes)}">
         Du har endnu ikke tilføjet nogen ønsker.
     </p>
-<div>
-    <article th:each="wish : ${wishes}">
-        <img class="wish-image"
-             th:src="${#strings.isEmpty(wish.imageUrl)}
+
+    <div>
+        <article th:each="wish : ${wishes}">
+            <img class="wish-image"
+                 th:src="${#strings.isEmpty(wish.imageUrl)}
                      ? @{/images/standard.svg}
                      : ${wish.imageUrl}"
-             th:alt="${#strings.isEmpty(wish.imageUrl)}
+                 th:alt="${#strings.isEmpty(wish.imageUrl)}
                      ? 'Intet produktbillede'
                      : ${wish.name}"
-             th:attr="data-fallback=@{/images/standard.svg}"
-             onerror="this.onerror=null; this.src=this.dataset.fallback; this.alt='Intet produktbillede';">
+                 th:attr="data-fallback=@{/images/standard.svg}"
+                 onerror="this.onerror=null; this.src=this.dataset.fallback; this.alt='Intet produktbillede';">
 
-        <div class="wish-details">
-            <h2 th:text="${wish.name}">Ønskets navn</h2>
+            <div class="wish-details">
+                <h2 th:text="${wish.name}">Ønskets navn</h2>
 
-            <p th:if="${!#strings.isEmpty(wish.description)}"
-               th:text="${wish.description}">
-                Beskrivelse
-            </p>
-
-            <p>
-                Antal: <span th:text="${wish.quantity}">1</span>
-            </p>
-
-            <div th:if="${wish.price != null}">
-                <p>
-                    Pris pr. stk.:
-                    <span th:text="${wish.price}">79.50</span> kr.
+                <p th:if="${!#strings.isEmpty(wish.description)}"
+                   th:text="${wish.description}">
+                    Beskrivelse
                 </p>
 
                 <p>
-                    <strong>
-                        Totalpris:
-                        <span th:text="${wish.price * wish.quantity}">159.00</span> kr.
-                    </strong>
+                    Antal: <span th:text="${wish.quantity}">1</span>
                 </p>
+
+                <div th:if="${wish.price != null}">
+                    <p>
+                        Pris pr. stk.:
+                        <span th:text="${wish.price}">79.50</span> kr.
+                    </p>
+
+                    <p>
+                        <strong>
+                            Totalpris:
+                            <span th:text="${wish.price * wish.quantity}">159.00</span> kr.
+                        </strong>
+                    </p>
+                </div>
+
+                <a class="btn"
+                   th:if="${!#strings.isEmpty(wish.productUrl)}"
+                   th:href="${wish.productUrl}">
+                    Se produkt
+                </a>
+
+                <form th:action="@{/confirmDeleteWish}" method="get" style="margin-top: 10px;">
+                    <input type="hidden" name="id" th:value="${wish.id}">
+                    <input type="hidden" name="wishlistId" th:value="${wishlist.id}">
+                    <button type="submit" class="btn btn-danger">Slet</button>
+                </form>
             </div>
-
-            <a class="btn"
-               th:if="${!#strings.isEmpty(wish.productUrl)}"
-               th:href="${wish.productUrl}">
-                Se produkt
-            </a>
-
-        </div>
-    </article>
-</div>
+        </article>
+    </div>
 </main>
 
 </body>

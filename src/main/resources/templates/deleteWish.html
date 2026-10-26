@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slet ønske</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+
+<header>
+    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+
+    <nav>
+        <a th:href="@{/wishlists}">Mine ønskesedler</a>
+    </nav>
+</header>
+
+<main>
+    <h1>Slet ønske</h1>
+
+    <p>Vil du slette ønske <strong th:text="${wish.name}">Ønske</strong>?</p>
+
+    <form th:action="@{/deleteWish}" method="post">
+        <input type="hidden" name="id" th:value="${wish.id}">
+        <input type="hidden" name="wishlistId" th:value="${wishlistId}">
+
+        <div class="delete-actions">
+            <button type="submit" name="action" value="delete" class="btn btn-danger">
+                Slet ønske
+            </button>
+
+            <button type="submit" name="action" value="cancel" class="btn">
+                Annuller
+            </button>
+        </div>
+    </form>
+</main>
+
+</body>
+</html>
