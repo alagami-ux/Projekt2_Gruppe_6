@@ -50,7 +50,7 @@ class WishListControllerTest {
     }
 
     @Test
-    void viserNuvaerendeTitel() throws Exception {
+    void displaysCurrentTitle() throws Exception {
         when(repository.getWishlistById(1))
                 .thenReturn(new WishList(1, "Fødselsdag"));
 
@@ -68,7 +68,7 @@ class WishListControllerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"", "   "})
-    void afviserTomTitelOgMellemrum(String title) throws Exception {
+    void rejectsEmptyOrWhitespaceTitle(String title) throws Exception {
         mockMvc.perform(post("/saveUpdateWishList")
                         .param("id", "1")
                         .param("title", title))
@@ -83,7 +83,7 @@ class WishListControllerTest {
     }
 
     @Test
-    void afviser151TegnUdenDatabasekald() throws Exception {
+    void rejects151CharactersWithoutDatabaseCalls() throws Exception {
         String title = "A".repeat(151);
 
         mockMvc.perform(post("/saveUpdateWishList")
@@ -99,7 +99,7 @@ class WishListControllerTest {
     }
 
     @Test
-    void accepterer150TegnOgBevarerId() throws Exception {
+    void accepts150CharactersAndPreservesId() throws Exception {
         String title = "A".repeat(150);
 
         when(repository.getWishlistById(1))
@@ -121,7 +121,7 @@ class WishListControllerTest {
     }
 
     @Test
-    void uAendretTitelGiverIngenFejlEllerOpdatering() throws Exception {
+    void unchangedTitleRedirectsWithoutUpdate() throws Exception {
         when(repository.getWishlistById(1))
                 .thenReturn(new WishList(1, "Fødselsdag"));
 
@@ -134,7 +134,7 @@ class WishListControllerTest {
     }
 
     @Test
-    void ukendtListeKanIkkeRedigeres() throws Exception {
+    void unknownWishlistCannotBeEdited() throws Exception {
         when(repository.getWishlistById(999)).thenReturn(null);
 
         mockMvc.perform(get("/getUpdateWishList")
@@ -157,7 +157,7 @@ class WishListControllerTest {
     }
 
     @Test
-    void databasefejlBevarerIndtastningen() throws Exception {
+    void databaseFailurePreservesInput() throws Exception {
         when(repository.getWishlistById(1))
                 .thenReturn(new WishList(1, "Gammel titel"));
 
@@ -178,7 +178,7 @@ class WishListControllerTest {
     }
 
     @Test
-    void databasefejlVedHentningViserDanskBesked() throws Exception {
+    void databaseReadFailureDisplaysDanishMessage() throws Exception {
         when(repository.getWishlistById(1))
                 .thenThrow(
                         new DataAccessResourceFailureException("Testfejl"));
