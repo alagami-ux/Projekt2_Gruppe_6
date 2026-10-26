@@ -44,7 +44,22 @@
                  onerror="this.onerror=null; this.src=this.dataset.fallback; this.alt='Intet produktbillede';">
 
             <div class="wish-details">
-                <h2 th:text="${wish.name}">Ønskets navn</h2>
+
+                <div class="wish-title-row">
+                    <h2 th:text="${wish.name}">Ønskets navn</h2>
+
+                    <div class="wish-actions">
+                        <a th:href="@{/getUpdateWish(id=${wish.id})}" class="btn">
+                            Rediger ønske
+                        </a>
+
+                        <form th:action="@{/confirmDeleteWish}" method="get">
+                            <input type="hidden" name="id" th:value="${wish.id}">
+                            <input type="hidden" name="wishlistId" th:value="${wishlist.id}">
+                            <button type="submit" class="btn btn-danger">Slet</button>
+                        </form>
+                    </div>
+                </div>
 
                 <p th:if="${!#strings.isEmpty(wish.description)}"
                    th:text="${wish.description}">
@@ -75,15 +90,14 @@
                     Se produkt
                 </a>
 
-                <form th:action="@{/confirmDeleteWish}" method="get" style="margin-top: 10px;">
-                    <input type="hidden" name="id" th:value="${wish.id}">
-                    <input type="hidden" name="wishlistId" th:value="${wishlist.id}">
-                    <button type="submit" class="btn btn-danger">Slet</button>
-                </form>
             </div>
         </article>
     </div>
 </main>
+
+<footer>
+    <p>ØNSKESKYEN · 2026</p>
+</footer>
 
 </body>
 </html>
