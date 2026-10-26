@@ -1,54 +1,79 @@
+
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mine ønskesedler</title>
+
     <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/wishlists.css}">
 </head>
 <body>
 
-<header>
-    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+<header class="wishlist-header">
+    <h2>
+        <a th:href="@{/}" class="logo">Ønskeskyen ☁️</a>
+    </h2>
+
     <nav>
-        <a th:href="@{/getCreateWishList}">Opret ønskeseddel</a>
+        <a th:href="@{/getCreateWishList}">
+            Opret ønskeseddel
+        </a>
     </nav>
 </header>
 
-<main>
+<main class="wishlist-page">
 
     <h1 class="overskriftWishlist">Mine ønskesedler</h1>
-    <p class="textWishLists">Her kan du se dine ønskesedler og åbne dem.</p>
 
-    <div th:if="${#lists.isEmpty(wishlists)}">
+    <p class="textWishLists">
+        Her kan du se dine ønskesedler og åbne dem.
+    </p>
+
+    <div class="wishlist-empty"
+         th:if="${#lists.isEmpty(wishlists)}">
         <p>Du har endnu ingen ønskesedler.</p>
     </div>
-
 
     <div class="wishlist-container"
          th:unless="${#lists.isEmpty(wishlists)}">
 
-        <div class="wishlist-box"
-             th:each="wishlist : ${wishlists}">
+        <div class="wishlist-grid">
 
-            <h2 th:text="${wishlist.title}">Titel</h2>
+            <div class="wishlist-card"
+                 th:each="wishlist : ${wishlists}">
 
-            <a th:href="@{/showWishList(id=${wishlist.id})}">
-                Se ønskeseddel
-            </a>
-            <a th:href="@{/confirmDeleteWishList(id=${wishlist.id})}">
-                Slet ønskeseddel
-            </a>
+                <h2 th:text="${wishlist.title}">Titel</h2>
+
+                <div class="wishlist-actions">
+
+                    <a class="view-button"
+                       th:href="@{/showWishList(id=${wishlist.id})}">
+                        Se ønskeseddel
+                    </a>
+
+                    <a class="delete-button"
+                       th:href="@{/confirmDeleteWishList(id=${wishlist.id})}"
+                       th:aria-label="|Slet ${wishlist.title}|">
+                        Slet
+                    </a>
+
+                </div>
+            </div>
 
         </div>
-
     </div>
 
     <div class="button4">
-        <form th:action="@{/getCreateWishList}" method="get" class="modify-form">
-            <button class="btn">+ Opret en ny ønskeseddel</button>
+        <form th:action="@{/getCreateWishList}" method="get">
+            <button type="submit" class="btn">
+                <span class="plus">+</span>
+                Opret ønskeseddel
+            </button>
         </form>
     </div>
+
 </main>
 
 </body>

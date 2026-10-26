@@ -1,0 +1,100 @@
+
+/* Mine ønskesedler */
+
+body:has(.wishlist-page) {
+    background: white;
+}
+
+.wishlist-page {
+    max-width: 1100px;
+    margin: 40px auto;
+    text-align: center;
+}
+
+.wishlist-page h1 {
+    color: var(--forest-main);
+}
+
+.wishlist-page .wishlist-container {
+    display: block;
+    max-width: 100%;
+    padding: 0;
+}
+
+.wishlist-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.wishlist-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 30px;
+    min-width: 0;
+    padding: 24px;
+    background: var(--white);
+    border: 1px solid var(--sage-light);
+    border-radius: 12px;
+    text-align: left;
+}
+
+.wishlist-card h2 {
+    margin: 0;
+    overflow-wrap: break-word;
+}
+
+.wishlist-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.wishlist-actions a {
+    display: block;
+    padding: 12px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.wishlist-actions .view-button {
+    background: var(--forest-main);
+    color: var(--white);
+    border-radius: 8px;
+}
+
+.wishlist-actions .delete-button {
+    color: var(--danger);
+    background: none;
+    border: 0;
+}
+
+/* Én synlig oprettelsesknap */
+body:has(.wishlist-page) header nav a[href*="getCreateWishList"] {
+    display: none;
+}
+
+/* Opret-knap med større plus */
+.wishlist-page .button4 .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 18px 36px;
+    min-height: 60px;
+}
+
+.wishlist-page .plus {
+    font-size: 26px;
+    line-height: 1;
+}
+
+/* Mobil */
+@media (max-width: 600px) {
+    .wishlist-grid {
+        grid-template-columns: 1fr;
+    }
+}
