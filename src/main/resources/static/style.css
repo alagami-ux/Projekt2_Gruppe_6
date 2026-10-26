@@ -1,11 +1,27 @@
+:root {
+    --forest-dark: #30372F;
+    --forest-main: #45634A;
+    --forest-deep: #344B38;
+    --sage-light: #DCE8D5;
+    --sage-pale: #E8EDE2;
+    --paper: #F8F6F0;
+    --white: #FFFFFF;
+    --pink-soft: #F2D6D8;
+    --danger: #a32626;
+    --danger-dark: #7d1c1c;
+    --error: #b42318;
+    --input-bg: #FAFCF8;
+    --shadow: #cccccc;
+}
 
-/*
-   1. Grundlæggende styling
-*/
+/* Base */
+* {
+    box-sizing: border-box;
+}
 
 body {
-    background-color: #F8F6F0;
-    color: #30372F;
+    background-color: var(--paper);
+    color: var(--forest-dark);
     font-family: Arial, sans-serif;
     margin: 0;
 }
@@ -14,55 +30,54 @@ h1, h2, p, a {
     overflow-wrap: anywhere;
 }
 
-/* Hovedoverskrift */
 h1 {
     font-size: 36px;
-    color: #30372F;
+    color: var(--forest-dark);
     margin-bottom: 15px;
 }
 
-/* Andre overskrifter */
 h2 {
-    color: #45634A;
+    color: var(--forest-main);
 }
 
-/* Almindelig tekst */
 p {
-    color: #45634A;
+    color: var(--forest-main);
     line-height: 1.6;
     font-size: 20px;
 }
 
+a {
+    color: var(--forest-main);
+    text-decoration: none;
+}
 
-/*
-   2. Header og navigation
-*/
+img {
+    max-width: 100%;
+}
 
+/* Header */
 header {
-    background-color: #FFFFFF;
+    background-color: var(--white);
     padding: 20px 50px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* Navnet Ønskeskyen */
 header h2 {
-    color: #45634A;
+    color: var(--forest-main);
     margin: 0;
 }
 
-/* Logo-link */
 .logo,
 a.logo {
-    color: #45634A;
+    color: var(--forest-main);
     text-decoration: none;
     padding: 0;
 }
 
-/* Links i navigationen */
 nav a {
-    color: #45634A;
+    color: var(--forest-main);
     text-decoration: none;
     font-weight: bold;
 }
@@ -72,39 +87,20 @@ nav a:hover {
     cursor: pointer;
 }
 
-
-/*
-   3. Forsiden og sektioner
-*/
-
+/* Sections */
 section {
     text-align: center;
     padding: 40px 20px;
 }
 
-/* Billedet på forsiden */
-.img-forside {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 16px;
-    margin: 0 auto 30px;
-}
-
-/* Vandret linje */
 hr {
     border: none;
-    border-top: 1px solid #DCE8D5;
+    border-top: 1px solid var(--sage-light);
     width: 90%;
     margin: 20px auto;
 }
 
-
-/*
-   4. Knapper
-*/
-
-/* Knappernes placering */
+/* Buttons */
 .button,
 .button2,
 .button3,
@@ -113,78 +109,93 @@ hr {
     margin: 10px;
 }
 
-/* Knappernes udseende */
-
-
-.btn {
+.btn,
+.addWish,
+.createButton,
+.wishlist-form button,
+.createwish-formular button.btn {
     display: inline-block;
-    background-color: #45634A;
-    color: #FFFFFF;
+    background-color: var(--forest-main);
+    color: var(--white);
     border: none;
-    padding: 14px 24px;
     border-radius: 8px;
+    padding: 14px 24px;
     font-size: 16px;
     cursor: pointer;
     text-decoration: none;
+    transition: background-color 0.2s ease;
 }
 
-/* Når musen holdes over knapperne */
-.btn:hover {
-    background-color: #344B38;
+.btn:hover,
+.addWish:hover,
+.createButton:hover,
+.wishlist-form button:hover,
+.createwish-formular button.btn:hover,
+.btn:focus-visible,
+.addWish:focus-visible,
+.createButton:focus-visible,
+.wishlist-form button:focus-visible,
+.createwish-formular button.btn:focus-visible {
+    background-color: var(--forest-deep);
+    outline: none;
 }
 
+.btn-danger {
+    background-color: var(--danger);
+    border: 1px solid var(--danger);
+    color: var(--white);
+}
 
-/*
-   5. Informationsbokse
-*/
+.btn-danger:hover {
+    background-color: var(--danger-dark);
+}
 
-/* Placering af de to bokse */
+/* Front page */
+.img-forside {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin: 0 auto 30px;
+}
+
 .grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 50px;
     max-width: 900px;
     margin: 50px auto;
 }
 
-/* Fælles styling til boksene */
 .box1,
 .box2 {
     padding: 25px;
     border-radius: 12px;
-    border: 1px solid #DCE8D5;
-    box-shadow: 0 1px 5px #ccc;
+    border: 1px solid var(--sage-light);
+    box-shadow: 0 1px 5px var(--shadow);
 }
 
-/* Farver på boksene */
 .box1 {
-    background-color: #DCE8D5;
+    background-color: var(--sage-light);
 }
 
 .box2 {
-    background-color: #F2D6D8;
+    background-color: var(--pink-soft);
 }
 
-/* Første afsnit i hver boks */
 .box1 p:first-child,
 .box2 p:first-child {
-    color: #45634A;
+    color: var(--forest-main);
     font-weight: bold;
     font-size: 18px;
 }
 
-
-/*
-   6. Ønskesedler
-*/
-
-/* Overskrift på ønskeseddel-sider */
+/* Wishlist form */
 .overskriftWishlist {
     text-align: center;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
-/* Formular til oprettelse af ønskeseddel */
 .wishlist-form {
     display: flex;
     flex-direction: column;
@@ -194,56 +205,41 @@ hr {
     box-sizing: border-box;
     margin: 0 auto;
     padding: 20px;
-    background-color: #FFFFFF;
-    border: 1px solid #DCE8D5;
+    background-color: var(--white);
+    border: 1px solid var(--sage-light);
     border-radius: 12px;
-    box-shadow: 0 1px 5px #ccc;
+    box-shadow: 0 1px 5px var(--shadow);
 }
 
-/* Tekst over inputfelt */
 .wishlist-form label {
     font-weight: bold;
 }
 
-/* Inputfelt */
-.wishlist-form input {
+.wishlist-form input,
+.createwish-formular input {
     width: 100%;
     box-sizing: border-box;
     padding: 12px;
     font: inherit;
     border: 1px solid #888;
     border-radius: 4px;
+    background-color: var(--input-bg);
 }
 
-/* Gem-knap */
-.wishlist-form button {
-    align-self: flex-start;
-    padding: 14px 24px;
-    background-color: #45634A;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
+.wishlist-form input:focus,
+.createwish-formular input:focus {
+    outline: 2px solid #8DA780;
+    border-color: var(--forest-main);
 }
 
-/* Når musen holdes over gem-knappen */
-.wishlist-form button:hover {
-    background-color: #344B38;
-}
-
-/* Fejlbesked */
-.error-message {
-    color: #b42318;
+.error-message,
+.createwish-formular .error-message {
+    color: var(--error);
     margin: 0;
+    font-size: 14px;
 }
 
-/* Placering af ønskeseddel-kort */
-.overskriftWishlist {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
+/* Wishlist cards */
 .wishlist-container {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -254,23 +250,20 @@ hr {
     box-sizing: border-box;
 }
 
-/* Udseende af hvert ønskeseddel-kort */
 .wishlist-box {
     padding: 25px;
     border-radius: 12px;
-    border: 1px solid #DCE8D5;
-    box-shadow: 0 1px 5px #ccc;
-    background-color: #FFFFFF;
+    border: 1px solid var(--sage-light);
+    box-shadow: 0 1px 5px var(--shadow);
+    background-color: var(--white);
 }
 
-/* Overskriften på kortet */
 .wishlist-box h2 {
     margin-top: 0;
 }
 
-/* Link til ønskesedlen */
 .wishlist-box a {
-    color: #45634A;
+    color: var(--forest-main);
     font-weight: bold;
     text-decoration: none;
 }
@@ -286,19 +279,14 @@ hr {
     margin-top: 50px;
 }
 
-.textWishLists{
-    color: #45634A;
+.textWishLists {
+    color: var(--forest-main);
     line-height: 1.6;
     font-size: 20px;
     text-align: center;
 }
 
-
-/*
-   7. Ønsker og billeder
-*/
-
-/* Et enkelt ønske */
+/* Show wishlist / wishes */
 main {
     padding: 0 20px;
 }
@@ -306,22 +294,20 @@ main {
 article {
     display: flex;
     gap: 20px;
-    background-color: #FFFFFF;
+    background-color: var(--white);
     padding: 20px;
-    margin-bottom: 20px;
-    border: 1px solid #DCE8D5;
+    margin: 0 auto 20px;
+    border: 1px solid var(--sage-light);
     border-radius: 12px;
-    box-shadow: 0 1px 5px #ccc;
+    box-shadow: 0 1px 5px var(--shadow);
     max-width: 1000px;
 }
 
-/* Teksten til ønsket */
 .wish-details {
     flex: 1;
     min-width: 0;
 }
 
-/* Overskriften til ønsket */
 .wish-details h2 {
     margin-top: 0;
 }
@@ -330,27 +316,6 @@ article {
     font-size: 16px;
 }
 
-
-.addWish {
-    display: inline-block;
-    background-color: #45634A;
-    color: #FFFFFF;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    text-decoration: none;
-    margin: 10px;
-}
-
-/* Når musen holdes over knapperne */
-.addWish:hover {
-    background-color: #344B38;
-}
-
-
-/* Billede til ønsket */
 .wish-image {
     width: 170px;
     height: 180px;
@@ -359,22 +324,11 @@ article {
     flex-shrink: 0;
 }
 
-
-/*
-   8. Footer
-*/
-
-footer {
-    background-color: #E8EDE2;
-    color: #45634A;
-    text-align: center;
-    padding: 5px;
-    margin-top: 30px;
+.addWish {
+    margin: 10px;
 }
 
-/* Formular til oprettelse af ønske */
-
-
+/* Create wish form */
 .addWishHeading {
     text-align: center;
     margin: 50px;
@@ -386,10 +340,10 @@ footer {
     margin: 0 auto 40px;
     padding: 30px;
     box-sizing: border-box;
-    background-color: #FFFFFF;
-    border: 1px solid #DCE8D5;
+    background-color: var(--white);
+    border: 1px solid var(--sage-light);
     border-radius: 12px;
-    box-shadow: 0 1px 5px #ccc;
+    box-shadow: 0 1px 5px var(--shadow);
 }
 
 .createwish-formular form {
@@ -399,72 +353,80 @@ footer {
 }
 
 .createwish-formular label {
-    color: #45634A;
+    color: var(--forest-main);
     font-weight: bold;
 }
 
 .createwish-formular input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 12px;
-    font: inherit;
-    border: 1px solid #DCE8D5;
+    border: 1px solid var(--sage-light);
     border-radius: 6px;
-    background-color: #FAFCF8;
+    background-color: var(--input-bg);
 }
-
-.createwish-formular input:focus {
-    outline: 2px solid #8DA780;
-    border-color: #45634A;
-}
-
 
 .createwish-formular .error-message {
-    color: #b42318;
-    font-size: 14px;
     margin: 0 0 5px;
 }
 
-.createButton{
-    display: inline-block;
-    background-color: #45634A;
-    color: #FFFFFF;
-    border: none;
-    padding: 14px 40px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
+/* Footer */
+footer {
+    background-color: var(--sage-pale);
+    color: var(--forest-main);
+    text-align: center;
+    padding: 5px;
+    margin-top: 30px;
+}
+
+/* Delete confirmation */
+.delete-confirmation {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--white);
+    border: 1px solid var(--sage-light);
+    border-radius: 12px;
+    box-shadow: 0 1px 5px var(--shadow);
+}
+
+.delete-confirmation h1 {
+    margin-top: 0;
+}
+
+.delete-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.delete-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    box-sizing: border-box;
+    font: inherit;
     text-decoration: none;
-}
-.btn:hover {
-    background-color: #344B38;
+    cursor: pointer;
 }
 
-/*
-   9. Tilpasning til mobil
-*/
-
+/* Responsive */
 @media (max-width: 600px) {
-
-    /* Header */
     header {
         padding: 20px;
         flex-direction: column;
         gap: 15px;
     }
 
-    /* Overskrift */
     h1 {
         font-size: 28px;
     }
 
-    /* Informationsbokse */
     .grid {
         grid-template-columns: 1fr;
         margin: 20px;
     }
 
-    /* Knapper */
     .button,
     .button2,
     .button3,
@@ -472,33 +434,28 @@ footer {
         display: block;
     }
 
-    /* Ønsker */
     article {
         flex-direction: column;
     }
 
-    /* Billeder */
     .wish-image {
         width: 100%;
         height: 220px;
     }
 
-    /* Gem-knap */
-    .wishlist-form button {
+    .wishlist-form button,
+    .createwish-formular button.btn,
+    .delete-actions .btn {
         width: 100%;
     }
 
-    /* Ønskesedler på mobil */
     .wishlist-container {
         grid-template-columns: 1fr;
         margin: 20px auto;
     }
 
-      .createwish-formular {
-            padding: 20px;
-        }
-
-        .createwish-formular button.btn {
-            width: 100%;
-        }
+    .createwish-formular,
+    .delete-confirmation {
+        padding: 20px;
+    }
 }

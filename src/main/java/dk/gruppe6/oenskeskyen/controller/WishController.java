@@ -73,11 +73,102 @@ public class WishController {
             }
 
             wishRepository.createWish(wish);
+
         } catch (DataAccessException e) {
             model.addAttribute("errorMessage", "Ønsket kunne ikke gemmes. Prøv igen senere.");
             return "createWish";
         }
 
         return "redirect:/showWishList?id=" + wishlistId;
+    }
+
+    @GetMapping("/confirmDeleteWish")
+    public String confirmDeleteWish(
+            @RequestParam("id") int id,
+            @RequestParam("wishlistId") int wishlistId,
+            Model model) {
+
+        try {
+            WishList wishlist = wishListRepository.getWishlistById(wishlistId);
+            if (wishlist == null) {
+                model.addAttribute("errorMessage", "Ønskesedlen findes ikke.");
+                return "showWishList";
+            }
+
+            boolean found = false;
+
+            for (Wish wish : wishListRepository.getWishesByWishListID(wishlistId)) {
+                if (wish.getId() == id) {
+                    model.addAttribute("wish", wish);
+                    model.addAttribute("wishlist", wishlist);
+                    model.addAttribute("wishlistId", wishlistId);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                model.addAttribute("wishlist", wishlist);
+                model.addAttribute("wishes", wishListRepository.getWishesByWishListID(wishlistId));
+                model.addAttribute("errorMessage", "Ønsket findes ikke på denne ønskeseddel.");
+                return "showWishList";
+            }
+
+            return "deleteWish";
+
+        } catch (DataAccessException e) {
+            model.addAttribute("errorMessage", "Ønsket kunne ikke hentes. Prøv igen senere.");
+            return "showWishList";
+        }
+    }
+
+    @PostMapping("/deleteWish")
+    public String deleteWish(
+            @RequestParam("id") int id,
+            @RequestParam("wishlistId") int wishlistId,
+            @RequestParam(value = "action", defaultValue = "cancel") String action,
+            Model model) {
+
+        if ("cancel".equalsIgnoreCase(action)) {
+            return "redirect:/showWishList?id=" + wishlistId;
+        }
+
+        try {
+            WishList wishlist = wishListRepository.getWishlistById(wishlistId);
+            if (wishlist == null) {
+                model.addAttribute("errorMessage", "Ønskesedlen findes ikke.");
+                return "showWishList";
+            }
+
+            boolean existsInWishlist = false;
+            for (Wish wish : wishListRepository.getWishesByWishListID(wishlistId)) {
+                if (wish.getId() == id) {
+                    existsInWishlist = true;
+                    break;
+                }
+            }
+
+            if (!existsInWishlist) {
+                model.addAttribute("wishlist", wishlist);
+                model.addAttribute("wishes", wishListRepository.getWishesByWishListID(wishlistId));
+                model.addAttribute("errorMessage", "Ønsket findes ikke på denne ønskeseddel. Intet blev slettet.");
+                return "showWishList";
+            }
+
+            int deletedRows = wishRepository.deleteWish(id, wishlistId);
+
+            if (deletedRows == 0) {
+                model.addAttribute("wishlist", wishlist);
+                model.addAttribute("wishes", wishListRepository.getWishesByWishListID(wishlistId));
+                model.addAttribute("errorMessage", "Ønsket findes ikke på denne ønskeseddel. Intet blev slettet.");
+                return "showWishList";
+            }
+
+            return "redirect:/showWishList?id=" + wishlistId;
+
+        } catch (DataAccessException e) {
+            model.addAttribute("errorMessage", "Der opstod en databasefejl. Ønsket blev ikke slettet.");
+            return "showWishList";
+        }
     }
 }
