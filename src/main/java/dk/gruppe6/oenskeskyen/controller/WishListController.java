@@ -79,4 +79,17 @@ public class WishListController {
             return "createWishList";
         }
     }
+
+    @GetMapping("/getUpdateWishList")
+    public String getUpdateWishlist(@RequestParam("id") int id, Model model) {
+        WishList wishList = wishListRepository.getWishlistById(id);
+        model.addAttribute("wishList", wishList);
+        return "updateWishlist";
+    }
+
+    @PostMapping("/saveUpdateWishList")
+    public String postUpdateWishList(@ModelAttribute WishList wishList) {
+        wishListRepository.updateWishList(wishList);
+        return "redirect:/showWishList?id=" + wishList.getId();
+    }
 }
