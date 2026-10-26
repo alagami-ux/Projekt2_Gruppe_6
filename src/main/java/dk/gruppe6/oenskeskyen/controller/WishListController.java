@@ -20,10 +20,11 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 public class WishListController {
 
-    private static final Logger log = LoggerFactory.getLogger(WishListController.class);
+    private static final Logger log =
+            LoggerFactory.getLogger(WishListController.class);
 
     @Autowired
-    WishListRepository wishListRepository;
+    private WishListRepository wishListRepository;
 
     @GetMapping("/")
     public String home() {
@@ -32,21 +33,28 @@ public class WishListController {
 
     @GetMapping("/wishlists")
     public String wishlists(Model model) {
-        model.addAttribute("wishlists", wishListRepository.getAllWishLists());
+        model.addAttribute(
+                "wishlists", wishListRepository.getAllWishLists());
         return "wishlists";
     }
 
     @GetMapping("/showWishList")
-    public String showWishList(@RequestParam("id") int id, Model model) {
+    public String showWishList(
+            @RequestParam("id") int id,
+            Model model) {
+
         WishList wishlist = wishListRepository.getWishlistById(id);
 
         if (wishlist == null) {
             throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, "Ønskesedlen findes ikke.");
+                    HttpStatus.NOT_FOUND,
+                    "Ønskesedlen findes ikke.");
         }
 
         model.addAttribute("wishlist", wishlist);
-        model.addAttribute("wishes", wishListRepository.getWishesByWishListID(id));
+        model.addAttribute(
+                "wishes",
+                wishListRepository.getWishesByWishListID(id));
 
         return "showWishList";
     }
@@ -101,35 +109,113 @@ public class WishListController {
             return "createWishList";
         }
 
-        String title = wishList.getTitle() == null ? "" : wishList.getTitle().trim();
+        String title = wishList.getTitle() == null
+                ? ""
+                : wishList.getTitle().trim();
 
         if (title.isBlank()) {
-            model.addAttribute("errorMessage", "Du skal skrive en titel til ønskesedlen.");
+            model.addAttribute(
+                    "errorMessage",
+                    "Du skal skrive en titel til ønskesedlen.");
             return "createWishList";
         }
 
         WishList savedWishList = new WishList(title);
+
         try {
             int id = wishListRepository.createWishList(savedWishList);
             return "redirect:/showWishList?id=" + id;
         } catch (DataAccessException e) {
-            log.error("Fejl ved oprettelse af ønskeseddel med titel={}", title, e);
-            model.addAttribute("wishList", wishList); // bevar titel i formularen
-            model.addAttribute("errorMessage", "Ønskesedlen kunne ikke gemmes. Prøv igen senere.");
+            log.error("Fejl ved oprettelse af ønskeseddel", e);
+            model.addAttribute(
+                    "errorMessage",
+                    "Ønskesedlen kunne ikke gemmes. Prøv igen senere.");
             return "createWishList";
         }
     }
 
     @GetMapping("/getUpdateWishList")
-    public String getUpdateWishlist(@RequestParam("id") int id, Model model) {
-        WishList wishList = wishListRepository.getWishlistById(id);
-        model.addAttribute("wishList", wishList);
+    public String getUpdateWishlist(
+            @RequestParam("id") int id,
+            Model model) {
+
+        // Formularen skal også have et objekt ved fejl.
+        WishList form = new WishList();
+        form.setId(id);
+        model.addAttribute("wishList", form);
+        model.addAttribute("canEdit", false);
+
+        try {
+            WishList existing =
+                    wishListRepository.getWishlistById(id);
+
+            if (existing == null) {
+                model.addAttribute(
+                        "errorMessage",
+                        "Ønskesedlen findes ikke.");
+                return "updateWishlist";
+            }
+
+            model.addAttribute("wishList", existing);
+            model.addAttribute("canEdit", true);
+
+        } catch (DataAccessException e) {
+            log.error("Kunne ikke hente ønskeseddel id={}", id, e);
+            model.addAttribute(
+                    "errorMessage",
+                    "Ønskesedlen kunne ikke hentes. Prøv igen senere.");
+        }
+
         return "updateWishlist";
     }
 
     @PostMapping("/saveUpdateWishList")
-    public String postUpdateWishList(@ModelAttribute WishList wishList) {
-        wishListRepository.updateWishList(wishList);
-        return "redirect:/showWishList?id=" + wishList.getId();
+    public String postUpdateWishList(
+            @Valid @ModelAttribute("wishList") WishList wishList,
+            BindingResult bindingResult,
+            Model model) {
+
+        model.addAttribute("canEdit", true);
+
+        if (bindingResult.hasErrors()) {
+            return "updateWishlist";
+        }
+
+        try {
+            WishList existing =
+                    wishListRepository.getWishlistById(wishList.getId());
+
+            if (existing == null) {
+                model.addAttribute("canEdit", false);
+                model.addAttribute(
+                        "errorMessage",
+                        "Ønskesedlen findes ikke. Intet blev ændret.");
+                return "updateWishlist";
+            }
+
+            String title = wishList.getTitle().trim();
+
+            // Gem uden ændringer er også en gyldig handling.
+            if (!title.equals(existing.getTitle())) {
+                WishList updated =
+                        new WishList(existing.getId(), title);
+                wishListRepository.updateWishList(updated);
+            }
+
+            return "redirect:/showWishList?id=" + existing.getId();
+
+        } catch (DataAccessException e) {
+            log.error(
+                    "Fejl ved ændring af ønskeseddel id={}",
+                    wishList.getId(),
+                    e);
+
+            model.addAttribute(
+                    "errorMessage",
+                    "Ændringen kunne ikke bekræftes. "
+                            + "Kontrollér ønskesedlen, før du prøver igen.");
+
+            return "updateWishlist";
+        }
     }
 }
