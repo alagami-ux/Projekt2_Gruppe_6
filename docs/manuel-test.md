@@ -55,3 +55,31 @@ Resultat: Bestået
 
 Testen blev udført direkte i MySQL Workbench.
 Java-metoden og controllerforløbet er endnu ikke funktionstestet.
+
+## #55 – Manuel test af titelredigering
+
+Dato: 26. oktober 2026
+Miljø: Lokal applikation startet fra IntelliJ.
+Resultater rapporteret af testeren.
+
+| Test | Resultat |
+|---|---|
+| Formularen viser den nuværende titel | Bestået |
+| Tom titel afvises med dansk fejlbesked | Bestået |
+| Titel med kun mellemrum afvises | Bestået |
+| Annuller bevarer den oprindelige titel | Bestået |
+| Gyldig ny titel vises på ønskesedlen og i oversigten | Bestået |
+| Gem uden ændringer giver ingen fejl | Bestået |
+| Titel på præcis 150 tegn accepteres | Bestået |
+| Listens ID, ønsker, antal og priser bevares | Bestået |
+| En anden ønskeseddel påvirkes ikke | Bestået |
+| Den nye titel bevares efter genstart | Bestået |
+| Ukendt liste giver dansk fejlbesked og tilbage-link | Bestået |
+
+### Mangler at blive verificeret
+
+- Serveren afviser 151 tegn uden databaseændring.
+- Databasefejl giver en dansk besked og bevarer indtastningen.
+- Automatiske JUnit-tests af controller og databasekald.
+
+#55 er endnu ikke færdigtestet.

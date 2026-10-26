@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opret ønskeseddel</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Rediger ønskeseddel</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 
 <body>
-
 <header>
-    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+    <h2>
+        <a th:href="@{/}" class="logo">Ønskeskyen ☁️</a>
+    </h2>
 
-    <nav>
+    <nav aria-label="Hovednavigation">
         <a th:href="@{/wishlists}">Mine ønskesedler</a>
     </nav>
 </header>
@@ -21,33 +23,55 @@
 <main>
     <h1 class="overskriftWishlist">Rediger ønskeseddel</h1>
 
-    <div class="wishlist-form">
-        <form th:action="@{/saveUpdateWishList}"
-              method="post"
-              th:object="${wishList}"
-              class="wishlist-form"
-              novalidate>
+    <p th:if="${errorMessage != null}"
+       th:text="${errorMessage}"
+       class="error-message"
+       role="alert">
+    </p>
 
-            <input type="hidden" th:field="*{id}">
+    <form th:if="${canEdit == true}"
+          th:action="@{/saveUpdateWishList}"
+          th:object="${wishList}"
+          method="post"
+          class="wishlist-form"
+          novalidate>
 
+        <input type="hidden" th:field="*{id}">
 
-            <label for="title">Rediger titlen på ønskeseddel</label>
+        <label for="title">Titel på ønskeseddel</label>
 
-            <input type="text" id="title" th:field="*{title}" maxlength="150" required>
+        <input type="text"
+               id="title"
+               th:field="*{title}"
+               maxlength="150"
+               required
+               aria-describedby="title-error"
+               th:attr="aria-invalid=${#fields.hasErrors('title')}">
 
-            <div th:if="${#fields.hasErrors('title')}" class="error-message">
-                <span th:errors="*{title}">Fejl</span>
-            </div>
+        <p id="title-error"
+           th:if="${#fields.hasErrors('title')}"
+           th:errors="*{title}"
+           class="error-message"
+           role="alert">
+        </p>
 
-            <div th:if="${errorMessage != null}" class="error-message" th:text="${errorMessage}">
-                Fejl
-            </div>
+        <div class="delete-actions">
+            <button class="btn" type="submit">
+                Gem ændringer
+            </button>
 
-            <button class="button3" type="submit">Gem ændringer</button>
+            <a class="btn"
+               th:href="@{/showWishList(id=${wishList.id})}">
+                Annuller
+            </a>
+        </div>
+    </form>
 
-        </form>
-    </div>
+    <p th:if="${canEdit != true}">
+        <a class="btn" th:href="@{/wishlists}">
+            Tilbage til mine ønskesedler
+        </a>
+    </p>
 </main>
-
 </body>
 </html>
