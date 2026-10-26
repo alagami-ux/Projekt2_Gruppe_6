@@ -20,8 +20,8 @@ public class WishRepository {
         String sql = "INSERT INTO wish (wishlist_id, name, description, " +
                 "quantity, price, product_url, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setInt(1, wish.getWishlistId());
             statement.setString(2, wish.getName());
@@ -37,6 +37,22 @@ public class WishRepository {
             throw new DataAccessResourceFailureException(
                     "Kunne ikke oprette ønsket i databasen.", e);
         }
+    }
 
+    public int deleteWish(int id, int wishlistId) {
+        String sql = "DELETE FROM wish WHERE id = ? AND wishlist_id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+            statement.setInt(2, wishlistId);
+
+            return statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke slette ønsket fra databasen.", e);
+        }
     }
 }
