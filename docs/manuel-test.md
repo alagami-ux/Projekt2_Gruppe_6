@@ -92,3 +92,14 @@ Resultater rapporteret af testeren.
 Kontrollerer titelvalidering, grænsen på 150/151 tegn,
 uændret titel, ukendt liste og simulerede databasefejl.
 Repositoryet er mocket; rigtig MySQL testes ikke her.
+
+### SQL-test – #55
+
+26. oktober 2026, MySQL Workbench.
+
+- Titelændring på testliste A: Bestået.
+- Testliste B forbliver uændret: Bestået.
+- Ønskets ID, liste-ID, navn, antal og pris bevares: Bestået.
+
+Alle tre SQL-kontroller returnerede true.
+Testen kører SQL direkte; Java-repository-metoden testes ikke her.
