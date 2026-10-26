@@ -5,6 +5,8 @@ import dk.gruppe6.oenskeskyen.model.WishList;
 import dk.gruppe6.oenskeskyen.repository.WishListRepository;
 import dk.gruppe6.oenskeskyen.repository.WishRepository;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 public class WishController {
+
+    private static final Logger log = LoggerFactory.getLogger(WishController.class);
 
     @Autowired
     private WishListRepository wishListRepository;
@@ -75,6 +79,8 @@ public class WishController {
             wishRepository.createWish(wish);
 
         } catch (DataAccessException e) {
+            log.error("Fejl ved oprettelse af ønske for wishlistId={}", wishlistId, e);
+            model.addAttribute("wish", wish); // bevar felterne i formularen
             model.addAttribute("errorMessage", "Ønsket kunne ikke gemmes. Prøv igen senere.");
             return "createWish";
         }
