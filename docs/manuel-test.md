@@ -83,3 +83,12 @@ Resultater rapporteret af testeren.
 - Automatiske JUnit-tests af controller og databasekald.
 
 #55 er endnu ikke færdigtestet.
+
+### Automatiske controllertests – #55
+
+26. oktober 2026: `.\mvnw.cmd -U test`
+    Resultat: 9 tests bestået, 0 failures, 0 errors, 0 skipped.
+
+Kontrollerer titelvalidering, grænsen på 150/151 tegn,
+uændret titel, ukendt liste og simulerede databasefejl.
+Repositoryet er mocket; rigtig MySQL testes ikke her.
