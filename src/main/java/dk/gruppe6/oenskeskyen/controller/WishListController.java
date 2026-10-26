@@ -23,7 +23,7 @@ public class WishListController {
 
     @GetMapping("/")
     public String home() {
-        return "redirect:/wishlists";
+        return "index";
     }
 
     @GetMapping("/wishlists")
