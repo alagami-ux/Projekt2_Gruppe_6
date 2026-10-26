@@ -128,4 +128,18 @@ public class WishListRepository {
                     "Kunne ikke oprette ønskesedlen i databasen.", e);
         }
     }
+    public int deleteWishlist(int id) {
+        String sql = "DELETE FROM wishlist WHERE id = ?";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, id);
+            return statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessResourceFailureException(
+                    "Kunne ikke slette ønskesedlen fra databasen.", e);
+        }
+    }
 }
