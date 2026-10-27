@@ -13,6 +13,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.ui.ExtendedModelMap;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
@@ -23,6 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class WishListControllerTest {
 
@@ -314,5 +318,163 @@ class WishListControllerTest {
                 });
 
         verifyNoInteractions(repository);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"0", "-1"})
+    void rejectsNonPositiveWishlistId(String id) throws Exception {
+
+        mockMvc.perform(get("/showWishList")
+                        .param("id", id))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void returns404ForUnknownWishlistId() throws Exception {
+
+        when(repository.getWishlistById(999))
+                .thenReturn(null);
+
+        mockMvc.perform(get("/showWishList")
+                        .param("id", "999"))
+                .andExpect(status().isNotFound())
+                .andExpect(result -> {
+
+                    ResponseStatusException exception =
+                            (ResponseStatusException)
+                                    result.getResolvedException();
+
+                    assertNotNull(exception);
+
+                    assertEquals(
+                            "Ønskesedlen findes ikke.",
+                            exception.getReason());
+                });
+
+        verify(repository).getWishlistById(999);
+        verify(repository, never())
+                .getWishesByWishListID(anyInt());
+    }
+
+    @Test
+    void returns400ForMissingWishlistId() throws Exception {
+
+        mockMvc.perform(get("/showWishList"))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> {
+
+                    ResponseStatusException exception =
+                            assertInstanceOf(
+                                    ResponseStatusException.class,
+                                    result.getResolvedException());
+
+                    assertEquals(
+                            "Du skal angive et ønskeseddel-ID.",
+                            exception.getReason());
+                });
+
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void returns400ForNonNumericWishlistId() throws Exception {
+
+        mockMvc.perform(get("/showWishList")
+                        .param("id", "abc"))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> {
+
+                    ResponseStatusException exception =
+                            assertInstanceOf(
+                                    ResponseStatusException.class,
+                                    result.getResolvedException());
+
+                    assertEquals(
+                            "Ønskeseddel-ID skal være et positivt heltal.",
+                            exception.getReason());
+                });
+
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void showsExistingWishlistWithoutWishes() {
+
+        int id = 7;
+
+        // Simulate an existing wishlist
+        when(repository.getWishlistById(id))
+                .thenReturn(new WishList(id, "Tom ønskeseddel"));
+
+        // Simulate a wishlist containing no wishes
+        when(repository.getWishesByWishListID(id))
+                .thenReturn(java.util.List.of());
+
+        // Create the controller and inject the mocked repository
+        WishListController controller = new WishListController();
+
+        ReflectionTestUtils.setField(
+                controller, "wishListRepository", repository);
+
+        // Create a model to store the controller's data
+        ExtendedModelMap model = new ExtendedModelMap();
+
+        // Call the controller method directly
+        String viewName = controller.showWishList("7", model);
+
+        // Verify the correct page is returned
+        assertEquals("showWishList", viewName);
+
+        // Verify the correct wishlist is returned
+        WishList result = (WishList) model.get("wishlist");
+
+        assertNotNull(result);
+        assertEquals(id, result.getId());
+        assertEquals("Tom ønskeseddel", result.getTitle());
+
+        // Verify the list of wishes is empty
+        assertEquals(
+                java.util.List.of(),
+                model.get("wishes"));
+
+        // Verify the correct repository methods were called
+        verify(repository).getWishlistById(id);
+        verify(repository).getWishesByWishListID(id);
+    }
+
+    @Test
+    void databaseFailureIsNotTreatedAsMissingWishlist() {
+
+        int id = 7;
+
+        // Simulate a database failure
+        when(repository.getWishlistById(id))
+                .thenThrow(
+                        new DataAccessResourceFailureException(
+                                "Testfejl i databasen"));
+
+        WishListController controller = new WishListController();
+
+        ReflectionTestUtils.setField(
+                controller, "wishListRepository", repository);
+
+        // Verify that the database exception is preserved
+        DataAccessResourceFailureException exception =
+                assertThrows(
+                        DataAccessResourceFailureException.class,
+                        () -> controller.showWishList(
+                                "7", new ExtendedModelMap()));
+
+        assertEquals(
+                "Testfejl i databasen",
+                exception.getMessage());
+
+        verify(repository).getWishlistById(id);
+
+        // No wishes should be retrieved after the failure
+        verify(repository, never())
+                .getWishesByWishListID(anyInt());
     }
 }

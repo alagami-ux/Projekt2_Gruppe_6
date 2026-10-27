@@ -40,8 +40,30 @@ public class WishListController {
 
     @GetMapping("/showWishList")
     public String showWishList(
-            @RequestParam("id") int id,
+            @RequestParam(value = "id", required = false) String idValue,
             Model model) {
+
+        if (idValue == null || idValue.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Du skal angive et ønskeseddel-ID.");
+        }
+
+        int id;
+
+        try {
+            id = Integer.parseInt(idValue.trim());
+        } catch (NumberFormatException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Ønskeseddel-ID skal være et positivt heltal.");
+        }
+
+        if (id <= 0) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Ønskeseddel-ID skal være større end 0.");
+        }
 
         WishList wishlist = wishListRepository.getWishlistById(id);
 

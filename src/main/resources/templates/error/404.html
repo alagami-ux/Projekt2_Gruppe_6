@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Siden blev ikke fundet - Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<header>
+    <h2>
+        <a th:href="@{/}" class="logo">
+            Ønskeskyen ☁️
+        </a>
+    </h2>
+
+    <nav>
+        <a th:href="@{/wishlists}">
+            Mine ønskesedler
+        </a>
+    </nav>
+</header>
+
+<main style="max-width: 700px;
+             margin: 60px auto;
+             padding: 20px;">
+
+    <h1>Ikke fundet (404)</h1>
+
+    <p th:if="${path == '/showWishList'}">
+        Ønskesedlen findes ikke.
+        Den kan være blevet slettet,
+        eller linket kan være forkert.
+    </p>
+
+    <p th:unless="${path == '/showWishList'}">
+        Siden blev ikke fundet.
+        Kontrollér adressen, eller gå tilbage
+        til dine ønskesedler.
+    </p>
+
+    <a th:href="@{/wishlists}" class="btn">
+        Tilbage til mine ønskesedler
+    </a>
+
+</main>
+
+</body>
+</html>

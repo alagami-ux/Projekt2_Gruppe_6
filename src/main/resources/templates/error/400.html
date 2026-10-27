@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Ugyldig anmodning - Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<header>
+    <h2>
+        <a th:href="@{/}" class="logo">
+            Ønskeskyen ☁️
+        </a>
+    </h2>
+
+    <nav>
+        <a th:href="@{/wishlists}">
+            Mine ønskesedler
+        </a>
+    </nav>
+</header>
+
+<main style="max-width: 700px;
+             margin: 60px auto;
+             padding: 20px;">
+
+    <h1>Ugyldig anmodning (400)</h1>
+
+    <p th:if="${path == '/showWishList'}">
+        Ønskeseddel-ID mangler eller er ugyldigt.
+        ID'et skal være et positivt heltal.
+    </p>
+
+    <p th:unless="${path == '/showWishList'}">
+        Anmodningen kunne ikke behandles.
+        Kontrollér linket eller dine oplysninger.
+    </p>
+
+    <a th:href="@{/wishlists}" class="btn">
+        Tilbage til mine ønskesedler
+    </a>
+
+</main>
+
+</body>
+</html>
