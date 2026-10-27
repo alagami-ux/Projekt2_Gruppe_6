@@ -21,7 +21,6 @@
 <main>
     <h1 class="overskriftWishlist">Opret ønskeseddel</h1>
 
-    <div class="wishlist-form">
         <form th:action="@{/saveCreateWishList}"
               method="post"
               th:object="${wishList}"
@@ -37,7 +36,7 @@
                    placeholder="F.eks. Mine fødselsdagsønsker"
                    required>
 
-            <div th:if="${#fields.hasErrors('title')}" class="error-message">
+            <div th:if="${#fields.hasErrors('title')}" class="error-message" role="alert">
                 <span th:errors="*{title}">Fejl</span>
             </div>
 
@@ -48,7 +47,6 @@
             <button class="button3" type="submit">Gem ønskeseddel</button>
 
         </form>
-    </div>
 </main>
 
 </body>

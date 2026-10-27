@@ -12,6 +12,7 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.BindingResult;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class WishListControllerTest {
 
@@ -192,5 +194,125 @@ class WishListControllerTest {
                         "Ønskesedlen kunne ikke hentes. Prøv igen senere."));
 
         verify(repository, never()).updateWishList(any());
+    }
+
+    @Test
+    void opensCreateWishlistForm() throws Exception {
+        mockMvc.perform(get("/getCreateWishList"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("createWishList"))
+                .andExpect(model().attributeExists("wishList"));
+    }
+
+    @Test
+    void createsWishlistAndRedirects() throws Exception {
+        when(repository.createWishList(any(WishList.class)))
+                .thenReturn(42);
+
+        mockMvc.perform(post("/saveCreateWishList")
+                        .param("title", "Min fødselsdag"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(
+                        "/showWishList?id=42"));
+
+        verify(repository).createWishList(any(WishList.class));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    void rejectsInvalidWishlistTitle(String title) throws Exception {
+
+        mockMvc.perform(post("/saveCreateWishList")
+                        .param("title", title))
+                .andExpect(status().isOk())
+                .andExpect(view().name("createWishList"))
+                .andExpect(model().attributeHasFieldErrors(
+                        "wishList", "title"));
+
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void rejectsWishlistTitleOver150Characters() throws Exception {
+
+        String title = "A".repeat(151);
+
+        mockMvc.perform(post("/saveCreateWishList")
+                        .param("title", title))
+                .andExpect(status().isOk())
+                .andExpect(view().name("createWishList"))
+                .andExpect(model().attributeHasFieldErrors(
+                        "wishList", "title"));
+
+        verifyNoInteractions(repository);
+    }
+
+    @Test
+    void rejectsMissingWishlistTitle() throws Exception {
+
+        mockMvc.perform(post("/saveCreateWishList"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("createWishList"))
+                .andExpect(model().attributeHasFieldErrors(
+                        "wishList", "title"));
+
+        verifyNoInteractions(repository);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 150})
+    void acceptsValidWishlistTitles(int length) throws Exception {
+
+        String title = "A".repeat(length);
+
+        when(repository.createWishList(any(WishList.class)))
+                .thenReturn(42);
+
+        mockMvc.perform(post("/saveCreateWishList")
+                        .param("title", title))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(
+                        "/showWishList?id=42"));
+
+        ArgumentCaptor<WishList> captor =
+                ArgumentCaptor.forClass(WishList.class);
+
+        verify(repository).createWishList(captor.capture());
+
+        assertEquals(title, captor.getValue().getTitle());
+    }
+
+    @Test
+    void showsDanishErrorAndPreservesTitle() throws Exception {
+
+        String title = "   ";
+
+        mockMvc.perform(post("/saveCreateWishList")
+                        .param("title", title))
+                .andExpect(status().isOk())
+                .andExpect(view().name("createWishList"))
+                .andExpect(model().attribute(
+                        "wishList",
+                        hasProperty("title", is(title))))
+                .andExpect(model().attributeHasFieldErrors(
+                        "wishList", "title"))
+                .andExpect(result -> {
+
+                    BindingResult errors = (BindingResult)
+                            result.getModelAndView()
+                                    .getModel()
+                                    .get(BindingResult.MODEL_KEY_PREFIX
+                                            + "wishList");
+
+                    assertNotNull(errors);
+                    assertNotNull(errors.getFieldError("title"));
+
+                    assertEquals(
+                            "Indtast en titel til ønskesedlen.",
+                            errors.getFieldError("title")
+                                    .getDefaultMessage());
+                });
+
+        verifyNoInteractions(repository);
     }
 }
