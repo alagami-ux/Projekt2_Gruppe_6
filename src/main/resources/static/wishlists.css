@@ -56,16 +56,28 @@
     text-decoration: none;
 }
 
-.wishlist-actions .view-button {
+.view-button {
     background: var(--forest-main);
     color: var(--white);
     border-radius: 8px;
+    transition: background-color 0.2s ease;
 }
 
-.wishlist-actions .delete-button {
-    color: var(--danger);
-    background: none;
-    border: 0;
+.view-button:hover {
+   background-color: var(--forest-deep);
+
+}
+
+.delete-button {
+    background-color: var(--danger);
+    border: 1px solid var(--danger);
+    color: var(--white);
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.delete-button:hover {
+    background-color: var(--danger-dark);
 }
 
 /* Én synlig oprettelsesknap */

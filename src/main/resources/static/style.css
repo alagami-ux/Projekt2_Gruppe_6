@@ -140,16 +140,6 @@ hr {
     outline: none;
 }
 
-.btn-danger {
-    background-color: var(--danger);
-    border: 1px solid var(--danger);
-    color: var(--white);
-}
-
-.btn-danger:hover {
-    background-color: var(--danger-dark);
-}
-
 /* Front page */
 .img-forside {
     width: 100%;
@@ -241,37 +231,7 @@ hr {
 }
 
 /* Wishlist cards */
-.wishlist-container {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 20px;
-    max-width: 1000px;
-    margin: 30px auto;
-    padding: 0 20px;
-    box-sizing: border-box;
-}
 
-.wishlist-box {
-    padding: 25px;
-    border-radius: 12px;
-    border: 1px solid var(--sage-light);
-    box-shadow: 0 1px 5px var(--shadow);
-    background-color: var(--white);
-}
-
-.wishlist-box h2 {
-    margin-top: 0;
-}
-
-.wishlist-box a {
-    color: var(--forest-main);
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.wishlist-box a:hover {
-    text-decoration: underline;
-}
 
 .button4 {
     display: flex;
@@ -568,4 +528,9 @@ footer {
     .delete-confirmation {
         padding: 20px;
     }
+
+    .wishlist-grid {
+        grid-template-columns: 1fr;
+    }
+
 }
