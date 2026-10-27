@@ -33,8 +33,7 @@ public class WishListController {
 
     @GetMapping("/wishlists")
     public String wishlists(Model model) {
-        model.addAttribute(
-                "wishlists", wishListRepository.getAllWishLists());
+        model.addAttribute("wishlists", wishListRepository.getAllWishLists());
         return "wishlists";
     }
 
@@ -91,7 +90,7 @@ public class WishListController {
         }
 
         model.addAttribute("wishlist", wishlist);
-        return "confirmDeleteWishlist";
+        return "deleteWishlist";
     }
 
     @PostMapping("/deleteWishList")
