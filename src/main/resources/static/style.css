@@ -532,5 +532,34 @@ footer {
     .wishlist-grid {
         grid-template-columns: 1fr;
     }
+}
 
+/* Edit wish: cancel button */
+.createwish-formular .cancel-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Edit wish: invalid fields */
+.createwish-formular input.input-error {
+    border: 2px solid var(--error);
+    background-color: #fff5f5;
+}
+
+.createwish-formular input.input-error:focus {
+    outline: 2px solid var(--error);
+    outline-offset: 2px;
+}
+
+/* Edit wish: field error messages */
+.createwish-formular .field-error {
+    color: var(--error);
+    font-weight: 600;
+    margin-top: 0.4rem;
+}
+
+.createwish-formular .field-error:empty {
+    display: none;
 }

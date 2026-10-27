@@ -2,73 +2,143 @@
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tilføj ønske til din ønskeseddel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rediger ønske</title>
     <link rel="stylesheet" th:href="@{/style.css}">
 </head>
 <body>
 
 <header>
-    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+    <h2>
+        <a th:href="@{/}" class="logo">Ønskeskyen ☁️</a>
+    </h2>
 
-    <nav>
+    <nav aria-label="Hovednavigation">
         <a th:href="@{/wishlists}">Mine ønskesedler</a>
     </nav>
 </header>
 
 <main>
-    <h1 class="addWishHeading">
-        Rediger ønsket
-        <span th:if="${wish != null}" th:text="${wish.name}">Rediger ønske</span> 🎁
-    </h1>
+    <h1 class="addWishHeading">Rediger ønske 🎁</h1>
 
-    <div th:if="${errorMessage != null}" class="error-message" th:text="${errorMessage}">
+    <div th:if="${errorMessage != null}"
+         class="error-message"
+         role="alert"
+         th:text="${errorMessage}">
         Fejl
     </div>
 
-    <div class="createwish-formular">
-        <form th:action="@{/saveUpdateWish}" method="post" th:object="${wish}">
-            <input type="hidden" name="wishlistId" th:value="${wishlistId}">
-            <input type="hidden" name="id" th:value="*{id}">
+    <div class="createwish-formular" th:if="${canEdit == true}">
+        <form th:action="@{/saveUpdateWish}"
+              method="post"
+              th:object="${wish}">
+
+            <input type="hidden" th:field="*{wishlistId}">
+            <input type="hidden" th:field="*{id}">
 
             <label for="name">Navn på ønske</label>
-            <input type="text" id="name" th:field="*{name}" required>
-            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-            <br>
+            <input type="text"
+                   id="name"
+                   th:field="*{name}"
+                   th:errorclass="input-error"
+                   th:attr="aria-invalid=${#fields.hasErrors('name')}"
+                   maxlength="150"
+                   aria-describedby="name-error"
+                   required>
+            <div id="name-error"
+                 class="field-error"
+                 th:errors="*{name}">
+            </div>
 
-            <label for="description">Beskrivelse</label>
-            <input type="text" id="description" th:field="*{description}" >
-            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
-            <br>
+            <label for="description">Beskrivelse (valgfri)</label>
+            <input type="text"
+                   id="description"
+                   th:field="*{description}"
+                   th:errorclass="input-error"
+                   th:attr="aria-invalid=${#fields.hasErrors('description')}"
+                   maxlength="150"
+                   aria-describedby="description-error">
+            <div id="description-error"
+                 class="field-error"
+                 th:errors="*{description}">
+            </div>
 
             <label for="quantity">Antal</label>
-            <input type="number" id="quantity" th:field="*{quantity}">
-            <div th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
-            <br>
+            <input type="number"
+                   id="quantity"
+                   th:field="*{quantity}"
+                   th:errorclass="input-error"
+                   th:attr="aria-invalid=${#fields.hasErrors('quantity')}"
+                   min="1"
+                   step="1"
+                   aria-describedby="quantity-error"
+                   required>
+            <div id="quantity-error"
+                 class="field-error"
+                 th:errors="*{quantity}">
+            </div>
 
-            <label for="price">Pris</label>
-            <input type="text" id="price" th:field="*{price}">
-            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
-            <br>
+            <label for="price">Pris pr. stk. (valgfri)</label>
+            <input type="number"
+                   id="price"
+                   th:field="*{price}"
+                   th:errorclass="input-error"
+                   th:attr="aria-invalid=${#fields.hasErrors('price')}"
+                   min="0"
+                   max="99999999.99"
+                   step="0.01"
+                   aria-describedby="price-error">
+            <div id="price-error"
+                 class="field-error"
+                 th:errors="*{price}">
+            </div>
 
-            <label for="productUrl">Link til ønske</label>
-            <input type="url" id="productUrl" th:field="*{productUrl}">
-            <div th:if="${#fields.hasErrors('productUrl')}" th:errors="*{productUrl}"></div>
-            <br>
+            <label for="productUrl">Link til produkt (valgfrit)</label>
+            <input type="url"
+                   id="productUrl"
+                   th:field="*{productUrl}"
+                   th:errorclass="input-error"
+                   th:attr="aria-invalid=${#fields.hasErrors('productUrl')}"
+                   maxlength="2048"
+                   aria-describedby="product-url-error">
+            <div id="product-url-error"
+                 class="field-error"
+                 th:errors="*{productUrl}">
+            </div>
 
-            <label for="imageUrl">Link til billede af ønske</label>
-            <input type="url" id="imageUrl" th:field="*{imageUrl}">
-            <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
-            <br>
+            <label for="imageUrl">Link til billede (valgfrit)</label>
+            <input type="url"
+                   id="imageUrl"
+                   th:field="*{imageUrl}"
+                   th:errorclass="input-error"
+                   th:attr="aria-invalid=${#fields.hasErrors('imageUrl')}"
+                   maxlength="2048"
+                   aria-describedby="image-url-error">
+            <div id="image-url-error"
+                 class="field-error"
+                 th:errors="*{imageUrl}">
+            </div>
 
-            <button type="submit" class="createButton">Gem ændringer</button>
+            <button type="submit" class="createButton">
+                Gem ændringer
+            </button>
 
+            <a class="btn cancel-button"
+               th:href="@{/showWishList(id=${wishlistId})}">
+                Annuller
+            </a>
         </form>
     </div>
+
+    <p th:if="${canEdit != true}">
+        <a class="btn" th:href="@{/wishlists}">
+            Tilbage til Mine ønskesedler
+        </a>
+    </p>
 </main>
 
 <footer>
-    <p>ØNSKESKYEN · 2026 </p>
+    <p>ØNSKESKYEN · 2026</p>
 </footer>
 
 </body>
