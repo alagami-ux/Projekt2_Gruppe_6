@@ -17,24 +17,28 @@
 </header>
 
 <main>
-    <h1>Slet ønske</h1>
 
-    <p>Vil du slette ønske <strong th:text="${wish.name}">Ønske</strong>?</p>
+    <div class="delete-confirmation">
+        <h1>Slet ønske</h1>
 
-    <form th:action="@{/deleteWish}" method="post">
-        <input type="hidden" name="id" th:value="${wish.id}">
-        <input type="hidden" name="wishlistId" th:value="${wishlistId}">
+        <p>Vil du slette ønske <strong th:text="${wish.name}">Ønske</strong>?</p>
 
-        <div class="delete-actions">
-            <button type="submit" name="action" value="delete" class="btn btn-danger">
-                Slet ønske
-            </button>
+        <form th:action="@{/deleteWish}" method="post">
+            <input type="hidden" name="id" th:value="${wish.id}">
+            <input type="hidden" name="wishlistId" th:value="${wishlistId}">
 
-            <button type="submit" name="action" value="cancel" class="btn">
-                Annuller
-            </button>
-        </div>
-    </form>
+            <div class="delete-actions">
+                <button type="submit" name="action" value="delete" class="btn btn-danger">
+                    Slet ønske
+                </button>
+
+                <button type="submit" name="action" value="cancel" class="btn">
+                    Annuller
+                </button>
+            </div>
+        </form>
+    </div>
+
 </main>
 
 </body>
