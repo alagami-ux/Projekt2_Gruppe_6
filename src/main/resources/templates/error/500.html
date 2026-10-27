@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Serverfejl - Ønskeskyen</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+</head>
+
+<body>
+
+<header>
+    <h2>
+        <a th:href="@{/}" class="logo">
+            Ønskeskyen ☁️
+        </a>
+    </h2>
+</header>
+
+<main style="max-width: 700px;
+             margin: 60px auto;
+             padding: 20px;">
+
+    <h1>Der opstod en fejl (500)</h1>
+
+    <p>
+        Vi kunne desværre ikke behandle din
+        anmodning på grund af en serverfejl.
+    </p>
+
+    <p>
+        Prøv igen senere.
+    </p>
+
+    <a th:href="@{/}" class="btn">
+        Tilbage til forsiden
+    </a>
+
+</main>
+
+</body>
+</html>
