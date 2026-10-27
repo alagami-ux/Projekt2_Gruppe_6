@@ -89,9 +89,13 @@ public class WishRepository {
         }
     }
 
-    public void updateWish(Wish updatedWish) {
-        String sql = "UPDATE wish SET name = ?, description = ?, quantity = ?, price = ?," +
-                "product_url = ?, image_url = ? WHERE id = ?";
+    public int updateWish(Wish updatedWish) {
+        String sql = """
+            UPDATE wish
+            SET name = ?, description = ?, quantity = ?, price = ?,
+                product_url = ?, image_url = ?
+            WHERE id = ? AND wishlist_id = ?
+            """;
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -103,12 +107,13 @@ public class WishRepository {
             statement.setString(5, updatedWish.getProductUrl());
             statement.setString(6, updatedWish.getImageUrl());
             statement.setInt(7, updatedWish.getId());
+            statement.setInt(8, updatedWish.getWishlistId());
 
-            statement.executeUpdate();
+            return statement.executeUpdate();
 
         } catch (SQLException e) {
             throw new DataAccessResourceFailureException(
-                    "Kunne ikke redigere i ønsket.", e);
+                    "Ønsket kunne ikke opdateres i databasen.", e);
         }
     }
 }
