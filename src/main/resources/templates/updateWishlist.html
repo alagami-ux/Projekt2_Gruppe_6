@@ -43,6 +43,7 @@
         <input type="text"
                id="title"
                th:field="*{title}"
+               th:errorclass="input-error"
                maxlength="150"
                required
                aria-describedby="title-error"
@@ -51,7 +52,7 @@
         <p id="title-error"
            th:if="${#fields.hasErrors('title')}"
            th:errors="*{title}"
-           class="error-message"
+           class="field-error"
            role="alert">
         </p>
 

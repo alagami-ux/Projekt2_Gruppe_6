@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -9,7 +10,9 @@
 <body>
 
 <header>
-    <h2><a th:href="@{/}" class="logo">Ønskeskyen ☁️</a></h2>
+    <h2>
+        <a th:href="@{/}" class="logo">Ønskeskyen ☁️</a>
+    </h2>
 
     <nav>
         <a th:href="@{/wishlists}">Mine ønskesedler</a>
@@ -19,55 +22,103 @@
 <main>
     <h1 class="addWishHeading">
         Tilføj et ønske til
-        <span th:if="${wishlist != null}" th:text="${wishlist.title}">ønskesedlen</span> 🎁
+        <span th:if="${wishlist != null}"
+              th:text="${wishlist.title}">ønskesedlen</span> 🎁
     </h1>
 
-    <div th:if="${errorMessage != null}" class="error-message" th:text="${errorMessage}">
-        Fejl
-    </div>
-
     <div class="createwish-formular">
-        <form th:action="@{/saveCreateWish}" method="post" th:object="${wish}">
-            <input type="hidden" name="wishlistId" th:value="${wishlistId}">
+
+        <form th:action="@{/saveCreateWish}"
+              method="post"
+              th:object="${wish}"
+              novalidate>
+
+            <input type="hidden"
+                   name="wishlistId"
+                   th:value="${wishlistId}">
+
+            <div th:if="${errorMessage != null}"
+                 class="error-message"
+                 role="alert"
+                 th:text="${errorMessage}">
+                Fejl
+            </div>
 
             <label for="name">Navn på ønske</label>
-            <input type="text" id="name" th:field="*{name}" required>
-            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-            <br>
+
+            <input type="text"
+                   id="name"
+                   th:field="*{name}"
+                   th:classappend="${#fields.hasErrors('name')} ? 'input-error' : ''"
+                   th:attr="aria-invalid=${#fields.hasErrors('name')},
+                aria-describedby=${#fields.hasErrors('name')} ? 'name-error' : null"
+                   required>
+
+            <div id="name-error"
+                 th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}"
+                 class="field-error"></div>
 
             <label for="description">Beskrivelse</label>
-            <input type="text" id="description" th:field="*{description}">
-            <div th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
-            <br>
+            <input type="text"
+                   id="description"
+                   th:field="*{description}"
+                   th:classappend="${#fields.hasErrors('description')} ? 'input-error' : ''"
+                   th:attr="aria-invalid=${#fields.hasErrors('description')}">
+            <div th:if="${#fields.hasErrors('description')}"
+                 th:errors="*{description}"
+                 class="field-error"></div>
 
             <label for="quantity">Antal</label>
-            <input type="number" id="quantity" th:field="*{quantity}">
-            <div th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></div>
-            <br>
+            <input type="number"
+                   id="quantity"
+                   th:field="*{quantity}"
+                   th:classappend="${#fields.hasErrors('quantity')} ? 'input-error' : ''"
+                   th:attr="aria-invalid=${#fields.hasErrors('quantity')}">
+            <div th:if="${#fields.hasErrors('quantity')}"
+                 th:errors="*{quantity}"
+                 class="field-error"></div>
 
             <label for="price">Pris</label>
-            <input type="text" id="price" th:field="*{price}">
-            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}"></div>
-            <br>
+            <input type="text"
+                   id="price"
+                   th:field="*{price}"
+                   th:classappend="${#fields.hasErrors('price')} ? 'input-error' : ''"
+                   th:attr="aria-invalid=${#fields.hasErrors('price')}">
+            <div th:if="${#fields.hasErrors('price')}"
+                 th:errors="*{price}"
+                 class="field-error"></div>
 
             <label for="productUrl">Link til ønske</label>
-            <input type="url" id="productUrl" th:field="*{productUrl}">
-            <div th:if="${#fields.hasErrors('productUrl')}" th:errors="*{productUrl}"></div>
-            <br>
+            <input type="url"
+                   id="productUrl"
+                   th:field="*{productUrl}"
+                   th:classappend="${#fields.hasErrors('productUrl')} ? 'input-error' : ''"
+                   th:attr="aria-invalid=${#fields.hasErrors('productUrl')}">
+            <div th:if="${#fields.hasErrors('productUrl')}"
+                 th:errors="*{productUrl}"
+                 class="field-error"></div>
 
             <label for="imageUrl">Link til billede af ønske</label>
-            <input type="url" id="imageUrl" th:field="*{imageUrl}">
-            <div th:if="${#fields.hasErrors('imageUrl')}" th:errors="*{imageUrl}"></div>
-            <br>
+            <input type="url"
+                   id="imageUrl"
+                   th:field="*{imageUrl}"
+                   th:classappend="${#fields.hasErrors('imageUrl')} ? 'input-error' : ''"
+                   th:attr="aria-invalid=${#fields.hasErrors('imageUrl')}">
+            <div th:if="${#fields.hasErrors('imageUrl')}"
+                 th:errors="*{imageUrl}"
+                 class="field-error"></div>
 
-            <button type="submit" class="createButton">Gem ønske</button>
+            <button type="submit" class="createButton">
+                Gem ønske
+            </button>
 
         </form>
     </div>
 </main>
 
 <footer>
-    <p>ØNSKESKYEN · 2026 </p>
+    <p>ØNSKESKYEN · 2026</p>
 </footer>
 
 </body>
