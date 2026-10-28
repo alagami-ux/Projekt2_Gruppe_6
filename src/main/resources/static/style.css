@@ -563,3 +563,38 @@ footer {
 .createwish-formular .field-error:empty {
     display: none;
 }
+
+.wishlist-form input.input-error {
+    border: 2px solid #b42318;
+    background-color: #fff5f5;
+}
+
+.wishlist-form input.input-error:focus {
+    outline: 2px solid #b42318;
+    outline-offset: 2px;
+}
+
+/* Generel fejlbesked */
+.error-message {
+    color: #c81e1e;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* Rød markering af ugyldige felter */
+.wishlist-form input.input-error,
+.createwish-formular input.input-error {
+    border: 2px solid #c81e1e;
+    background-color: #fff5f5;
+}
+
+/* Konkret fejltekst under feltet */
+.wishlist-form .field-error,
+.createwish-formular .field-error {
+    color: #c81e1e;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 6px 0 12px;
+}

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -21,17 +22,20 @@
 <main>
     <h1 class="addWishHeading">Rediger ønske 🎁</h1>
 
-    <div th:if="${errorMessage != null}"
-         class="error-message"
-         role="alert"
-         th:text="${errorMessage}">
-        Fejl
-    </div>
-
     <div class="createwish-formular" th:if="${canEdit == true}">
+
+        <!-- Generel fejlbesked inde i formularkortet -->
+        <div th:if="${errorMessage != null}"
+             class="error-message"
+             role="alert"
+             th:text="${errorMessage}">
+            Fejl
+        </div>
+
         <form th:action="@{/saveUpdateWish}"
               method="post"
-              th:object="${wish}">
+              th:object="${wish}"
+              novalidate>
 
             <input type="hidden" th:field="*{wishlistId}">
             <input type="hidden" th:field="*{id}">
@@ -127,14 +131,26 @@
                th:href="@{/showWishList(id=${wishlistId})}">
                 Annuller
             </a>
+
         </form>
     </div>
 
-    <p th:if="${canEdit != true}">
+    <!-- Fejlbesked, hvis redigering ikke er mulig -->
+    <div th:if="${canEdit != true}"
+         class="delete-confirmation">
+
+        <p th:if="${errorMessage != null}"
+           class="error-message"
+           role="alert"
+           th:text="${errorMessage}">
+            Fejl
+        </p>
+
         <a class="btn" th:href="@{/wishlists}">
             Tilbage til Mine ønskesedler
         </a>
-    </p>
+    </div>
+
 </main>
 
 <footer>
