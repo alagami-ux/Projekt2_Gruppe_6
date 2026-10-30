@@ -17,6 +17,7 @@ public class Wish {
     private String description;
 
     @jakarta.validation.constraints.Min(value = 1, message = "Antallet skal mindst være 1.")
+    @jakarta.validation.constraints.Max(value = 999, message = "Antallet må højst være 999.")
     private int quantity = 1;
 
     @jakarta.validation.constraints.DecimalMin(value ="0.00", message = "Prisen må ikke være negativ.")
