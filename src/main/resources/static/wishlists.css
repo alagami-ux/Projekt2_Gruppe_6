@@ -19,12 +19,14 @@
 }
 
 .wishlist-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
 }
 
 .wishlist-card {
+    flex: 0 1 calc((100% - 40px) / 3);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -104,7 +106,7 @@ body:has(.wishlist-page) header nav a[href*="getCreateWishList"] {
 
 /* Mobil */
 @media (max-width: 600px) {
-    .wishlist-grid {
-        grid-template-columns: 1fr;
+    .wishlist-card {
+        flex-basis: 100%;
     }
 }
