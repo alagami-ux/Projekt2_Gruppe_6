@@ -1,129 +1,81 @@
-# Projekt2_Gruppe_6
-Digital ønskeseddel – miniprojekt på 2. semester, gruppe 6.
+# Ønskeskyen
 
-## Projektbeskrivelse
+Miniprojekt på 2. semester – datamatiker, gruppe 6.
 
-Ønskeskyen er en Spring Boot-applikation, hvor brugeren kan oprette og administrere ønskelister og ønsker.
+Vi har lavet en webapp, hvor man kan oprette ønskesedler og tilføje, redigere og slette ønsker.
 
-Denne README beskriver, hvordan databasen gendannes, og hvordan applikationen startes på en ny computer (target-maskinen).
+Projektet bruger **Java 21, Spring Boot, Thymeleaf og MySQL**. Maven bruges til at bygge og teste projektet.
 
-## Krav
+## Kom i gang
 
-- Java 21
-- IntelliJ IDEA
-- MySQL Server og MySQL Workbench.
-- Projektets kildekode fra GitHub.
+Du skal have Java 21, IntelliJ IDEA og MySQL installeret.
 
-Projektet bruger Spring Boot og Maven. Maven Wrapper følger med.
+1. Hent projektet fra GitHub, og åbn det i IntelliJ.
+2. Vent på, at Maven henter projektets dependencies.
+3. Start MySQL.
 
-## Hent projektet
-
-Hent projektet fra GitHub.
-
-Åbn projektmappen i IntelliJ IDEA.
-
-Vent på, at Maven indlæser projektets afhængigheder.
-
-## Gendan databasen og indlæs startdata
+## Opret databasen
 
 SQL-filerne ligger i `src/main/resources/db/`.
 
-1. Start MySQL Server, og åbn forbindelsen i MySQL Workbench som root eller en anden konto med rettighed til at oprette databasen og tabellerne.
-2. Vælg **File → Open SQL Script**, og åbn [`schema.sql`](src/main/resources/db/schema.sql).
-3. Kør hele scriptet med lyn-knappen. Det opretter `projekt2_gruppe_6_db` samt tabellerne `wishlist` og `wish`. Scriptet opretter ikke brugeren F26A.
-4. Ved en frisk installation: Åbn derefter [`data.sql`](src/main/resources/db/data.sql), og kør hele scriptet én gang på samme forbindelse.
-5. Kontrollér, at Action Output ikke viser fejl. På en frisk database indsættes to ønskesedler og fem ønsker.
+1. Åbn MySQL Workbench med en bruger, der må oprette databaser og tabeller.
+2. Kør [schema.sql](src/main/resources/db/schema.sql). Det opretter databasen `projekt2_gruppe_6_db` og tabellerne `wishlist` og `wish`.
+3. Hvis databasen er ny, kan du køre [data.sql](src/main/resources/db/data.sql) **én gang** for at indsætte eksempeldata.
 
-`data.sql` gemmer hver ny ønskeseddels ID med `LAST_INSERT_ID()` og bruger det til de tilhørende ønsker. Kør hele scriptet på samme forbindelse. Det kræver ikke, at listerne får ID 1 og 2, men det er vigtigt, at hele scriptet køres i samme forbindelse.
+Hvis du kører `data.sql` igen, får du flere kopier af eksempeldata. `schema.sql` sletter ikke eksisterende data.
 
-**Kør startdata-scriptet én gang pr. installation.** Gentagen kørsel opretter yderligere to lister og fem ønsker. `schema.sql` tømmer ikke eksisterende tabeller og ændrer ikke deres struktur.
+MySQL-brugeren skal have rettigheder til at læse, oprette, ændre og slette data i databasen. Kontakt en databaseadministrator, hvis brugeren mangler rettigheder.
 
-Kontrollér data i en ny query-fane:
+## Database i IntelliJ
 
-```sql
-SELECT id, title
-FROM projekt2_gruppe_6_db.wishlist
-ORDER BY id;
-
-SELECT id, wishlist_id, name
-FROM projekt2_gruppe_6_db.wish
-ORDER BY id;
-```
-
-I `src/main/resources/application.properties` skal `spring.sql.init.mode=never` være sat. SQL-filerne køres manuelt i Workbench, ikke automatisk ved opstart.
-
-## Rettigheder til brugeren F26A
-
-Applikationen bruger MySQL-brugeren `F26A`. Adgangskoden til denne bruger ændres ikke af projektet og må ikke skrives i kildekoden, README eller commits.
-
-Hvis F26A mangler de nødvendige rettigheder, skal en MySQL-administrator logge ind med root eller en anden konto med de nødvendige administratorrettigheder og køre:
-
-GRANT SELECT, INSERT, UPDATE, DELETE
-ON projekt2_gruppe_6_db.*
-TO 'F26A'@'localhost';
-
-Hvis brugeren `F26A` ikke allerede findes, skal databaseadministratoren oprette den og aftale adgangskoden med underviseren. Del adgangskoden separat fra GitHub.
-
-## Kontrollér databaseindstillingerne
-
-Kontrollér filen `src/main/resources/application.properties`:
+I `src/main/resources/application.properties` bruger vi miljøvariabler:
 
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/projekt2_gruppe_6_db
-spring.datasource.username=${DB_USERNAME:F26A}
+spring.datasource.username=${DB_USERNAME}
 spring.datasource.password=${DB_PASSWORD}
 spring.sql.init.mode=never
 ```
 
-**Opsætning i IntelliJ IDEA (også på underviserens computer):**
+Sådan sætter du dem op:
 
-1. Åbn **Run → Edit Configurations…** og vælg Spring Boot-konfigurationen `Projekt2Gruppe6Application`.
-2. Klik **Modify options → Environment variables**, hvis feltet ikke vises.
-3. Tilføj `DB_USERNAME` med værdien `F26A` og `DB_PASSWORD` med den eksisterende adgangskode til denne MySQL-bruger.
-4. Klik **Apply → OK**, og start eller genstart applikationen.
-5. Kontrollér `http://localhost:8080/wishlists` for at bekræfte databaseadgang.
+1. Gå til **Run → Edit Configurations**.
+2. Vælg `Projekt2Gruppe6Application`.
+3. Find **Environment variables**. Klik på **Modify options**, hvis feltet mangler.
+4. Tilføj `DB_USERNAME` med din MySQL-bruger og `DB_PASSWORD` med brugerens adgangskode.
+5. Klik **Apply** og **OK**.
 
-Lad **Store as project file** være umarkeret, så den lokale Run-konfiguration ikke deles ved et uheld. Miljøvariabler skal konfigureres på hver computer, der starter applikationen. Undlad at sende screenshots med adgangskoden synlig.
+Brug de MySQL-oplysninger, du har fået til projektet. Du skal **ikke ændre adgangskoden i MySQL**. Skriv heller ikke adgangskoden i README eller i et Git-commit. Lad **Store as project file** være umarkeret, så din lokale opsætning ikke deles.
 
-**Bemærk:** Adgangskoden kan stadig findes i tidligere Git-commits, selvom den er fjernet fra den aktuelle version. Den kan ikke betragtes som hemmelig, hvis den deles eller ligger i historikken.
+## Start appen
 
-## Start applikationen
+1. Vælg `Projekt2Gruppe6Application` i IntelliJ.
+2. Klik på den grønne **Run**-knap.
+3. Åbn [forsiden](http://localhost:8080/).
+4. Åbn [Mine ønskesedler](http://localhost:8080/wishlists).
 
-Find projektets hovedklasse med @SpringBootApplication i IntelliJ.
+Hvis ønskesedlerne vises, kan appen hente data fra MySQL. Hvis du får en databasefejl, så kontrollér, at MySQL kører, og at miljøvariablerne er korrekte.
 
-Start applikationen med Run.
+## Test
 
-Kontrollér, at Run-vinduet viser `Started Projekt2Gruppe6Application`, og at
-Tomcat er startet på port 8080. Det viser, at Spring Boot er startet.
+Kør de automatiske tests fra terminalen i IntelliJ:
 
-Forsiden vises på `http://localhost:8080/`. Ønskeseddeloversigten findes på `http://localhost:8080/wishlists`.
-En eksisterende ønskeseddel kan vises på
-`http://localhost:8080/showWishList?id=DIT_ID`. Erstat `DIT_ID` med et
-eksisterende ID fra SQL-opslaget ovenfor. Test også oprettelse, redigering og sletning af ønsker og ønskesedler.
-Opstart alene bekræfter ikke, at databaseforespørgsler virker.
+```powershell
+.\mvnw.cmd clean verify
+```
 
-## Manuel test
+Kontrollér, at der står `BUILD SUCCESS`. Vi har også JUnit/MockMvc-tests i projektet.
 
-Projektet bruger både manuelle funktionstests og JUnit/MockMvc-controller-tests. Testafhængighederne er deklareret i `pom.xml`.
+Test derefter funktionerne i browseren: opret, vis, rediger og slet både ønskesedler og ønsker. Brug [vores manuelle testskema](docs/manuel-test.md) til at skrive resultaterne ned.
 
-Brug [den manuelle testtabel](docs/manuel-test.md). Udfyld resultatet, når
-hver funktion er afprøvet. En funktion er ikke testet alene ved, at projektet
-kan bygges eller Spring Boot starter.
+## GitHub
 
-## Automatisk bygning på GitHub
+Når vi laver en ændring, arbejder vi på en branch, committer, pusher og opretter en Pull Request til `main`.
 
-Workflowen [Maven build](.github/workflows/tests.yml) bygger projektet med
-Java 21 ved pull requests til `main` og push til `main`.
-Den kan også startes fra **Actions → Maven build → Run workflow**,
-når ændringen er merged til standardbranchen.
+GitHub Actions bygger projektet med Java 21 og Maven, når vi opretter en Pull Request eller pusher til `main`. Se [workflowet](.github/workflows/tests.yml).
 
-Workflowen kører `bash mvnw --batch-mode --no-transfer-progress package`.
-Den kompilerer og pakker applikationen uden at starte MySQL eller applikationen.
-Maven `package` kører som udgangspunkt automatiske tests, når tests er til stede og ikke er fravalgt. Workflowen starter ikke selv MySQL eller browseren.
+En bestået build erstatter ikke manuel test i browseren.
 
-En grøn kørsel betyder, at projektet kunne bygges. Formularer, SQL, navigation
-og layout skal stadig afprøves manuelt. Workflowen ændrer ikke merge-reglerne.
+## Diagrammer
 
-## Diagrammer og design
-
-Se [diagrammer og forklaring til holdet](docs/diagrammer.md) for klasse-, sekvens- og deployment-diagrammer samt links til wireframes og ER-diagram med Chen-notation.
+Vi har samlet vores diagrammer og forklaringer i [docs/diagrammer.md](docs/diagrammer.md).
