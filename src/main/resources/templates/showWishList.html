@@ -40,15 +40,16 @@
 
     <div>
         <article th:each="wish : ${wishes}">
+
             <img class="wish-image"
-                 th:src="${#strings.isEmpty(wish.imageUrl)}
-                     ? @{/images/standard.svg}
-                     : ${wish.imageUrl}"
-                 th:alt="${#strings.isEmpty(wish.imageUrl)}
-                     ? 'Intet produktbillede'
-                     : ${wish.name}"
+                 th:src="${#strings.isEmpty(wish.imageUrl)
+         ? '/images/standard.svg'
+         : wish.imageUrl}"
+                 th:alt="${#strings.isEmpty(wish.imageUrl)
+         ? 'Intet produktbillede'
+         : wish.name}"
                  th:attr="data-fallback=@{/images/standard.svg}"
-                 onerror="this.onerror=null; this.src=this.dataset.fallback; this.alt='Intet produktbillede';">
+                 onerror="this.onerror=null; this.src=this.dataset.fallback;">
 
             <div class="wish-details">
 
