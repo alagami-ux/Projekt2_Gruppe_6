@@ -130,14 +130,18 @@ hr {
 .addWish:hover,
 .createButton:hover,
 .wishlist-form button:hover,
-.createwish-formular button.btn:hover,
+.createwish-formular button.btn:hover {
+    background-color: var(--forest-deep);
+}
+
 .btn:focus-visible,
 .addWish:focus-visible,
 .createButton:focus-visible,
 .wishlist-form button:focus-visible,
 .createwish-formular button.btn:focus-visible {
     background-color: var(--forest-deep);
-    outline: none;
+    outline: 3px solid var(--forest-main);
+    outline-offset: 3px;
 }
 
 /* Front page */
@@ -254,6 +258,7 @@ main {
 
 article {
     display: flex;
+    align-items: flex-start;
     gap: 20px;
     background-color: var(--white);
     padding: 20px;
@@ -271,35 +276,6 @@ article {
 
 .wish-details h2 {
     margin-top: 0;
-}
-/* Show wishlist / wishes */
-main {
-    padding: 0 20px;
-}
-
-article {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    background-color: var(--white);
-    padding: 20px;
-    margin: 0 auto 20px;
-    border: 1px solid var(--sage-light);
-    border-radius: 12px;
-    box-shadow: 0 1px 5px var(--shadow);
-    max-width: 1000px;
-}
-
-.wish-image {
-    width: 170px;
-    height: 180px;
-    object-fit: contain;
-    flex-shrink: 0;
-}
-
-.wish-details {
-    flex: 1;
-    min-width: 0;
 }
 
 .wish-title-row {
@@ -362,10 +338,6 @@ article {
     margin: 10px;
 }
 
-.wish-details p {
-    font-size: 16px;
-}
-
 .wishlist-title-row {
     display: flex;
     align-items: center;
@@ -391,9 +363,6 @@ article {
     flex-shrink: 0;
 }
 
-.addWish {
-    margin: 10px;
-}
 
 /* Create wish form */
 .addWishHeading {
@@ -443,6 +412,7 @@ footer {
     margin-top: 30px;
 }
 
+
 /* Delete confirmation */
 .delete-confirmation {
     max-width: 600px;
@@ -477,8 +447,23 @@ footer {
     cursor: pointer;
 }
 
+/* Destructive action: always visibly red */
+.delete-actions .btn-danger {
+    background-color: var(--danger);
+    color: var(--white);
+    border: 1px solid var(--danger);
+}
 
+.delete-actions .btn-danger:hover {
+    background-color: var(--danger-dark);
+}
 
+/* Keyboard accessibility */
+.delete-actions .btn-danger:focus-visible {
+    background-color: var(--danger-dark);
+    outline: 3px solid var(--danger-dark);
+    outline-offset: 3px;
+}
 
 /* Responsive */
 @media (max-width: 600px) {
@@ -543,34 +528,18 @@ footer {
 }
 
 /* Edit wish: invalid fields */
-.createwish-formular input.input-error {
-    border: 2px solid var(--error);
-    background-color: #fff5f5;
-}
-
 .createwish-formular input.input-error:focus {
-    outline: 2px solid var(--error);
+    outline: 2px solid #c81e1e;
     outline-offset: 2px;
 }
 
 /* Edit wish: field error messages */
-.createwish-formular .field-error {
-    color: var(--error);
-    font-weight: 600;
-    margin-top: 0.4rem;
-}
-
 .createwish-formular .field-error:empty {
     display: none;
 }
 
-.wishlist-form input.input-error {
-    border: 2px solid #b42318;
-    background-color: #fff5f5;
-}
-
 .wishlist-form input.input-error:focus {
-    outline: 2px solid #b42318;
+    outline: 2px solid #c81e1e;
     outline-offset: 2px;
 }
 
