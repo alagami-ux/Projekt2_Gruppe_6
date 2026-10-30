@@ -174,7 +174,7 @@ public class WishController {
             String action,
             Model model) {
 
-        if ("cancel".equalsIgnoreCase(action)) {
+        if (!"delete".equals(action)) {
             return "redirect:/showWishList?id=" + wishlistId;
         }
 

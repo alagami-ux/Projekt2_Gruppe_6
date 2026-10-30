@@ -54,7 +54,7 @@ I `src/main/resources/application.properties` skal `spring.sql.init.mode=never` 
 
 ## Rettigheder til brugeren F26A
 
-Applikationen bruger MySQL-brugeren F26A med adgangskoden 1234.
+Applikationen bruger MySQL-brugeren `F26A`. Adgangskoden til denne bruger ændres ikke af projektet og må ikke skrives i kildekoden, README eller commits.
 
 Hvis F26A mangler de nødvendige rettigheder, skal en MySQL-administrator logge ind med root eller en anden konto med de nødvendige administratorrettigheder og køre:
 
@@ -62,15 +62,30 @@ GRANT SELECT, INSERT, UPDATE, DELETE
 ON projekt2_gruppe_6_db.*
 TO 'F26A'@'localhost';
 
-Hvis brugeren F26A ikke allerede findes, skal den først oprettes med den aftalte adgangskode.
+Hvis brugeren `F26A` ikke allerede findes, skal databaseadministratoren oprette den og aftale adgangskoden med underviseren. Del adgangskoden separat fra GitHub.
 
 ## Kontrollér databaseindstillingerne
 
-Kontrollér filen src/main/resources/application.properties:
+Kontrollér filen `src/main/resources/application.properties`:
 
+```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/projekt2_gruppe_6_db
-spring.datasource.username=F26A
-spring.datasource.password=1234
+spring.datasource.username=${DB_USERNAME:F26A}
+spring.datasource.password=${DB_PASSWORD}
+spring.sql.init.mode=never
+```
+
+**Opsætning i IntelliJ IDEA (også på underviserens computer):**
+
+1. Åbn **Run → Edit Configurations…** og vælg Spring Boot-konfigurationen `Projekt2Gruppe6Application`.
+2. Klik **Modify options → Environment variables**, hvis feltet ikke vises.
+3. Tilføj `DB_USERNAME` med værdien `F26A` og `DB_PASSWORD` med den eksisterende adgangskode til denne MySQL-bruger.
+4. Klik **Apply → OK**, og start eller genstart applikationen.
+5. Kontrollér `http://localhost:8080/wishlists` for at bekræfte databaseadgang.
+
+Lad **Store as project file** være umarkeret, så den lokale Run-konfiguration ikke deles ved et uheld. Miljøvariabler skal konfigureres på hver computer, der starter applikationen. Undlad at sende screenshots med adgangskoden synlig.
+
+**Bemærk:** Adgangskoden kan stadig findes i tidligere Git-commits, selvom den er fjernet fra den aktuelle version. Den kan ikke betragtes som hemmelig, hvis den deles eller ligger i historikken.
 
 ## Start applikationen
 
@@ -81,16 +96,15 @@ Start applikationen med Run.
 Kontrollér, at Run-vinduet viser `Started Projekt2Gruppe6Application`, og at
 Tomcat er startet på port 8080. Det viser, at Spring Boot er startet.
 
-Forsiden på `http://localhost:8080/` returnerer nu en redirect til `/wishlists`.
+Forsiden vises på `http://localhost:8080/`. Ønskeseddeloversigten findes på `http://localhost:8080/wishlists`.
 En eksisterende ønskeseddel kan vises på
 `http://localhost:8080/showWishList?id=DIT_ID`. Erstat `DIT_ID` med et
-eksisterende ID fra SQL-opslaget ovenfor. De øvrige brugerforløb er under udvikling.
+eksisterende ID fra SQL-opslaget ovenfor. Test også oprettelse, redigering og sletning af ønsker og ønskesedler.
 Opstart alene bekræfter ikke, at databaseforespørgsler virker.
 
 ## Manuel test
 
-Projektet bruger manuel funktionstest. Der er ingen JUnit-tests eller
-test-dependencies i denne version.
+Projektet bruger både manuelle funktionstests og JUnit/MockMvc-controller-tests. Testafhængighederne er deklareret i `pom.xml`.
 
 Brug [den manuelle testtabel](docs/manuel-test.md). Udfyld resultatet, når
 hver funktion er afprøvet. En funktion er ikke testet alene ved, at projektet
@@ -105,7 +119,7 @@ når ændringen er merged til standardbranchen.
 
 Workflowen kører `bash mvnw --batch-mode --no-transfer-progress package`.
 Den kompilerer og pakker applikationen uden at starte MySQL eller applikationen.
-Den udfører ingen automatiske funktionstests.
+Maven `package` kører som udgangspunkt automatiske tests, når tests er til stede og ikke er fravalgt. Workflowen starter ikke selv MySQL eller browseren.
 
 En grøn kørsel betyder, at projektet kunne bygges. Formularer, SQL, navigation
 og layout skal stadig afprøves manuelt. Workflowen ændrer ikke merge-reglerne.
