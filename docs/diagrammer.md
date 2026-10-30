@@ -120,7 +120,7 @@ flowchart TB
         Workbench["MySQL Workbench"]
         Browser -->|"HTTP · port 8080"| App
         App -->|"JDBC · port 3306<br/>Bruger: F26A"| DB
-        Workbench -.->|"Installation som root<br/>schema.sql og data.sql"| DB
+        Workbench -.->|"Installation som root<br/>setup.sql og setup.sql"| DB
     end
 ```
 
