@@ -32,21 +32,21 @@
         </p>
 
         <div class="button">
-            <form th:action="@{/wishlists}"
-                  method="get"
-                  class="modify-form">
-                <button class="btn" type="submit">
-                    Se mine ønskesedler
-                </button>
-            </form>
-        </div>
-
-        <div class="button2">
             <form th:action="@{/getCreateWishList}"
                   method="get"
                   class="modify-form">
                 <button class="btn" type="submit">
                     + Opret en ny ønskeseddel
+                </button>
+            </form>
+        </div>
+
+        <div class="button2">
+            <form th:action="@{/wishlists}"
+                  method="get"
+                  class="modify-form">
+                <button class="btn" type="submit">
+                    Se mine ønskesedler
                 </button>
             </form>
         </div>
