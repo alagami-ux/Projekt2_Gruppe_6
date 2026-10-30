@@ -73,13 +73,16 @@
             <input type="number"
                    id="quantity"
                    th:field="*{quantity}"
+                   min="1"
+                   max="999"
+                   step="1"
                    th:classappend="${#fields.hasErrors('quantity')} ? 'input-error' : ''"
                    th:attr="aria-invalid=${#fields.hasErrors('quantity')}">
             <div th:if="${#fields.hasErrors('quantity')}"
                  th:errors="*{quantity}"
                  class="field-error"></div>
 
-            <label for="price">Pris</label>
+            <label for="price">Pris pr. stk. (valgfri)</label>
             <input type="text"
                    id="price"
                    th:field="*{price}"
