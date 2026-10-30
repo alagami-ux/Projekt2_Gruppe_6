@@ -16,15 +16,15 @@ Du skal have Java 21, IntelliJ IDEA og MySQL installeret.
 
 ## Opret databasen
 
-SQL-filerne ligger i `src/main/resources/db/`.
+SQL-filen ligger i `src/main/resources/db/setup.sql`.
 
 1. Åbn MySQL Workbench med en bruger, der må oprette databaser og tabeller.
-2. Kør [schema.sql](src/main/resources/db/schema.sql). Det opretter databasen `projekt2_gruppe_6_db` og tabellerne `wishlist` og `wish`.
-3. Hvis databasen er ny, kan du køre [data.sql](src/main/resources/db/data.sql) **én gang** for at indsætte eksempeldata.
+2. Åbn [setup.sql](src/main/resources/db/setup.sql), og kør hele filen med lyn-knappen.
+3. Filen opretter databasen, tabellerne og to eksempelønskesedler med fem ønsker.
 
-Hvis du kører `data.sql` igen, får du flere kopier af eksempeldata. `schema.sql` sletter ikke eksisterende data.
+Hvis databasen allerede indeholder ønskesedler, bevares de, og der indsættes ikke nye eksempeldata. Filen ændrer ikke på eksisterende tabellers struktur.
 
-MySQL-brugeren skal have rettigheder til at læse, oprette, ændre og slette data i databasen. Kontakt en databaseadministrator, hvis brugeren mangler rettigheder.
+MySQL-brugeren, som appen bruger, skal have adgang til databasen. Kontakt underviseren, hvis brugeren mangler rettigheder.
 
 ## Database i IntelliJ
 
