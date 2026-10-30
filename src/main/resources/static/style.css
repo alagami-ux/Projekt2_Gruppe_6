@@ -177,6 +177,21 @@ hr {
     background-color: var(--pink-soft);
 }
 
+.feature-link {
+    display: block;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.feature-link:hover {
+    transform: translateY(-2px);
+}
+
+.feature-link:focus-visible {
+    outline: 3px solid var(--forest-main);
+    outline-offset: 3px;
+}
+
 .box1 p:first-child,
 .box2 p:first-child {
     color: var(--forest-main);
