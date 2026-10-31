@@ -118,51 +118,35 @@ public class WishController {
             Model model) {
 
         try {
-            WishList wishlist =
-                    wishListRepository.getWishlistById(wishlistId);
-
+            WishList wishlist = wishListRepository.getWishlistById(wishlistId);
             if (wishlist == null) {
-                model.addAttribute(
-                        "errorMessage",
-                        "Ønskesedlen findes ikke."
-                );
-                return "showWishList";
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Ønskesedlen findes ikke.");
             }
 
-            boolean found = false;
-
-            for (Wish wish :
-                    wishListRepository.getWishesByWishListID(wishlistId)) {
+            // Hent kun ønsker én gang og brug samme data ved fejlvisning.
+            var wishes = wishListRepository.getWishesByWishListID(wishlistId);
+            for (Wish wish : wishes) {
                 if (wish.getId() == id) {
                     model.addAttribute("wish", wish);
                     model.addAttribute("wishlist", wishlist);
                     model.addAttribute("wishlistId", wishlistId);
-                    found = true;
-                    break;
+                    return "deleteWish";
                 }
             }
 
-            if (!found) {
-                model.addAttribute("wishlist", wishlist);
-                model.addAttribute(
-                        "wishes",
-                        wishListRepository.getWishesByWishListID(wishlistId)
-                );
-                model.addAttribute(
-                        "errorMessage",
-                        "Ønsket findes ikke på denne ønskeseddel."
-                );
-                return "showWishList";
-            }
-
-            return "deleteWish";
+            model.addAttribute("wishlist", wishlist);
+            model.addAttribute("wishes", wishes);
+            model.addAttribute("errorMessage",
+                    "Ønsket findes ikke på denne ønskeseddel.");
+            return "showWishList";
 
         } catch (DataAccessException e) {
-            model.addAttribute(
-                    "errorMessage",
-                    "Ønsket kunne ikke hentes. Prøv igen senere."
-            );
-            return "showWishList";
+            log.error("Kunne ikke hente ønske id={} på liste id={}",
+                    id, wishlistId, e);
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Ønsket kunne ikke hentes. Prøv igen senere.", e);
         }
     }
 
@@ -179,65 +163,44 @@ public class WishController {
         }
 
         try {
-            WishList wishlist =
-                    wishListRepository.getWishlistById(wishlistId);
-
+            WishList wishlist = wishListRepository.getWishlistById(wishlistId);
             if (wishlist == null) {
-                model.addAttribute(
-                        "errorMessage",
-                        "Ønskesedlen findes ikke."
-                );
-                return "showWishList";
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Ønskesedlen findes ikke.");
             }
 
-            boolean existsInWishlist = false;
-
-            for (Wish wish :
-                    wishListRepository.getWishesByWishListID(wishlistId)) {
-                if (wish.getId() == id) {
-                    existsInWishlist = true;
-                    break;
-                }
-            }
+            var wishes = wishListRepository.getWishesByWishListID(wishlistId);
+            boolean existsInWishlist = wishes.stream()
+                    .anyMatch(wish -> wish.getId() == id);
 
             if (!existsInWishlist) {
                 model.addAttribute("wishlist", wishlist);
-                model.addAttribute(
-                        "wishes",
-                        wishListRepository.getWishesByWishListID(wishlistId)
-                );
-                model.addAttribute(
-                        "errorMessage",
-                        "Ønsket findes ikke på denne ønskeseddel. "
-                                + "Intet blev slettet."
-                );
+                model.addAttribute("wishes", wishes);
+                model.addAttribute("errorMessage",
+                        "Ønsket findes ikke på denne ønskeseddel. Intet blev slettet.");
                 return "showWishList";
             }
 
             int deletedRows = wishRepository.deleteWish(id, wishlistId);
-
             if (deletedRows == 0) {
+                // Ønsket kan være slettet af et andet request imens.
                 model.addAttribute("wishlist", wishlist);
-                model.addAttribute(
-                        "wishes",
-                        wishListRepository.getWishesByWishListID(wishlistId)
-                );
-                model.addAttribute(
-                        "errorMessage",
-                        "Ønsket findes ikke på denne ønskeseddel. "
-                                + "Intet blev slettet."
-                );
+                model.addAttribute("wishes",
+                        wishListRepository.getWishesByWishListID(wishlistId));
+                model.addAttribute("errorMessage",
+                        "Ønsket findes ikke længere. Kontrollér ønskesedlen.");
                 return "showWishList";
             }
 
             return "redirect:/showWishList?id=" + wishlistId;
 
         } catch (DataAccessException e) {
-            model.addAttribute(
-                    "errorMessage",
-                    "Der opstod en databasefejl. Ønsket blev ikke slettet."
-            );
-            return "showWishList";
+            log.error("Fejl ved sletning af ønske id={} på liste id={}",
+                    id, wishlistId, e);
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                    "Sletningen kunne ikke bekræftes. Kontrollér ønskesedlen, før du prøver igen.",
+                    e);
         }
     }
 
