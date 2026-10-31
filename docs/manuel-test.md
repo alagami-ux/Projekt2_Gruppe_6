@@ -80,16 +80,16 @@ Resultater rapporteret af testeren.
 
 - Serveren afviser 151 tegn uden databaseændring.
 - Databasefejl giver en dansk besked og bevarer indtastningen.
-- Automatiske JUnit-tests af controller og databasekald.
+- Gennemgående integrationstest mod rigtig MySQL af Java-repository-kald (ikke dækket af de eksisterende mock-tests).
 
-#55 er endnu ikke færdigtestet.
+#55: Manuelle titeltests og tidligere registrerede automatiske controller-tests er bestået. Integrationstest ved faktisk databasefejl og direkte Java-repository-kald mod MySQL er ikke dokumenteret.
 
-### Automatiske controllertests – #55
+### Eksisterende automatiske controllertests – #55
 
 26. oktober 2026: `.\mvnw.cmd -U test`
     Resultat: 9 tests bestået, 0 failures, 0 errors, 0 skipped.
 
-Kontrollerer titelvalidering, grænsen på 150/151 tegn,
+Disse tests findes i kodebasens `WishListControllerTest.java`. De er **ikke gruppens primære manuelle testmetode**. Den registrerede kørsel 26. oktober kontrollerede titelvalidering, grænsen på 150/151 tegn,
 uændret titel, ukendt liste og simulerede databasefejl.
 Repositoryet er mocket; rigtig MySQL testes ikke her.
 
