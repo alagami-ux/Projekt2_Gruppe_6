@@ -28,24 +28,15 @@ MySQL-brugeren, som appen bruger, skal have adgang til databasen. Kontakt underv
 
 ## Database i IntelliJ
 
-I `src/main/resources/application.properties` bruger vi miljøvariabler:
+`src/main/resources/application.properties` angiver forbindelsen til den lokale MySQL-database **direkte**. Den nuværende version bruger ikke `DB_USERNAME` eller `DB_PASSWORD` som miljøvariabler. Filen indeholder:
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/projekt2_gruppe_6_db
-spring.datasource.username=${DB_USERNAME}
-spring.datasource.password=${DB_PASSWORD}
-spring.sql.init.mode=never
-```
+- URL: `jdbc:mysql://localhost:3306/projekt2_gruppe_6_db`
+- Et lokalt MySQL-brugernavn og en adgangskode
+- `spring.sql.init.mode=never` (databasen oprettes manuelt med `setup.sql`)
 
-Sådan sætter du dem op:
+Brug den lokale MySQL-bruger, som projektet er sat op med, og sørg for, at den har de nødvendige rettigheder til `projekt2_gruppe_6_db`. Hvis du kører projektet på en anden computer, skal oplysningerne passe til MySQL-installationen på den computer.
 
-1. Gå til **Run → Edit Configurations**.
-2. Vælg `Projekt2Gruppe6Application`.
-3. Find **Environment variables**. Klik på **Modify options**, hvis feltet mangler.
-4. Tilføj `DB_USERNAME` med din MySQL-bruger og `DB_PASSWORD` med brugerens adgangskode.
-5. Klik **Apply** og **OK**.
-
-Brug de MySQL-oplysninger, du har fået til projektet. Du skal **ikke ændre adgangskoden i MySQL**. Skriv heller ikke adgangskoden i README eller i et Git-commit. Lad **Store as project file** være umarkeret, så din lokale opsætning ikke deles.
+**Bemærk ved offentlig GitHub-aflevering:** Fordi loginoplysninger står direkte i en versioneret konfigurationsfil, skal kontoen være en isoleret lokal projekt-/testbruger uden adgang til andre systemer. Genbrug ikke adgangskoden andre steder, og medtag ikke loginoplysninger i screenshots eller rapporter.
 
 ## Start appen
 
@@ -54,17 +45,19 @@ Brug de MySQL-oplysninger, du har fået til projektet. Du skal **ikke ændre adg
 3. Åbn [forsiden](http://localhost:8080/).
 4. Åbn [Mine ønskesedler](http://localhost:8080/wishlists).
 
-Hvis ønskesedlerne vises, kan appen hente data fra MySQL. Hvis du får en databasefejl, så kontrollér, at MySQL kører, og at miljøvariablerne er korrekte.
+Hvis ønskesedlerne vises, kan appen hente data fra MySQL. Hvis du får en databasefejl, så kontrollér, at MySQL kører, og at forbindelsesoplysningerne i `application.properties` stemmer med din lokale MySQL-installation.
 
 ## Test
 
-Kør de automatiske tests fra terminalen i IntelliJ:
+Projektets primære dokumenterede funktionstest er **manuel test i browseren og kontrol i MySQL Workbench**. Repositoryet indeholder desuden en eksisterende `WishListControllerTest.java` med JUnit/MockMvc; den er ikke grundlaget for gruppens manuelle testresultater.
+
+Du kan kontrollere Maven-build og de eksisterende automatiske tests fra terminalen i IntelliJ:
 
 ```powershell
 .\mvnw.cmd clean verify
 ```
 
-Kontrollér, at der står `BUILD SUCCESS`. Vi har også JUnit/MockMvc-tests i projektet.
+Kontrollér, om der står `BUILD SUCCESS`. En bestået Maven-build dokumenterer ikke i sig selv, at alle brugerflows virker i browseren.
 
 Test derefter funktionerne i browseren: opret, vis, rediger og slet både ønskesedler og ønsker. Brug [vores manuelle testskema](docs/manuel-test.md) til at skrive resultaterne ned.
 
