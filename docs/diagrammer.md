@@ -64,10 +64,10 @@ sequenceDiagram
         LR->>DB: SELECT ønskeseddel via PreparedStatement
         DB-->>LR: Ønskesedlens id og title
         LR-->>LC: WishList
-        LC->>WR: getWishesByWishlistId(id)
-        WR->>DB: SELECT ønsker via PreparedStatement
-        DB-->>WR: Ønskernes oplysninger
-        WR-->>LC: Liste af Wish
+        LC->>LR: getWishesByWishListID(id)
+        LR->>DB: SELECT ønsker via PreparedStatement
+        DB-->>LR: Ønskernes oplysninger
+        LR-->>LC: Liste af Wish
         LC->>LC: Tilføj ønskeseddel og ønsker til Model
         LC-->>B: Thymeleaf-side med titel og ønsker
         B-->>U: Vis opdateret ønskeseddel
@@ -78,7 +78,7 @@ Repositoryerne bruger direkte JDBC med `DataSource`, `Connection`, `PreparedStat
 
 ## Sekvensdiagram – Databasefejl under Gem
 
-Foreslået håndtering ved oprettelse: Repositoryet pakker `SQLException` ind i en `DataAccessException`. Controlleren håndterer `DataAccessException`, bevarer formularens værdier og viser en generel fejlbesked.
+Implementeret håndtering ved oprettelse: Repositoryet pakker `SQLException` ind i en `DataAccessException`. Controlleren håndterer `DataAccessException`, bevarer formularens værdier og viser en generel fejlbesked.
 
 ```mermaid
 sequenceDiagram
@@ -103,7 +103,7 @@ sequenceDiagram
 
 Brugerbesked:
 
-> Vi kunne ikke bekræfte, at ønsket blev gemt. Kontrollér ønskesedlen, før du prøver igen.
+> Ønsket kunne ikke gemmes. Prøv igen senere.
 
 En mistet forbindelse kan i enkelte tilfælde betyde, at databasen har gemt ønsket, men at svaret er gået tabt. Derfor vises ingen falsk bekræftelse, og der foretages ikke automatisk et nyt forsøg. Fejl ved genindlæsning efter redirect og manglende ønskeseddel er ikke vist i disse diagrammer.
 
@@ -120,7 +120,7 @@ flowchart TB
         Workbench["MySQL Workbench"]
         Browser -->|"HTTP · port 8080"| App
         App -->|"JDBC · port 3306<br/>Bruger: F26A"| DB
-        Workbench -.->|"Installation som root<br/>setup.sql og setup.sql"| DB
+        Workbench -.->|"Databaseopsætning i Workbench<br/>src/main/resources/db/setup.sql"| DB
     end
 ```
 
@@ -138,7 +138,7 @@ Når brugeren trykker **Gem**:
 
 Hvis databasen fejler, viser vi en forståelig fejlbesked og bevarer det indtastede. Vi fortæller ikke brugeren, at ønsket er gemt.
 
-Vi har delt flowet i to sekvensdiagrammer, så det normale flow og databasefejl er lette at følge. Koden skal implementeres og testes, så den følger diagrammerne.
+Vi har delt flowet i to sekvensdiagrammer, så det normale flow og databasefejl er lette at følge. Diagrammerne beskriver de relevante kodeforløb; manuel verifikation er dokumenteret særskilt i [manuel-test.md](manuel-test.md).
 
 ## Wireframes og ER-diagram
 
