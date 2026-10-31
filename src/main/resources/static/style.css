@@ -195,6 +195,37 @@ hr {
     outline-offset: 3px;
 }
 
+/* Forsidens klikbare billedkort */
+.feature-image-card {
+    overflow: hidden;
+    padding: 0;
+    background: var(--white);
+    text-align: left;
+}
+
+.feature-image {
+    display: block;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.feature-content {
+    padding: 20px 24px;
+}
+
+.feature-content h3 {
+    margin: 0 0 8px;
+    color: var(--forest-main);
+    font-size: 22px;
+}
+
+.feature-content p {
+    margin: 0;
+    color: var(--forest-dark);
+    font-size: 16px;
+}
+
 .box1 p:first-child,
 .box2 p:first-child {
     color: var(--forest-main);
