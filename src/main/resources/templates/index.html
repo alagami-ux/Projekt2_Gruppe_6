@@ -58,14 +58,26 @@
         <h2>Gør dine ønsker personlige</h2>
 
         <div class="grid">
-            <a class="box1 feature-link" th:href="@{/getCreateWishList}">
-                <p>Saml dine ønsker</p>
-                <p>Alle dine idéer på ét sted</p>
+            <a class="box1 feature-link feature-image-card" th:href="@{/getCreateWishList}">
+                <img class="feature-image"
+                     th:src="@{/images/saml-dine-onsker.jpg}"
+                     alt="PlayStation, kamera, ur, fodbold, brætspil, sko, vin og skateboard samlet som gaveønsker"
+                     loading="lazy">
+                <div class="feature-content">
+                    <h3>Saml dine ønsker</h3>
+                    <p>Alle dine idéer på ét sted</p>
+                </div>
             </a>
 
-            <a class="box2 feature-link" th:href="@{/wishlists}">
-                <p>Hold overblik</p>
-                <p>Organisér dine ønskesedler</p>
+            <a class="box2 feature-link feature-image-card" th:href="@{/wishlists}">
+                <img class="feature-image"
+                     th:src="@{/images/hold-overblik.jpg}"
+                     alt="En person samler ønsker i en notesbog ved siden af Ønskeskyen på en computerskærm"
+                     loading="lazy">
+                <div class="feature-content">
+                    <h3>Hold overblik</h3>
+                    <p>Organisér dine ønskesedler</p>
+                </div>
             </a>
         </div>
     </section>
