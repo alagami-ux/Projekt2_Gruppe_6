@@ -17,6 +17,10 @@
 </header>
 
 <main>
+    <p th:if="${errorMessage != null}"
+       th:text="${errorMessage}"
+       class="error-message"
+       role="alert"></p>
     <div>
         <div class="wishlist-title-row">
             <h1 th:text="${wishlist.title}">Ønskesedlens titel</h1>
