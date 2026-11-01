@@ -80,16 +80,16 @@ Resultater rapporteret af testeren.
 
 - Serveren afviser 151 tegn uden databaseændring.
 - Databasefejl giver en dansk besked og bevarer indtastningen.
-- Automatiske JUnit-tests af controller og databasekald.
+- Gennemgående integrationstest mod rigtig MySQL af Java-repository-kald (ikke dækket af de eksisterende mock-tests).
 
-#55 er endnu ikke færdigtestet.
+#55: Manuelle titeltests og tidligere registrerede automatiske controller-tests er bestået. Integrationstest ved faktisk databasefejl og direkte Java-repository-kald mod MySQL er ikke dokumenteret.
 
-### Automatiske controllertests – #55
+### Eksisterende automatiske controllertests – #55
 
 26. oktober 2026: `.\mvnw.cmd -U test`
     Resultat: 9 tests bestået, 0 failures, 0 errors, 0 skipped.
 
-Kontrollerer titelvalidering, grænsen på 150/151 tegn,
+Disse tests findes i kodebasens `WishListControllerTest.java`. De er **ikke gruppens primære manuelle testmetode**. Den registrerede kørsel 26. oktober kontrollerede titelvalidering, grænsen på 150/151 tegn,
 uændret titel, ukendt liste og simulerede databasefejl.
 Repositoryet er mocket; rigtig MySQL testes ikke her.
 
@@ -103,3 +103,56 @@ Repositoryet er mocket; rigtig MySQL testes ikke her.
 
 Alle tre SQL-kontroller returnerede true.
 Testen kører SQL direkte; Java-repository-metoden testes ikke her.
+
+
+## Opfølgning 31-10-2026 – teststatus efter kodeændringer
+
+Denne opfølgning er adskilt fra de historiske testresultater i tabellen ovenfor. Tidligere
+"Ikke udført"-markeringer er bevaret, så de oprindelige registreringer ikke overskrives.
+
+### Testpunkt 1 – Brugerflow og validering
+
+Tester har 31-10-2026 oplyst, at den samlede gennemgang af **test nr. 1, 2, 5, 6, 7 og 8**
+er udført: oprettelse, ugyldigt input, redigering, annullering og sletning af ønskesedler
+og ønsker. **Resultat, konkrete input, testdata og skærmbilleder er ikke indført for hvert
+enkelt scenarie.** Status: *Udført ifølge tester – detaljeret resultat afventer registrering*.
+Dette afsnit dokumenterer ikke i sig selv, at samtlige delscenarier bestod.
+
+### Testpunkt 2 – Ugyldigt antal
+
+Tester har 31-10-2026 oplyst, at test af ugyldigt antal, herunder meget stort heltal,
+er udført i både **Opret ønske** og **Rediger ønske**.
+Koden begrænser antal til 1–999 og har danske `typeMismatch`-meddelelser.
+**Faktisk viste fejltekst og eventuelle afvigelser mangler at blive noteret**.
+Status: *Udført ifølge tester – detaljeret resultat afventer registrering*.
+
+### Testpunkt 3 – Forsidens billedkort
+
+Tester har 31-10-2026 oplyst, at forsidens to billedkort er testet og bestået:
+**Saml dine ønsker** (venstre) og **Hold overblik** (højre). De to billeder
+vises på desktop i samme størrelse med bevaret tekst. Tester har desuden
+oplyst, at navigation og mobilvisning er testet.
+Status: *Bestået ifølge tester*. Browser- og mobiltesten er ikke gentaget her.
+
+### Testpunkt 4 – Fejl ved sletning og databaseadgang
+
+**Ikke manuelt verificeret.** Kodegennemgang 31-10-2026 peger på, at
+`WishController.confirmDeleteWish` og `WishController.deleteWish` i nogle
+fejlgrene returnerer `showWishList` uden konsekvent at tilføje både
+`wishlist` og `wishes` til modellen. Det bør testes, fordi Thymeleaf
+ellers kan mangle data ved rendering.
+
+Reproducerbare testtrin på lokal testdatabase:
+
+1. Opret en testønskeseddel med ét ønske. Notér id for begge.
+2. Slet ønsket, og prøv derefter bekræftelses-URL'en med det slettede id og korrekt wishlistId.
+   Forventet: forståelig dansk besked, ingen sletning af andre data og ingen serverfejl.
+3. Prøv `/confirmDeleteWish?id=<ukendt>&wishlistId=<eksisterende>`.
+   Forventet: fejlbesked og mulighed for at komme tilbage.
+4. På en isoleret testdatabase: stop MySQL og prøv både slettebekræftelse og
+   en gemmehandling; start derefter MySQL igen.
+   Forventet: ingen falsk succes og en forståelig fejlvisning.
+5. Kontrollér rækkerne i MySQL før/efter. Notér HTTP-status, faktisk skærmtekst,
+   dato og tester.
+
+Først når dette er udført, må punktet markeres Bestået.
