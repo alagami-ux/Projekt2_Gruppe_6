@@ -105,6 +105,72 @@ Alle tre SQL-kontroller returnerede true.
 Testen kører SQL direkte; Java-repository-metoden testes ikke her.
 
 
+#### SQL-script til gentagelse af testen
+
+Tilføjet 3. november 2026 som vejledning; tilføjelsen er ikke en ny testkørsel.
+
+Åbn en ny SQL-fane i MySQL Workbench på den lokale database. Markér hele
+scriptet og kør det i samme forbindelse. De tre resultatkolonner skal alle vise
+`1` eller `true`. Kontrollér også, at `ROLLBACK` udføres uden fejl.
+Hvis kørslen stopper før afslutningen, kør `ROLLBACK;` i samme forbindelse.
+
+```sql
+USE projekt2_gruppe_6_db;
+
+START TRANSACTION;
+
+-- Create two test wishlists.
+INSERT INTO wishlist (title)
+VALUES ('Testliste A');
+
+SET @list_a = LAST_INSERT_ID();
+
+INSERT INTO wishlist (title)
+VALUES ('Testliste B');
+
+SET @list_b = LAST_INSERT_ID();
+
+-- Create a wish belonging to list A.
+INSERT INTO wish (wishlist_id, name, quantity, price)
+VALUES (@list_a, 'Testønske', 2, 100.00);
+
+SET @wish_id = LAST_INSERT_ID();
+
+-- Change only the title of list A.
+UPDATE wishlist
+SET title = 'Ny testtitel'
+WHERE id = @list_a;
+
+-- Check all three expected results.
+SELECT
+    (
+        SELECT title
+        FROM wishlist
+        WHERE id = @list_a
+    ) = 'Ny testtitel' AS title_a_correct,
+
+    (
+        SELECT title
+        FROM wishlist
+        WHERE id = @list_b
+    ) = 'Testliste B' AS list_b_unchanged,
+
+    EXISTS (
+        SELECT 1
+        FROM wish
+        WHERE id = @wish_id
+          AND wishlist_id = @list_a
+          AND name = 'Testønske'
+          AND quantity = 2
+          AND price = 100.00
+    ) AS wish_preserved;
+
+-- Undo the changes and remove the test data.
+ROLLBACK;
+```
+
+Notér dato, tester og de tre faktiske resultater ved en ny kørsel.
+
 ## Opfølgning 31-10-2026 – teststatus efter kodeændringer
 
 Denne opfølgning er adskilt fra de historiske testresultater i tabellen ovenfor. Tidligere
