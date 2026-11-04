@@ -8,11 +8,42 @@ Projektet bruger **Java 21, Spring Boot, Thymeleaf og MySQL**. Maven bruges til 
 
 ## Kom i gang
 
-Du skal have Java 21, IntelliJ IDEA og MySQL installeret.
+Projektet kræver JDK 21, IntelliJ IDEA og MySQL. Trinene og terminalkommandoerne nedenfor er til Windows.
 
-1. Hent projektet fra GitHub, og åbn det i IntelliJ.
-2. Vent på, at Maven henter projektets dependencies.
-3. Start MySQL.
+1. Download og udpak projektet, eller klon det fra GitHub.
+2. I IntelliJ: Vælg **File → Open**, og vælg projektets **pom.xml**.
+3. Vælg **Open as Project**, hvis IntelliJ spørger.
+4. Vælg **Trust Project**, hvis du bliver spurgt.
+5. Vent, til Maven har hentet dependencies og indlæst projektet.
+
+### Vælg JDK 21
+
+1. Åbn **File → Project Structure → Project**.
+2. Vælg **JDK 21** under **SDK**.
+3. Vælg **SDK default** under **Language level**.
+4. Klik **Apply → OK**.
+
+Hvis JDK 21 ikke findes, vælg **Download JDK**, version **21** og fx **Eclipse Temurin**.
+
+### Kontrollér buildet
+
+Åbn terminalen i projektets rodmappe, hvor `pom.xml` ligger. Kontrollér først Java-versionen, som Maven bruger:
+
+```powershell
+.\mvnw.cmd -version
+```
+
+Outputtet skal vise Java 21. Terminalens Java-version kan være forskellig fra den SDK, der er valgt i IntelliJ.
+Hvis den er forkert, skal `JAVA_HOME` pege på installationsmappen for JDK 21 (ikke dens `bin`-mappe).
+Genstart derefter IntelliJ og kontrollér versionen igen.
+
+Kør herefter:
+
+```powershell
+.\mvnw.cmd clean verify
+```
+
+Forventet resultat: **BUILD SUCCESS**. Følg derefter afsnittet **Opret databasen**, og start appen som beskrevet under **Start appen**. Sørg for, at MySQL kører.
 
 ## Opret databasen
 
@@ -72,3 +103,31 @@ En bestået build erstatter ikke manuel test i browseren.
 ## Diagrammer
 
 Vi har samlet vores diagrammer og forklaringer i [docs/diagrammer.md](docs/diagrammer.md).
+
+## Fejlsøgning
+
+### error: release version 5 not supported
+
+Buildet forsøger at bruge Java 5, selv om projektet kræver Java 21.
+
+Kontrollér, at `pom.xml` er åbnet som Maven-projekt, og at JDK 21 er valgt.
+Åbn Maven-panelet, klik **Reload All Maven Projects**, og vent på indlæsningen.
+Kontrollér eventuelle fejl fra Maven, hvis Spring-imports fortsat er røde.
+Hvis Maven ikke kan hente en parent POM eller dependencies, skal den konkrete Maven-fejl løses først.
+
+Hvis Maven-buildet lykkes, men IntelliJ-buildet fejler, kontrollér
+**Settings → Build, Execution, Deployment → Compiler → Java Compiler**.
+Projektets **Target bytecode version** skal være **21**.
+
+### Failed to delete ... target\\classes\\application.properties
+
+Stop alle kørende instanser af appen, og prøv `clean verify` igen.
+
+Hvis fejlen fortsætter:
+
+1. Luk IntelliJ helt.
+2. Åbn projektets rodmappe i Stifinder.
+3. Slet kun mappen **target**, som indeholder genererede buildfiler.
+4. Åbn projektet igen, og kør `.\mvnw.cmd clean verify`.
+
+Maven gendanner `target`. Slet ikke `src/main/resources/application.properties`.
